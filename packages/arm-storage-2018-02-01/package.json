@@ -15,14 +15,17 @@
     "isomorphic"
   ],
   "license": "MIT",
-  "main": "./cjs/storageManagementClient.js",
+  "main": "./dist/arm-storage-2018-02-01.js",
   "module": "./esm/storageManagementClient.js",
-  "types": "./cjs/storageManagementClient.d.ts",
+  "types": "./esm/storageManagementClient.d.ts",
   "devDependencies": {
     "tslib": "^1.9.3",
-    "typescript": "^3.0.3",
-    "webpack": "^4.17.2",
-    "webpack-cli": "^3.1.0"
+    "typescript": "^3.1.1",
+    "rollup": "^0.66.2",
+    "rollup-plugin-commonjs": "^9.1.8",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "uglify-js": "^3.4.9"
   },
   "homepage": "https://github.com/azure/azure-sdk-for-js/tree/master/packages/arm-storage-2018-02-01",
   "repository": {
@@ -33,7 +36,7 @@
     "url": "https://github.com/azure/azure-sdk-for-js/issues"
   },
   "scripts": {
-    "build": "tsc && tsc -p tsconfig.esm.json && webpack",
+    "build": "tsc && rollup -c rollup.config.js && uglifyjs ./dist/arm-storage-2018-02-01.js -c -m -o ./dist/arm-storage-2018-02-01.min.js",
     "prepare": "npm run build"
   }
 }
