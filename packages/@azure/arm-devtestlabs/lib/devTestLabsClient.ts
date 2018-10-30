@@ -17,29 +17,19 @@ import { DevTestLabsClientContext } from "./devTestLabsClientContext";
 
 class DevTestLabsClient extends DevTestLabsClientContext {
   // Operation groups
-  providerOperations: operations.ProviderOperations;
-  labs: operations.Labs;
-  operations: operations.Operations;
-  globalSchedules: operations.GlobalSchedules;
-  artifactSources: operations.ArtifactSources;
-  armTemplates: operations.ArmTemplates;
-  artifacts: operations.Artifacts;
-  costs: operations.Costs;
-  customImages: operations.CustomImages;
-  formulas: operations.Formulas;
-  galleryImages: operations.GalleryImages;
-  notificationChannels: operations.NotificationChannels;
-  policySets: operations.PolicySets;
-  policies: operations.Policies;
-  schedules: operations.Schedules;
-  serviceRunners: operations.ServiceRunners;
-  users: operations.Users;
-  disks: operations.Disks;
-  environments: operations.Environments;
-  secrets: operations.Secrets;
-  virtualMachines: operations.VirtualMachines;
-  virtualMachineSchedules: operations.VirtualMachineSchedules;
-  virtualNetworks: operations.VirtualNetworks;
+  lab: operations.LabOperations;
+  artifactSource: operations.ArtifactSourceOperations;
+  artifact: operations.ArtifactOperations;
+  costInsight: operations.CostInsightOperations;
+  cost: operations.CostOperations;
+  customImage: operations.CustomImageOperations;
+  formula: operations.FormulaOperations;
+  galleryImage: operations.GalleryImageOperations;
+  policySet: operations.PolicySet;
+  policy: operations.PolicyOperations;
+  schedule: operations.ScheduleOperations;
+  virtualMachine: operations.VirtualMachine;
+  virtualNetwork: operations.VirtualNetworkOperations;
 
   /**
    * Initializes a new instance of the DevTestLabsClient class.
@@ -49,29 +39,19 @@ class DevTestLabsClient extends DevTestLabsClientContext {
    */
   constructor(credentials: msRest.ServiceClientCredentials, subscriptionId: string, options?: Models.DevTestLabsClientOptions) {
     super(credentials, subscriptionId, options);
-    this.providerOperations = new operations.ProviderOperations(this);
-    this.labs = new operations.Labs(this);
-    this.operations = new operations.Operations(this);
-    this.globalSchedules = new operations.GlobalSchedules(this);
-    this.artifactSources = new operations.ArtifactSources(this);
-    this.armTemplates = new operations.ArmTemplates(this);
-    this.artifacts = new operations.Artifacts(this);
-    this.costs = new operations.Costs(this);
-    this.customImages = new operations.CustomImages(this);
-    this.formulas = new operations.Formulas(this);
-    this.galleryImages = new operations.GalleryImages(this);
-    this.notificationChannels = new operations.NotificationChannels(this);
-    this.policySets = new operations.PolicySets(this);
-    this.policies = new operations.Policies(this);
-    this.schedules = new operations.Schedules(this);
-    this.serviceRunners = new operations.ServiceRunners(this);
-    this.users = new operations.Users(this);
-    this.disks = new operations.Disks(this);
-    this.environments = new operations.Environments(this);
-    this.secrets = new operations.Secrets(this);
-    this.virtualMachines = new operations.VirtualMachines(this);
-    this.virtualMachineSchedules = new operations.VirtualMachineSchedules(this);
-    this.virtualNetworks = new operations.VirtualNetworks(this);
+    this.lab = new operations.LabOperations(this);
+    this.artifactSource = new operations.ArtifactSourceOperations(this);
+    this.artifact = new operations.ArtifactOperations(this);
+    this.costInsight = new operations.CostInsightOperations(this);
+    this.cost = new operations.CostOperations(this);
+    this.customImage = new operations.CustomImageOperations(this);
+    this.formula = new operations.FormulaOperations(this);
+    this.galleryImage = new operations.GalleryImageOperations(this);
+    this.policySet = new operations.PolicySet(this);
+    this.policy = new operations.PolicyOperations(this);
+    this.schedule = new operations.ScheduleOperations(this);
+    this.virtualMachine = new operations.VirtualMachine(this);
+    this.virtualNetwork = new operations.VirtualNetworkOperations(this);
   }
 }
 
