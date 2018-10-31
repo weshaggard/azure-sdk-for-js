@@ -25,7 +25,7 @@ export const apiVersion: msRest.OperationQueryParameter = {
   mapper: {
     required: true,
     serializedName: "api-version",
-    defaultValue: '2016-05-15',
+    defaultValue: '2019-10-01',
     type: {
       name: "String"
     }
@@ -36,18 +36,6 @@ export const artifactSourceName: msRest.OperationURLParameter = {
   mapper: {
     required: true,
     serializedName: "artifactSourceName",
-    type: {
-      name: "String"
-    }
-  }
-};
-export const expand: msRest.OperationQueryParameter = {
-  parameterPath: [
-    "options",
-    "expand"
-  ],
-  mapper: {
-    serializedName: "$expand",
     type: {
       name: "String"
     }
@@ -75,16 +63,6 @@ export const labName: msRest.OperationURLParameter = {
     }
   }
 };
-export const locationName: msRest.OperationURLParameter = {
-  parameterPath: "locationName",
-  mapper: {
-    required: true,
-    serializedName: "locationName",
-    type: {
-      name: "String"
-    }
-  }
-};
 export const name: msRest.OperationURLParameter = {
   parameterPath: "name",
   mapper: {
@@ -106,13 +84,13 @@ export const nextPageLink: msRest.OperationURLParameter = {
   },
   skipEncoding: true
 };
-export const orderby: msRest.OperationQueryParameter = {
+export const orderBy: msRest.OperationQueryParameter = {
   parameterPath: [
     "options",
-    "orderby"
+    "orderBy"
   ],
   mapper: {
-    serializedName: "$orderby",
+    serializedName: "$orderBy",
     type: {
       name: "String"
     }
@@ -157,26 +135,6 @@ export const top: msRest.OperationQueryParameter = {
     serializedName: "$top",
     type: {
       name: "Number"
-    }
-  }
-};
-export const userName: msRest.OperationURLParameter = {
-  parameterPath: "userName",
-  mapper: {
-    required: true,
-    serializedName: "userName",
-    type: {
-      name: "String"
-    }
-  }
-};
-export const virtualMachineName: msRest.OperationURLParameter = {
-  parameterPath: "virtualMachineName",
-  mapper: {
-    required: true,
-    serializedName: "virtualMachineName",
-    type: {
-      name: "String"
     }
   }
 };
