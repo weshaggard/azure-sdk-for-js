@@ -13,7 +13,7 @@ npm install @azure/arm-appservice
 
 ## How to use
 
-### nodejs - Authentication, client creation and list appServiceCertificateOrders as an example written in TypeScript.
+### nodejs - Authentication, client creation and list appServiceEnvironments as an example written in TypeScript.
 
 ```ts
 import * as msRest from "ms-rest-js";
@@ -24,7 +24,7 @@ const subscriptionId = process.env["AZURE_SUBSCRIPTION_ID"];
 
 msRestNodeAuth.interactiveLogin().then((creds) => {
   const client = new WebSiteManagementClient(creds, subscriptionId);
-  client.appServiceCertificateOrders.list().then((result) => {
+  client.appServiceEnvironments.list().then((result) => {
     console.log("The result is:");
     console.log(result);
   });
@@ -33,7 +33,7 @@ msRestNodeAuth.interactiveLogin().then((creds) => {
 });
 ```
 
-### browser - Authentication, client creation and list appServiceCertificateOrders as an example written in JavaScript.
+### browser - Authentication, client creation and list appServiceEnvironments as an example written in JavaScript.
 See https://github.com/Azure/ms-rest-browserauth to learn how to authenticate to Azure in the browser.
 
 - index.html
@@ -58,7 +58,7 @@ See https://github.com/Azure/ms-rest-browserauth to learn how to authenticate to
           authManager.login();
         }
         const client = new Azure.ArmAppservice.WebSiteManagementClient(res.creds, subscriptionId);
-        client.appServiceCertificateOrders.list().then((result) => {
+        client.appServiceEnvironments.list().then((result) => {
           console.log("The result is:");
           console.log(result);
         }).catch((err) => {

@@ -16,31 +16,463 @@ export { BaseResource, CloudError };
 
 /**
  * @interface
- * An interface representing AppServiceCertificate.
- * Key Vault container for a certificate that is purchased through Azure.
+ * An interface representing VirtualIPMapping.
+ * Virtual IP mapping.
  *
  */
-export interface AppServiceCertificate {
+export interface VirtualIPMapping {
   /**
-   * @member {string} [keyVaultId] Key Vault resource Id.
+   * @member {string} [virtualIP] Virtual IP address.
    */
-  keyVaultId?: string;
+  virtualIP?: string;
   /**
-   * @member {string} [keyVaultSecretName] Key Vault secret name.
+   * @member {number} [internalHttpPort] Internal HTTP port.
    */
-  keyVaultSecretName?: string;
+  internalHttpPort?: number;
   /**
-   * @member {KeyVaultSecretStatus} [provisioningState] Status of the Key Vault
-   * secret. Possible values include: 'Initialized',
-   * 'WaitingOnCertificateOrder', 'Succeeded', 'CertificateOrderFailed',
-   * 'OperationNotPermittedOnKeyVault',
-   * 'AzureServiceUnauthorizedToAccessKeyVault', 'KeyVaultDoesNotExist',
-   * 'KeyVaultSecretDoesNotExist', 'UnknownError', 'ExternalPrivateKey',
-   * 'Unknown'
+   * @member {number} [internalHttpsPort] Internal HTTPS port.
+   */
+  internalHttpsPort?: number;
+  /**
+   * @member {boolean} [inUse] Is virtual IP mapping in use.
+   */
+  inUse?: boolean;
+}
+
+/**
+ * @interface
+ * An interface representing AddressResponse.
+ * Describes main public IP address and any extra virtual IPs.
+ *
+ */
+export interface AddressResponse {
+  /**
+   * @member {string} [serviceIpAddress] Main public virtual IP.
+   */
+  serviceIpAddress?: string;
+  /**
+   * @member {string} [internalIpAddress] Virtual Network internal IP address
+   * of the App Service Environment if it is in internal load-balancing mode.
+   */
+  internalIpAddress?: string;
+  /**
+   * @member {string[]} [outboundIpAddresses] IP addresses appearing on
+   * outbound connections.
+   */
+  outboundIpAddresses?: string[];
+  /**
+   * @member {VirtualIPMapping[]} [vipMappings] Additional virtual IPs.
+   */
+  vipMappings?: VirtualIPMapping[];
+}
+
+/**
+ * @interface
+ * An interface representing VirtualNetworkProfile.
+ * Specification for using a Virtual Network.
+ *
+ */
+export interface VirtualNetworkProfile {
+  /**
+   * @member {string} [id] Resource id of the Virtual Network.
+   */
+  id?: string;
+  /**
+   * @member {string} [name] Name of the Virtual Network (read-only).
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly provisioningState?: KeyVaultSecretStatus;
+  readonly name?: string;
+  /**
+   * @member {string} [type] Resource type of the Virtual Network (read-only).
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly type?: string;
+  /**
+   * @member {string} [subnet] Subnet within the Virtual Network.
+   */
+  subnet?: string;
+}
+
+/**
+ * @interface
+ * An interface representing WorkerPool.
+ * Worker pool of an App Service Environment.
+ *
+ */
+export interface WorkerPool {
+  /**
+   * @member {number} [workerSizeId] Worker size ID for referencing this worker
+   * pool.
+   */
+  workerSizeId?: number;
+  /**
+   * @member {ComputeModeOptions} [computeMode] Shared or dedicated app
+   * hosting. Possible values include: 'Shared', 'Dedicated', 'Dynamic'
+   */
+  computeMode?: ComputeModeOptions;
+  /**
+   * @member {string} [workerSize] VM size of the worker pool instances.
+   */
+  workerSize?: string;
+  /**
+   * @member {number} [workerCount] Number of instances in the worker pool.
+   */
+  workerCount?: number;
+  /**
+   * @member {string[]} [instanceNames] Names of all instances in the worker
+   * pool (read only).
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly instanceNames?: string[];
+}
+
+/**
+ * @interface
+ * An interface representing StampCapacity.
+ * Stamp capacity information.
+ *
+ */
+export interface StampCapacity {
+  /**
+   * @member {string} [name] Name of the stamp.
+   */
+  name?: string;
+  /**
+   * @member {number} [availableCapacity] Available capacity (# of machines,
+   * bytes of storage etc...).
+   */
+  availableCapacity?: number;
+  /**
+   * @member {number} [totalCapacity] Total capacity (# of machines, bytes of
+   * storage etc...).
+   */
+  totalCapacity?: number;
+  /**
+   * @member {string} [unit] Name of the unit.
+   */
+  unit?: string;
+  /**
+   * @member {ComputeModeOptions} [computeMode] Shared/dedicated workers.
+   * Possible values include: 'Shared', 'Dedicated', 'Dynamic'
+   */
+  computeMode?: ComputeModeOptions;
+  /**
+   * @member {WorkerSizeOptions} [workerSize] Size of the machines. Possible
+   * values include: 'Small', 'Medium', 'Large', 'D1', 'D2', 'D3', 'Default'
+   */
+  workerSize?: WorkerSizeOptions;
+  /**
+   * @member {number} [workerSizeId] Size ID of machines:
+   * 0 - Small
+   * 1 - Medium
+   * 2 - Large
+   */
+  workerSizeId?: number;
+  /**
+   * @member {boolean} [excludeFromCapacityAllocation] If <code>true</code>, it
+   * includes basic apps.
+   * Basic apps are not used for capacity allocation.
+   */
+  excludeFromCapacityAllocation?: boolean;
+  /**
+   * @member {boolean} [isApplicableForAllComputeModes] <code>true</code> if
+   * capacity is applicable for all apps; otherwise, <code>false</code>.
+   */
+  isApplicableForAllComputeModes?: boolean;
+  /**
+   * @member {string} [siteMode] Shared or Dedicated.
+   */
+  siteMode?: string;
+  /**
+   * @member {boolean} [isLinux] Is this a linux stamp capacity
+   */
+  isLinux?: boolean;
+}
+
+/**
+ * @interface
+ * An interface representing NetworkAccessControlEntry.
+ * Network access control entry.
+ *
+ */
+export interface NetworkAccessControlEntry {
+  /**
+   * @member {AccessControlEntryAction} [action] Action object. Possible values
+   * include: 'Permit', 'Deny'
+   */
+  action?: AccessControlEntryAction;
+  /**
+   * @member {string} [description] Description of network access control
+   * entry.
+   */
+  description?: string;
+  /**
+   * @member {number} [order] Order of precedence.
+   */
+  order?: number;
+  /**
+   * @member {string} [remoteSubnet] Remote subnet.
+   */
+  remoteSubnet?: string;
+}
+
+/**
+ * @interface
+ * An interface representing NameValuePair.
+ * Name value pair.
+ *
+ */
+export interface NameValuePair {
+  /**
+   * @member {string} [name] Pair name.
+   */
+  name?: string;
+  /**
+   * @member {string} [value] Pair value.
+   */
+  value?: string;
+}
+
+/**
+ * @interface
+ * An interface representing AppServiceEnvironment.
+ * Description of an App Service Environment.
+ *
+ */
+export interface AppServiceEnvironment {
+  /**
+   * @member {string} name Name of the App Service Environment.
+   */
+  name: string;
+  /**
+   * @member {string} location Location of the App Service Environment, e.g.
+   * "West US".
+   */
+  location: string;
+  /**
+   * @member {ProvisioningState} [provisioningState] Provisioning state of the
+   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
+   * 'Canceled', 'InProgress', 'Deleting'
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly provisioningState?: ProvisioningState;
+  /**
+   * @member {HostingEnvironmentStatus} [status] Current status of the App
+   * Service Environment. Possible values include: 'Preparing', 'Ready',
+   * 'Scaling', 'Deleting'
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly status?: HostingEnvironmentStatus;
+  /**
+   * @member {string} [vnetName] Name of the Virtual Network for the App
+   * Service Environment.
+   */
+  vnetName?: string;
+  /**
+   * @member {string} [vnetResourceGroupName] Resource group of the Virtual
+   * Network.
+   */
+  vnetResourceGroupName?: string;
+  /**
+   * @member {string} [vnetSubnetName] Subnet of the Virtual Network.
+   */
+  vnetSubnetName?: string;
+  /**
+   * @member {VirtualNetworkProfile} virtualNetwork Description of the Virtual
+   * Network.
+   */
+  virtualNetwork: VirtualNetworkProfile;
+  /**
+   * @member {InternalLoadBalancingMode} [internalLoadBalancingMode] Specifies
+   * which endpoints to serve internally in the Virtual Network for the App
+   * Service Environment. Possible values include: 'None', 'Web', 'Publishing'
+   */
+  internalLoadBalancingMode?: InternalLoadBalancingMode;
+  /**
+   * @member {string} [multiSize] Front-end VM size, e.g. "Medium", "Large".
+   */
+  multiSize?: string;
+  /**
+   * @member {number} [multiRoleCount] Number of front-end instances.
+   */
+  multiRoleCount?: number;
+  /**
+   * @member {WorkerPool[]} workerPools Description of worker pools with worker
+   * size IDs, VM sizes, and number of workers in each pool.
+   */
+  workerPools: WorkerPool[];
+  /**
+   * @member {number} [ipsslAddressCount] Number of IP SSL addresses reserved
+   * for the App Service Environment.
+   */
+  ipsslAddressCount?: number;
+  /**
+   * @member {string} [databaseEdition] Edition of the metadata database for
+   * the App Service Environment, e.g. "Standard".
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly databaseEdition?: string;
+  /**
+   * @member {string} [databaseServiceObjective] Service objective of the
+   * metadata database for the App Service Environment, e.g. "S0".
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly databaseServiceObjective?: string;
+  /**
+   * @member {number} [upgradeDomains] Number of upgrade domains of the App
+   * Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly upgradeDomains?: number;
+  /**
+   * @member {string} [subscriptionId] Subscription of the App Service
+   * Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly subscriptionId?: string;
+  /**
+   * @member {string} [dnsSuffix] DNS suffix of the App Service Environment.
+   */
+  dnsSuffix?: string;
+  /**
+   * @member {string} [lastAction] Last deployment action on the App Service
+   * Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly lastAction?: string;
+  /**
+   * @member {string} [lastActionResult] Result of the last deployment action
+   * on the App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly lastActionResult?: string;
+  /**
+   * @member {string} [allowedMultiSizes] List of comma separated strings
+   * describing which VM sizes are allowed for front-ends.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly allowedMultiSizes?: string;
+  /**
+   * @member {string} [allowedWorkerSizes] List of comma separated strings
+   * describing which VM sizes are allowed for workers.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly allowedWorkerSizes?: string;
+  /**
+   * @member {number} [maximumNumberOfMachines] Maximum number of VMs in the
+   * App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly maximumNumberOfMachines?: number;
+  /**
+   * @member {VirtualIPMapping[]} [vipMappings] Description of IP SSL mapping
+   * for the App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly vipMappings?: VirtualIPMapping[];
+  /**
+   * @member {StampCapacity[]} [environmentCapacities] Current total, used, and
+   * available worker capacities.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentCapacities?: StampCapacity[];
+  /**
+   * @member {NetworkAccessControlEntry[]} [networkAccessControlList] Access
+   * control list for controlling traffic to the App Service Environment.
+   */
+  networkAccessControlList?: NetworkAccessControlEntry[];
+  /**
+   * @member {boolean} [environmentIsHealthy] True/false indicating whether the
+   * App Service Environment is healthy.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentIsHealthy?: boolean;
+  /**
+   * @member {string} [environmentStatus] Detailed message about with results
+   * of the last check of the App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentStatus?: string;
+  /**
+   * @member {string} [resourceGroup] Resource group of the App Service
+   * Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly resourceGroup?: string;
+  /**
+   * @member {number} [frontEndScaleFactor] Scale factor for front-ends.
+   */
+  frontEndScaleFactor?: number;
+  /**
+   * @member {number} [defaultFrontEndScaleFactor] Default Scale Factor for
+   * FrontEnds.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly defaultFrontEndScaleFactor?: number;
+  /**
+   * @member {string} [apiManagementAccountId] API Management Account
+   * associated with the App Service Environment.
+   */
+  apiManagementAccountId?: string;
+  /**
+   * @member {boolean} [suspended] <code>true</code> if the App Service
+   * Environment is suspended; otherwise, <code>false</code>. The environment
+   * can be suspended, e.g. when the management endpoint is no longer available
+   * (most likely because NSG blocked the incoming traffic).
+   */
+  suspended?: boolean;
+  /**
+   * @member {boolean} [dynamicCacheEnabled] True/false indicating whether the
+   * App Service Environment is suspended. The environment can be suspended
+   * e.g. when the management endpoint is no longer available
+   * (most likely because NSG blocked the incoming traffic).
+   */
+  dynamicCacheEnabled?: boolean;
+  /**
+   * @member {NameValuePair[]} [clusterSettings] Custom settings for changing
+   * the behavior of the App Service Environment.
+   */
+  clusterSettings?: NameValuePair[];
+  /**
+   * @member {string[]} [userWhitelistedIpRanges] User added ip ranges to
+   * whitelist on ASE db
+   */
+  userWhitelistedIpRanges?: string[];
+  /**
+   * @member {boolean} [hasLinuxWorkers] Flag that displays whether an ASE has
+   * linux workers or not
+   */
+  hasLinuxWorkers?: boolean;
+  /**
+   * @member {string} [sslCertKeyVaultId] Key Vault ID for ILB App Service
+   * Environment default SSL certificate
+   */
+  sslCertKeyVaultId?: string;
+  /**
+   * @member {string} [sslCertKeyVaultSecretName] Key Vault Secret Name for ILB
+   * App Service Environment default SSL certificate
+   */
+  sslCertKeyVaultSecretName?: string;
 }
 
 /**
@@ -85,221 +517,243 @@ export interface Resource extends BaseResource {
 
 /**
  * @interface
- * An interface representing AppServiceCertificateResource.
- * Key Vault container ARM resource for a certificate that is purchased through
- * Azure.
+ * An interface representing AppServiceEnvironmentResource.
+ * App Service Environment ARM resource.
  *
  * @extends Resource
  */
-export interface AppServiceCertificateResource extends Resource {
+export interface AppServiceEnvironmentResource extends Resource {
   /**
-   * @member {string} [keyVaultId] Key Vault resource Id.
+   * @member {string} appServiceEnvironmentResourceName Name of the App Service
+   * Environment.
    */
-  keyVaultId?: string;
+  appServiceEnvironmentResourceName: string;
   /**
-   * @member {string} [keyVaultSecretName] Key Vault secret name.
+   * @member {string} appServiceEnvironmentResourceLocation Location of the App
+   * Service Environment, e.g. "West US".
    */
-  keyVaultSecretName?: string;
+  appServiceEnvironmentResourceLocation: string;
   /**
-   * @member {KeyVaultSecretStatus} [provisioningState] Status of the Key Vault
-   * secret. Possible values include: 'Initialized',
-   * 'WaitingOnCertificateOrder', 'Succeeded', 'CertificateOrderFailed',
-   * 'OperationNotPermittedOnKeyVault',
-   * 'AzureServiceUnauthorizedToAccessKeyVault', 'KeyVaultDoesNotExist',
-   * 'KeyVaultSecretDoesNotExist', 'UnknownError', 'ExternalPrivateKey',
-   * 'Unknown'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly provisioningState?: KeyVaultSecretStatus;
-}
-
-/**
- * @interface
- * An interface representing CertificateDetails.
- * SSL certificate details.
- *
- */
-export interface CertificateDetails {
-  /**
-   * @member {number} [version] Certificate Version.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly version?: number;
-  /**
-   * @member {string} [serialNumber] Certificate Serial Number.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly serialNumber?: string;
-  /**
-   * @member {string} [thumbprint] Certificate Thumbprint.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly thumbprint?: string;
-  /**
-   * @member {string} [subject] Certificate Subject.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly subject?: string;
-  /**
-   * @member {Date} [notBefore] Date Certificate is valid from.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly notBefore?: Date;
-  /**
-   * @member {Date} [notAfter] Date Certificate is valid to.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly notAfter?: Date;
-  /**
-   * @member {string} [signatureAlgorithm] Certificate Signature algorithm.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly signatureAlgorithm?: string;
-  /**
-   * @member {string} [issuer] Certificate Issuer.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly issuer?: string;
-  /**
-   * @member {string} [rawData] Raw certificate data.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly rawData?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServiceCertificateOrder.
- * SSL certificate purchase order.
- *
- * @extends Resource
- */
-export interface AppServiceCertificateOrder extends Resource {
-  /**
-   * @member {{ [propertyName: string]: AppServiceCertificate }} [certificates]
-   * State of the Key Vault secret.
-   */
-  certificates?: { [propertyName: string]: AppServiceCertificate };
-  /**
-   * @member {string} [distinguishedName] Certificate distinguished name.
-   */
-  distinguishedName?: string;
-  /**
-   * @member {string} [domainVerificationToken] Domain verification token.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly domainVerificationToken?: string;
-  /**
-   * @member {number} [validityInYears] Duration in years (must be between 1
-   * and 3). Default value: 1 .
-   */
-  validityInYears?: number;
-  /**
-   * @member {number} [keySize] Certificate key size. Default value: 2048 .
-   */
-  keySize?: number;
-  /**
-   * @member {CertificateProductType} productType Certificate product type.
-   * Possible values include: 'StandardDomainValidatedSsl',
-   * 'StandardDomainValidatedWildCardSsl'
-   */
-  productType: CertificateProductType;
-  /**
-   * @member {boolean} [autoRenew] <code>true</code> if the certificate should
-   * be automatically renewed when it expires; otherwise, <code>false</code>.
-   * Default value: true .
-   */
-  autoRenew?: boolean;
-  /**
-   * @member {ProvisioningState} [provisioningState] Status of certificate
-   * order. Possible values include: 'Succeeded', 'Failed', 'Canceled',
-   * 'InProgress', 'Deleting'
+   * @member {ProvisioningState} [provisioningState] Provisioning state of the
+   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
+   * 'Canceled', 'InProgress', 'Deleting'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
   readonly provisioningState?: ProvisioningState;
   /**
-   * @member {CertificateOrderStatus} [status] Current order status. Possible
-   * values include: 'Pendingissuance', 'Issued', 'Revoked', 'Canceled',
-   * 'Denied', 'Pendingrevocation', 'PendingRekey', 'Unused', 'Expired',
-   * 'NotSubmitted'
+   * @member {HostingEnvironmentStatus} [status] Current status of the App
+   * Service Environment. Possible values include: 'Preparing', 'Ready',
+   * 'Scaling', 'Deleting'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly status?: CertificateOrderStatus;
+  readonly status?: HostingEnvironmentStatus;
   /**
-   * @member {CertificateDetails} [signedCertificate] Signed certificate.
+   * @member {string} [vnetName] Name of the Virtual Network for the App
+   * Service Environment.
+   */
+  vnetName?: string;
+  /**
+   * @member {string} [vnetResourceGroupName] Resource group of the Virtual
+   * Network.
+   */
+  vnetResourceGroupName?: string;
+  /**
+   * @member {string} [vnetSubnetName] Subnet of the Virtual Network.
+   */
+  vnetSubnetName?: string;
+  /**
+   * @member {VirtualNetworkProfile} virtualNetwork Description of the Virtual
+   * Network.
+   */
+  virtualNetwork: VirtualNetworkProfile;
+  /**
+   * @member {InternalLoadBalancingMode} [internalLoadBalancingMode] Specifies
+   * which endpoints to serve internally in the Virtual Network for the App
+   * Service Environment. Possible values include: 'None', 'Web', 'Publishing'
+   */
+  internalLoadBalancingMode?: InternalLoadBalancingMode;
+  /**
+   * @member {string} [multiSize] Front-end VM size, e.g. "Medium", "Large".
+   */
+  multiSize?: string;
+  /**
+   * @member {number} [multiRoleCount] Number of front-end instances.
+   */
+  multiRoleCount?: number;
+  /**
+   * @member {WorkerPool[]} workerPools Description of worker pools with worker
+   * size IDs, VM sizes, and number of workers in each pool.
+   */
+  workerPools: WorkerPool[];
+  /**
+   * @member {number} [ipsslAddressCount] Number of IP SSL addresses reserved
+   * for the App Service Environment.
+   */
+  ipsslAddressCount?: number;
+  /**
+   * @member {string} [databaseEdition] Edition of the metadata database for
+   * the App Service Environment, e.g. "Standard".
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly signedCertificate?: CertificateDetails;
+  readonly databaseEdition?: string;
   /**
-   * @member {string} [csr] Last CSR that was created for this order.
-   */
-  csr?: string;
-  /**
-   * @member {CertificateDetails} [intermediate] Intermediate certificate.
+   * @member {string} [databaseServiceObjective] Service objective of the
+   * metadata database for the App Service Environment, e.g. "S0".
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly intermediate?: CertificateDetails;
+  readonly databaseServiceObjective?: string;
   /**
-   * @member {CertificateDetails} [root] Root certificate.
+   * @member {number} [upgradeDomains] Number of upgrade domains of the App
+   * Service Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly root?: CertificateDetails;
+  readonly upgradeDomains?: number;
   /**
-   * @member {string} [serialNumber] Current serial number of the certificate.
+   * @member {string} [subscriptionId] Subscription of the App Service
+   * Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly serialNumber?: string;
+  readonly subscriptionId?: string;
   /**
-   * @member {Date} [lastCertificateIssuanceTime] Certificate last issuance
-   * time.
+   * @member {string} [dnsSuffix] DNS suffix of the App Service Environment.
+   */
+  dnsSuffix?: string;
+  /**
+   * @member {string} [lastAction] Last deployment action on the App Service
+   * Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly lastCertificateIssuanceTime?: Date;
+  readonly lastAction?: string;
   /**
-   * @member {Date} [expirationTime] Certificate expiration time.
+   * @member {string} [lastActionResult] Result of the last deployment action
+   * on the App Service Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly expirationTime?: Date;
+  readonly lastActionResult?: string;
   /**
-   * @member {boolean} [isPrivateKeyExternal] <code>true</code> if private key
-   * is external; otherwise, <code>false</code>.
+   * @member {string} [allowedMultiSizes] List of comma separated strings
+   * describing which VM sizes are allowed for front-ends.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly isPrivateKeyExternal?: boolean;
+  readonly allowedMultiSizes?: string;
   /**
-   * @member {string[]} [appServiceCertificateNotRenewableReasons] Reasons why
-   * App Service Certificate is not renewable at the current moment.
+   * @member {string} [allowedWorkerSizes] List of comma separated strings
+   * describing which VM sizes are allowed for workers.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly appServiceCertificateNotRenewableReasons?: string[];
+  readonly allowedWorkerSizes?: string;
   /**
-   * @member {Date} [nextAutoRenewalTimeStamp] Time stamp when the certificate
-   * would be auto renewed next
+   * @member {number} [maximumNumberOfMachines] Maximum number of VMs in the
+   * App Service Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly nextAutoRenewalTimeStamp?: Date;
+  readonly maximumNumberOfMachines?: number;
+  /**
+   * @member {VirtualIPMapping[]} [vipMappings] Description of IP SSL mapping
+   * for the App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly vipMappings?: VirtualIPMapping[];
+  /**
+   * @member {StampCapacity[]} [environmentCapacities] Current total, used, and
+   * available worker capacities.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentCapacities?: StampCapacity[];
+  /**
+   * @member {NetworkAccessControlEntry[]} [networkAccessControlList] Access
+   * control list for controlling traffic to the App Service Environment.
+   */
+  networkAccessControlList?: NetworkAccessControlEntry[];
+  /**
+   * @member {boolean} [environmentIsHealthy] True/false indicating whether the
+   * App Service Environment is healthy.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentIsHealthy?: boolean;
+  /**
+   * @member {string} [environmentStatus] Detailed message about with results
+   * of the last check of the App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentStatus?: string;
+  /**
+   * @member {string} [resourceGroup] Resource group of the App Service
+   * Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly resourceGroup?: string;
+  /**
+   * @member {number} [frontEndScaleFactor] Scale factor for front-ends.
+   */
+  frontEndScaleFactor?: number;
+  /**
+   * @member {number} [defaultFrontEndScaleFactor] Default Scale Factor for
+   * FrontEnds.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly defaultFrontEndScaleFactor?: number;
+  /**
+   * @member {string} [apiManagementAccountId] API Management Account
+   * associated with the App Service Environment.
+   */
+  apiManagementAccountId?: string;
+  /**
+   * @member {boolean} [suspended] <code>true</code> if the App Service
+   * Environment is suspended; otherwise, <code>false</code>. The environment
+   * can be suspended, e.g. when the management endpoint is no longer available
+   * (most likely because NSG blocked the incoming traffic).
+   */
+  suspended?: boolean;
+  /**
+   * @member {boolean} [dynamicCacheEnabled] True/false indicating whether the
+   * App Service Environment is suspended. The environment can be suspended
+   * e.g. when the management endpoint is no longer available
+   * (most likely because NSG blocked the incoming traffic).
+   */
+  dynamicCacheEnabled?: boolean;
+  /**
+   * @member {NameValuePair[]} [clusterSettings] Custom settings for changing
+   * the behavior of the App Service Environment.
+   */
+  clusterSettings?: NameValuePair[];
+  /**
+   * @member {string[]} [userWhitelistedIpRanges] User added ip ranges to
+   * whitelist on ASE db
+   */
+  userWhitelistedIpRanges?: string[];
+  /**
+   * @member {boolean} [hasLinuxWorkers] Flag that displays whether an ASE has
+   * linux workers or not
+   */
+  hasLinuxWorkers?: boolean;
+  /**
+   * @member {string} [sslCertKeyVaultId] Key Vault ID for ILB App Service
+   * Environment default SSL certificate
+   */
+  sslCertKeyVaultId?: string;
+  /**
+   * @member {string} [sslCertKeyVaultSecretName] Key Vault Secret Name for ILB
+   * App Service Environment default SSL certificate
+   */
+  sslCertKeyVaultSecretName?: string;
 }
 
 /**
@@ -337,286 +791,526 @@ export interface ProxyOnlyResource extends BaseResource {
 
 /**
  * @interface
- * An interface representing AppServiceCertificateOrderPatchResource.
- * ARM resource for a certificate order that is purchased through Azure.
+ * An interface representing AppServiceEnvironmentPatchResource.
+ * ARM resource for a app service enviroment.
  *
  * @extends ProxyOnlyResource
  */
-export interface AppServiceCertificateOrderPatchResource extends ProxyOnlyResource {
+export interface AppServiceEnvironmentPatchResource extends ProxyOnlyResource {
   /**
-   * @member {{ [propertyName: string]: AppServiceCertificate }} [certificates]
-   * State of the Key Vault secret.
+   * @member {string} appServiceEnvironmentPatchResourceName Name of the App
+   * Service Environment.
    */
-  certificates?: { [propertyName: string]: AppServiceCertificate };
+  appServiceEnvironmentPatchResourceName: string;
   /**
-   * @member {string} [distinguishedName] Certificate distinguished name.
+   * @member {string} location Location of the App Service Environment, e.g.
+   * "West US".
    */
-  distinguishedName?: string;
+  location: string;
   /**
-   * @member {string} [domainVerificationToken] Domain verification token.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly domainVerificationToken?: string;
-  /**
-   * @member {number} [validityInYears] Duration in years (must be between 1
-   * and 3). Default value: 1 .
-   */
-  validityInYears?: number;
-  /**
-   * @member {number} [keySize] Certificate key size. Default value: 2048 .
-   */
-  keySize?: number;
-  /**
-   * @member {CertificateProductType} productType Certificate product type.
-   * Possible values include: 'StandardDomainValidatedSsl',
-   * 'StandardDomainValidatedWildCardSsl'
-   */
-  productType: CertificateProductType;
-  /**
-   * @member {boolean} [autoRenew] <code>true</code> if the certificate should
-   * be automatically renewed when it expires; otherwise, <code>false</code>.
-   * Default value: true .
-   */
-  autoRenew?: boolean;
-  /**
-   * @member {ProvisioningState} [provisioningState] Status of certificate
-   * order. Possible values include: 'Succeeded', 'Failed', 'Canceled',
-   * 'InProgress', 'Deleting'
+   * @member {ProvisioningState} [provisioningState] Provisioning state of the
+   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
+   * 'Canceled', 'InProgress', 'Deleting'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
   readonly provisioningState?: ProvisioningState;
   /**
-   * @member {CertificateOrderStatus} [status] Current order status. Possible
-   * values include: 'Pendingissuance', 'Issued', 'Revoked', 'Canceled',
-   * 'Denied', 'Pendingrevocation', 'PendingRekey', 'Unused', 'Expired',
-   * 'NotSubmitted'
+   * @member {HostingEnvironmentStatus} [status] Current status of the App
+   * Service Environment. Possible values include: 'Preparing', 'Ready',
+   * 'Scaling', 'Deleting'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly status?: CertificateOrderStatus;
+  readonly status?: HostingEnvironmentStatus;
   /**
-   * @member {CertificateDetails} [signedCertificate] Signed certificate.
+   * @member {string} [vnetName] Name of the Virtual Network for the App
+   * Service Environment.
+   */
+  vnetName?: string;
+  /**
+   * @member {string} [vnetResourceGroupName] Resource group of the Virtual
+   * Network.
+   */
+  vnetResourceGroupName?: string;
+  /**
+   * @member {string} [vnetSubnetName] Subnet of the Virtual Network.
+   */
+  vnetSubnetName?: string;
+  /**
+   * @member {VirtualNetworkProfile} virtualNetwork Description of the Virtual
+   * Network.
+   */
+  virtualNetwork: VirtualNetworkProfile;
+  /**
+   * @member {InternalLoadBalancingMode} [internalLoadBalancingMode] Specifies
+   * which endpoints to serve internally in the Virtual Network for the App
+   * Service Environment. Possible values include: 'None', 'Web', 'Publishing'
+   */
+  internalLoadBalancingMode?: InternalLoadBalancingMode;
+  /**
+   * @member {string} [multiSize] Front-end VM size, e.g. "Medium", "Large".
+   */
+  multiSize?: string;
+  /**
+   * @member {number} [multiRoleCount] Number of front-end instances.
+   */
+  multiRoleCount?: number;
+  /**
+   * @member {WorkerPool[]} workerPools Description of worker pools with worker
+   * size IDs, VM sizes, and number of workers in each pool.
+   */
+  workerPools: WorkerPool[];
+  /**
+   * @member {number} [ipsslAddressCount] Number of IP SSL addresses reserved
+   * for the App Service Environment.
+   */
+  ipsslAddressCount?: number;
+  /**
+   * @member {string} [databaseEdition] Edition of the metadata database for
+   * the App Service Environment, e.g. "Standard".
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly signedCertificate?: CertificateDetails;
+  readonly databaseEdition?: string;
   /**
-   * @member {string} [csr] Last CSR that was created for this order.
-   */
-  csr?: string;
-  /**
-   * @member {CertificateDetails} [intermediate] Intermediate certificate.
+   * @member {string} [databaseServiceObjective] Service objective of the
+   * metadata database for the App Service Environment, e.g. "S0".
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly intermediate?: CertificateDetails;
+  readonly databaseServiceObjective?: string;
   /**
-   * @member {CertificateDetails} [root] Root certificate.
+   * @member {number} [upgradeDomains] Number of upgrade domains of the App
+   * Service Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly root?: CertificateDetails;
+  readonly upgradeDomains?: number;
   /**
-   * @member {string} [serialNumber] Current serial number of the certificate.
+   * @member {string} [subscriptionId] Subscription of the App Service
+   * Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly serialNumber?: string;
+  readonly subscriptionId?: string;
   /**
-   * @member {Date} [lastCertificateIssuanceTime] Certificate last issuance
-   * time.
+   * @member {string} [dnsSuffix] DNS suffix of the App Service Environment.
+   */
+  dnsSuffix?: string;
+  /**
+   * @member {string} [lastAction] Last deployment action on the App Service
+   * Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly lastCertificateIssuanceTime?: Date;
+  readonly lastAction?: string;
   /**
-   * @member {Date} [expirationTime] Certificate expiration time.
+   * @member {string} [lastActionResult] Result of the last deployment action
+   * on the App Service Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly expirationTime?: Date;
+  readonly lastActionResult?: string;
   /**
-   * @member {boolean} [isPrivateKeyExternal] <code>true</code> if private key
-   * is external; otherwise, <code>false</code>.
+   * @member {string} [allowedMultiSizes] List of comma separated strings
+   * describing which VM sizes are allowed for front-ends.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly isPrivateKeyExternal?: boolean;
+  readonly allowedMultiSizes?: string;
   /**
-   * @member {string[]} [appServiceCertificateNotRenewableReasons] Reasons why
-   * App Service Certificate is not renewable at the current moment.
+   * @member {string} [allowedWorkerSizes] List of comma separated strings
+   * describing which VM sizes are allowed for workers.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly appServiceCertificateNotRenewableReasons?: string[];
+  readonly allowedWorkerSizes?: string;
   /**
-   * @member {Date} [nextAutoRenewalTimeStamp] Time stamp when the certificate
-   * would be auto renewed next
+   * @member {number} [maximumNumberOfMachines] Maximum number of VMs in the
+   * App Service Environment.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly nextAutoRenewalTimeStamp?: Date;
+  readonly maximumNumberOfMachines?: number;
+  /**
+   * @member {VirtualIPMapping[]} [vipMappings] Description of IP SSL mapping
+   * for the App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly vipMappings?: VirtualIPMapping[];
+  /**
+   * @member {StampCapacity[]} [environmentCapacities] Current total, used, and
+   * available worker capacities.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentCapacities?: StampCapacity[];
+  /**
+   * @member {NetworkAccessControlEntry[]} [networkAccessControlList] Access
+   * control list for controlling traffic to the App Service Environment.
+   */
+  networkAccessControlList?: NetworkAccessControlEntry[];
+  /**
+   * @member {boolean} [environmentIsHealthy] True/false indicating whether the
+   * App Service Environment is healthy.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentIsHealthy?: boolean;
+  /**
+   * @member {string} [environmentStatus] Detailed message about with results
+   * of the last check of the App Service Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly environmentStatus?: string;
+  /**
+   * @member {string} [resourceGroup] Resource group of the App Service
+   * Environment.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly resourceGroup?: string;
+  /**
+   * @member {number} [frontEndScaleFactor] Scale factor for front-ends.
+   */
+  frontEndScaleFactor?: number;
+  /**
+   * @member {number} [defaultFrontEndScaleFactor] Default Scale Factor for
+   * FrontEnds.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly defaultFrontEndScaleFactor?: number;
+  /**
+   * @member {string} [apiManagementAccountId] API Management Account
+   * associated with the App Service Environment.
+   */
+  apiManagementAccountId?: string;
+  /**
+   * @member {boolean} [suspended] <code>true</code> if the App Service
+   * Environment is suspended; otherwise, <code>false</code>. The environment
+   * can be suspended, e.g. when the management endpoint is no longer available
+   * (most likely because NSG blocked the incoming traffic).
+   */
+  suspended?: boolean;
+  /**
+   * @member {boolean} [dynamicCacheEnabled] True/false indicating whether the
+   * App Service Environment is suspended. The environment can be suspended
+   * e.g. when the management endpoint is no longer available
+   * (most likely because NSG blocked the incoming traffic).
+   */
+  dynamicCacheEnabled?: boolean;
+  /**
+   * @member {NameValuePair[]} [clusterSettings] Custom settings for changing
+   * the behavior of the App Service Environment.
+   */
+  clusterSettings?: NameValuePair[];
+  /**
+   * @member {string[]} [userWhitelistedIpRanges] User added ip ranges to
+   * whitelist on ASE db
+   */
+  userWhitelistedIpRanges?: string[];
+  /**
+   * @member {boolean} [hasLinuxWorkers] Flag that displays whether an ASE has
+   * linux workers or not
+   */
+  hasLinuxWorkers?: boolean;
+  /**
+   * @member {string} [sslCertKeyVaultId] Key Vault ID for ILB App Service
+   * Environment default SSL certificate
+   */
+  sslCertKeyVaultId?: string;
+  /**
+   * @member {string} [sslCertKeyVaultSecretName] Key Vault Secret Name for ILB
+   * App Service Environment default SSL certificate
+   */
+  sslCertKeyVaultSecretName?: string;
 }
 
 /**
  * @interface
- * An interface representing AppServiceCertificatePatchResource.
- * Key Vault container ARM resource for a certificate that is purchased through
- * Azure.
+ * An interface representing HostingEnvironmentDiagnostics.
+ * Diagnostics for an App Service Environment.
+ *
+ */
+export interface HostingEnvironmentDiagnostics {
+  /**
+   * @member {string} [name] Name/identifier of the diagnostics.
+   */
+  name?: string;
+  /**
+   * @member {string} [diagnosicsOutput] Diagnostics output.
+   */
+  diagnosicsOutput?: string;
+}
+
+/**
+ * @interface
+ * An interface representing MetricAvailabilily.
+ * Metric availability and retention.
+ *
+ */
+export interface MetricAvailabilily {
+  /**
+   * @member {string} [timeGrain] Time grain.
+   */
+  timeGrain?: string;
+  /**
+   * @member {string} [retention] Retention period for the current time grain.
+   */
+  retention?: string;
+}
+
+/**
+ * @interface
+ * An interface representing MetricDefinition.
+ * Metadata for a metric.
  *
  * @extends ProxyOnlyResource
  */
-export interface AppServiceCertificatePatchResource extends ProxyOnlyResource {
+export interface MetricDefinition extends ProxyOnlyResource {
   /**
-   * @member {string} [keyVaultId] Key Vault resource Id.
-   */
-  keyVaultId?: string;
-  /**
-   * @member {string} [keyVaultSecretName] Key Vault secret name.
-   */
-  keyVaultSecretName?: string;
-  /**
-   * @member {KeyVaultSecretStatus} [provisioningState] Status of the Key Vault
-   * secret. Possible values include: 'Initialized',
-   * 'WaitingOnCertificateOrder', 'Succeeded', 'CertificateOrderFailed',
-   * 'OperationNotPermittedOnKeyVault',
-   * 'AzureServiceUnauthorizedToAccessKeyVault', 'KeyVaultDoesNotExist',
-   * 'KeyVaultSecretDoesNotExist', 'UnknownError', 'ExternalPrivateKey',
-   * 'Unknown'
+   * @member {string} [unit] Unit of the metric.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly provisioningState?: KeyVaultSecretStatus;
-}
-
-/**
- * @interface
- * An interface representing CertificateEmail.
- * SSL certificate email.
- *
- * @extends ProxyOnlyResource
- */
-export interface CertificateEmail extends ProxyOnlyResource {
+  readonly unit?: string;
   /**
-   * @member {string} [emailId] Email id.
-   */
-  emailId?: string;
-  /**
-   * @member {Date} [timeStamp] Time stamp.
-   */
-  timeStamp?: Date;
-}
-
-/**
- * @interface
- * An interface representing CertificateOrderAction.
- * Certificate order action.
- *
- * @extends ProxyOnlyResource
- */
-export interface CertificateOrderAction extends ProxyOnlyResource {
-  /**
-   * @member {CertificateOrderActionType} [actionType] Action type. Possible
-   * values include: 'CertificateIssued', 'CertificateOrderCanceled',
-   * 'CertificateOrderCreated', 'CertificateRevoked',
-   * 'DomainValidationComplete', 'FraudDetected', 'OrgNameChange',
-   * 'OrgValidationComplete', 'SanDrop', 'FraudCleared', 'CertificateExpired',
-   * 'CertificateExpirationWarning', 'FraudDocumentationRequired', 'Unknown'
+   * @member {string} [primaryAggregationType] Primary aggregation type.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly actionType?: CertificateOrderActionType;
+  readonly primaryAggregationType?: string;
   /**
-   * @member {Date} [createdAt] Time at which the certificate action was
-   * performed.
+   * @member {MetricAvailabilily[]} [metricAvailabilities] List of time grains
+   * supported for the metric together with retention period.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly createdAt?: Date;
+  readonly metricAvailabilities?: MetricAvailabilily[];
+  /**
+   * @member {string} [displayName] Friendly name shown in the UI.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly displayName?: string;
 }
 
 /**
  * @interface
- * An interface representing ReissueCertificateOrderRequest.
- * Class representing certificate reissue request.
+ * An interface representing SkuCapacity.
+ * Description of the App Service plan scale options.
+ *
+ */
+export interface SkuCapacity {
+  /**
+   * @member {number} [minimum] Minimum number of workers for this App Service
+   * plan SKU.
+   */
+  minimum?: number;
+  /**
+   * @member {number} [maximum] Maximum number of workers for this App Service
+   * plan SKU.
+   */
+  maximum?: number;
+  /**
+   * @member {number} [default] Default number of workers for this App Service
+   * plan SKU.
+   */
+  default?: number;
+  /**
+   * @member {string} [scaleType] Available scale configurations for an App
+   * Service plan.
+   */
+  scaleType?: string;
+}
+
+/**
+ * @interface
+ * An interface representing Capability.
+ * Describes the capabilities/features allowed for a specific SKU.
+ *
+ */
+export interface Capability {
+  /**
+   * @member {string} [name] Name of the SKU capability.
+   */
+  name?: string;
+  /**
+   * @member {string} [value] Value of the SKU capability.
+   */
+  value?: string;
+  /**
+   * @member {string} [reason] Reason of the SKU capability.
+   */
+  reason?: string;
+}
+
+/**
+ * @interface
+ * An interface representing SkuDescription.
+ * Description of a SKU for a scalable resource.
+ *
+ */
+export interface SkuDescription {
+  /**
+   * @member {string} [name] Name of the resource SKU.
+   */
+  name?: string;
+  /**
+   * @member {string} [tier] Service tier of the resource SKU.
+   */
+  tier?: string;
+  /**
+   * @member {string} [size] Size specifier of the resource SKU.
+   */
+  size?: string;
+  /**
+   * @member {string} [family] Family code of the resource SKU.
+   */
+  family?: string;
+  /**
+   * @member {number} [capacity] Current number of instances assigned to the
+   * resource.
+   */
+  capacity?: number;
+  /**
+   * @member {SkuCapacity} [skuCapacity] Min, max, and default scale values of
+   * the SKU.
+   */
+  skuCapacity?: SkuCapacity;
+  /**
+   * @member {string[]} [locations] Locations of the SKU.
+   */
+  locations?: string[];
+  /**
+   * @member {Capability[]} [capabilities] Capabilities of the SKU, e.g., is
+   * traffic manager enabled?
+   */
+  capabilities?: Capability[];
+}
+
+/**
+ * @interface
+ * An interface representing SkuInfo.
+ * SKU discovery information.
+ *
+ */
+export interface SkuInfo {
+  /**
+   * @member {string} [resourceType] Resource type that this SKU applies to.
+   */
+  resourceType?: string;
+  /**
+   * @member {SkuDescription} [sku] Name and tier of the SKU.
+   */
+  sku?: SkuDescription;
+  /**
+   * @member {SkuCapacity} [capacity] Min, max, and default scale values of the
+   * SKU.
+   */
+  capacity?: SkuCapacity;
+}
+
+/**
+ * @interface
+ * An interface representing Usage.
+ * Usage of the quota resource.
  *
  * @extends ProxyOnlyResource
  */
-export interface ReissueCertificateOrderRequest extends ProxyOnlyResource {
+export interface Usage extends ProxyOnlyResource {
   /**
-   * @member {number} [keySize] Certificate Key Size.
+   * @member {string} [displayName] Friendly name shown in the UI.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  keySize?: number;
+  readonly displayName?: string;
   /**
-   * @member {number} [delayExistingRevokeInHours] Delay in hours to revoke
-   * existing certificate after the new certificate is issued.
+   * @member {string} [resourceName] Name of the quota resource.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  delayExistingRevokeInHours?: number;
+  readonly resourceName?: string;
   /**
-   * @member {string} [csr] Csr to be used for re-key operation.
+   * @member {string} [unit] Units of measurement for the quota resource.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  csr?: string;
+  readonly unit?: string;
   /**
-   * @member {boolean} [isPrivateKeyExternal] Should we change the ASC type
-   * (from managed private key to external private key and vice versa).
+   * @member {number} [currentValue] The current value of the resource counter.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  isPrivateKeyExternal?: boolean;
+  readonly currentValue?: number;
+  /**
+   * @member {number} [limit] The resource limit.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly limit?: number;
+  /**
+   * @member {Date} [nextResetTime] Next reset time for the resource counter.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly nextResetTime?: Date;
+  /**
+   * @member {ComputeModeOptions} [computeMode] Compute mode used for this
+   * usage. Possible values include: 'Shared', 'Dedicated', 'Dynamic'
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly computeMode?: ComputeModeOptions;
+  /**
+   * @member {string} [siteMode] Site mode used for this usage.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly siteMode?: string;
 }
 
 /**
  * @interface
- * An interface representing RenewCertificateOrderRequest.
- * Class representing certificate renew request.
+ * An interface representing WorkerPoolResource.
+ * Worker pool of an App Service Environment ARM resource.
  *
  * @extends ProxyOnlyResource
  */
-export interface RenewCertificateOrderRequest extends ProxyOnlyResource {
+export interface WorkerPoolResource extends ProxyOnlyResource {
   /**
-   * @member {number} [keySize] Certificate Key Size.
+   * @member {number} [workerSizeId] Worker size ID for referencing this worker
+   * pool.
    */
-  keySize?: number;
+  workerSizeId?: number;
   /**
-   * @member {string} [csr] Csr to be used for re-key operation.
+   * @member {ComputeModeOptions} [computeMode] Shared or dedicated app
+   * hosting. Possible values include: 'Shared', 'Dedicated', 'Dynamic'
    */
-  csr?: string;
+  computeMode?: ComputeModeOptions;
   /**
-   * @member {boolean} [isPrivateKeyExternal] Should we change the ASC type
-   * (from managed private key to external private key and vice versa).
+   * @member {string} [workerSize] VM size of the worker pool instances.
    */
-  isPrivateKeyExternal?: boolean;
-}
-
-/**
- * @interface
- * An interface representing SiteSeal.
- * Site seal
- *
- */
-export interface SiteSeal {
+  workerSize?: string;
   /**
-   * @member {string} html HTML snippet
+   * @member {number} [workerCount] Number of instances in the worker pool.
    */
-  html: string;
-}
-
-/**
- * @interface
- * An interface representing SiteSealRequest.
- * Site seal request.
- *
- */
-export interface SiteSealRequest {
+  workerCount?: number;
   /**
-   * @member {boolean} [lightTheme] If <code>true</code> use the light color
-   * theme for site seal; otherwise, use the default color theme.
+   * @member {string[]} [instanceNames] Names of all instances in the worker
+   * pool (read only).
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  lightTheme?: boolean;
+  readonly instanceNames?: string[];
   /**
-   * @member {string} [locale] Locale of site seal.
+   * @member {SkuDescription} [sku]
    */
-  locale?: string;
+  sku?: SkuDescription;
 }
 
 /**
@@ -1635,23 +2329,6 @@ export interface AzureStorageInfoValue {
 
 /**
  * @interface
- * An interface representing NameValuePair.
- * Name value pair.
- *
- */
-export interface NameValuePair {
-  /**
-   * @member {string} [name] Pair name.
-   */
-  name?: string;
-  /**
-   * @member {string} [value] Pair value.
-   */
-  value?: string;
-}
-
-/**
- * @interface
  * An interface representing SiteConfig.
  * Configuration of an App Service app.
  *
@@ -2152,100 +2829,6 @@ export interface Site extends Resource {
 
 /**
  * @interface
- * An interface representing Capability.
- * Describes the capabilities/features allowed for a specific SKU.
- *
- */
-export interface Capability {
-  /**
-   * @member {string} [name] Name of the SKU capability.
-   */
-  name?: string;
-  /**
-   * @member {string} [value] Value of the SKU capability.
-   */
-  value?: string;
-  /**
-   * @member {string} [reason] Reason of the SKU capability.
-   */
-  reason?: string;
-}
-
-/**
- * @interface
- * An interface representing SkuCapacity.
- * Description of the App Service plan scale options.
- *
- */
-export interface SkuCapacity {
-  /**
-   * @member {number} [minimum] Minimum number of workers for this App Service
-   * plan SKU.
-   */
-  minimum?: number;
-  /**
-   * @member {number} [maximum] Maximum number of workers for this App Service
-   * plan SKU.
-   */
-  maximum?: number;
-  /**
-   * @member {number} [default] Default number of workers for this App Service
-   * plan SKU.
-   */
-  default?: number;
-  /**
-   * @member {string} [scaleType] Available scale configurations for an App
-   * Service plan.
-   */
-  scaleType?: string;
-}
-
-/**
- * @interface
- * An interface representing SkuDescription.
- * Description of a SKU for a scalable resource.
- *
- */
-export interface SkuDescription {
-  /**
-   * @member {string} [name] Name of the resource SKU.
-   */
-  name?: string;
-  /**
-   * @member {string} [tier] Service tier of the resource SKU.
-   */
-  tier?: string;
-  /**
-   * @member {string} [size] Size specifier of the resource SKU.
-   */
-  size?: string;
-  /**
-   * @member {string} [family] Family code of the resource SKU.
-   */
-  family?: string;
-  /**
-   * @member {number} [capacity] Current number of instances assigned to the
-   * resource.
-   */
-  capacity?: number;
-  /**
-   * @member {SkuCapacity} [skuCapacity] Min, max, and default scale values of
-   * the SKU.
-   */
-  skuCapacity?: SkuCapacity;
-  /**
-   * @member {string[]} [locations] Locations of the SKU.
-   */
-  locations?: string[];
-  /**
-   * @member {Capability[]} [capabilities] Capabilities of the SKU, e.g., is
-   * traffic manager enabled?
-   */
-  capabilities?: Capability[];
-}
-
-/**
- * @interface
  * An interface representing AppServicePlan.
  * App Service plan.
  *
@@ -2459,777 +3042,427 @@ export interface DefaultErrorResponse {
 
 /**
  * @interface
- * An interface representing NameIdentifier.
- * Identifies an object.
+ * An interface representing ResourceMetricProperty.
+ * Resource metric property.
  *
  */
-export interface NameIdentifier {
+export interface ResourceMetricProperty {
   /**
-   * @member {string} [name] Name of the object.
+   * @member {string} [key] Key for resource metric property.
    */
-  name?: string;
+  key?: string;
+  /**
+   * @member {string} [value] Value of pair.
+   */
+  value?: string;
 }
 
 /**
  * @interface
- * An interface representing LogSpecification.
- * Log Definition of a single resource metric.
+ * An interface representing ResourceMetricValue.
+ * Value of resource metric.
  *
  */
-export interface LogSpecification {
+export interface ResourceMetricValue {
   /**
-   * @member {string} [name]
+   * @member {string} [timestamp] Value timestamp.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  name?: string;
+  readonly timestamp?: string;
   /**
-   * @member {string} [displayName]
+   * @member {number} [average] Value average.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  displayName?: string;
+  readonly average?: number;
   /**
-   * @member {string} [blobDuration]
+   * @member {number} [minimum] Value minimum.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  blobDuration?: string;
+  readonly minimum?: number;
+  /**
+   * @member {number} [maximum] Value maximum.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly maximum?: number;
+  /**
+   * @member {number} [total] Value total.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly total?: number;
+  /**
+   * @member {number} [count] Value count.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly count?: number;
+  /**
+   * @member {ResourceMetricProperty[]} [properties] Resource metric properties
+   * collection.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly properties?: ResourceMetricProperty[];
 }
 
 /**
  * @interface
- * An interface representing MetricAvailability.
- * Retention policy of a resource metric.
+ * An interface representing ResourceMetricName.
+ * Name of a metric for any resource .
  *
  */
-export interface MetricAvailability {
+export interface ResourceMetricName {
   /**
-   * @member {string} [timeGrain]
+   * @member {string} [value] metric name value.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  timeGrain?: string;
+  readonly value?: string;
   /**
-   * @member {string} [blobDuration]
+   * @member {string} [localizedValue] Localized metric name value.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  blobDuration?: string;
+  readonly localizedValue?: string;
 }
 
 /**
  * @interface
- * An interface representing Dimension.
- * Dimension of a resource metric. For e.g. instance specific HTTP requests for
- * a web app,
- * where instance name is dimension of the metric HTTP request
+ * An interface representing ResourceMetric.
+ * Object representing a metric for any resource .
  *
  */
-export interface Dimension {
+export interface ResourceMetric {
   /**
-   * @member {string} [name]
+   * @member {ResourceMetricName} [name] Name of metric.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  name?: string;
+  readonly name?: ResourceMetricName;
   /**
-   * @member {string} [displayName]
+   * @member {string} [unit] Metric unit.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  displayName?: string;
+  readonly unit?: string;
   /**
-   * @member {string} [internalName]
+   * @member {string} [timeGrain] Metric granularity. E.g PT1H, PT5M, P1D
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  internalName?: string;
+  readonly timeGrain?: string;
   /**
-   * @member {boolean} [toBeExportedForShoebox]
+   * @member {Date} [startTime] Metric start time.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
    */
-  toBeExportedForShoebox?: boolean;
+  readonly startTime?: Date;
+  /**
+   * @member {Date} [endTime] Metric end time.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly endTime?: Date;
+  /**
+   * @member {string} [resourceId] Metric resource Id.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly resourceId?: string;
+  /**
+   * @member {string} [id] Resource Id.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly id?: string;
+  /**
+   * @member {ResourceMetricValue[]} [metricValues] Metric values.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly metricValues?: ResourceMetricValue[];
+  /**
+   * @member {ResourceMetricProperty[]} [properties] Resource metric properties
+   * collection.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly properties?: ResourceMetricProperty[];
 }
 
 /**
  * @interface
- * An interface representing MetricSpecification.
- * Definition of a single resource metric.
+ * An interface representing LocalizableString.
+ * Localizable string object containing the name and a localized value.
  *
  */
-export interface MetricSpecification {
+export interface LocalizableString {
   /**
-   * @member {string} [name]
+   * @member {string} [value] Non-localized name.
    */
-  name?: string;
+  value?: string;
   /**
-   * @member {string} [displayName]
+   * @member {string} [localizedValue] Localized name.
    */
-  displayName?: string;
+  localizedValue?: string;
+}
+
+/**
+ * @interface
+ * An interface representing CsmUsageQuota.
+ * Usage of the quota resource.
+ *
+ */
+export interface CsmUsageQuota {
   /**
-   * @member {string} [displayDescription]
-   */
-  displayDescription?: string;
-  /**
-   * @member {string} [unit]
+   * @member {string} [unit] Units of measurement for the quota resourse.
    */
   unit?: string;
   /**
-   * @member {string} [aggregationType]
+   * @member {Date} [nextResetTime] Next reset time for the resource counter.
    */
-  aggregationType?: string;
+  nextResetTime?: Date;
   /**
-   * @member {boolean} [supportsInstanceLevelAggregation]
+   * @member {number} [currentValue] The current value of the resource counter.
    */
-  supportsInstanceLevelAggregation?: boolean;
+  currentValue?: number;
   /**
-   * @member {boolean} [enableRegionalMdmAccount]
+   * @member {number} [limit] The resource limit.
    */
-  enableRegionalMdmAccount?: boolean;
+  limit?: number;
   /**
-   * @member {string} [sourceMdmAccount]
+   * @member {LocalizableString} [name] Quota name.
    */
-  sourceMdmAccount?: string;
-  /**
-   * @member {string} [sourceMdmNamespace]
-   */
-  sourceMdmNamespace?: string;
-  /**
-   * @member {string} [metricFilterPattern]
-   */
-  metricFilterPattern?: string;
-  /**
-   * @member {boolean} [fillGapWithZero]
-   */
-  fillGapWithZero?: boolean;
-  /**
-   * @member {boolean} [isInternal]
-   */
-  isInternal?: boolean;
-  /**
-   * @member {Dimension[]} [dimensions]
-   */
-  dimensions?: Dimension[];
-  /**
-   * @member {string} [category]
-   */
-  category?: string;
-  /**
-   * @member {MetricAvailability[]} [availabilities]
-   */
-  availabilities?: MetricAvailability[];
+  name?: LocalizableString;
 }
 
 /**
  * @interface
- * An interface representing ServiceSpecification.
- * Resource metrics service provided by Microsoft.Insights resource provider.
+ * An interface representing ErrorEntity.
+ * Body of the error response returned from the API.
  *
  */
-export interface ServiceSpecification {
+export interface ErrorEntity {
   /**
-   * @member {MetricSpecification[]} [metricSpecifications]
+   * @member {string} [extendedCode] Type of error.
    */
-  metricSpecifications?: MetricSpecification[];
+  extendedCode?: string;
   /**
-   * @member {LogSpecification[]} [logSpecifications]
+   * @member {string} [messageTemplate] Message template.
    */
-  logSpecifications?: LogSpecification[];
+  messageTemplate?: string;
+  /**
+   * @member {string[]} [parameters] Parameters for the template.
+   */
+  parameters?: string[];
+  /**
+   * @member {ErrorEntity[]} [innerErrors] Inner errors.
+   */
+  innerErrors?: ErrorEntity[];
+  /**
+   * @member {string} [code] Basic error code.
+   */
+  code?: string;
+  /**
+   * @member {string} [message] Any details of the error.
+   */
+  message?: string;
 }
 
 /**
  * @interface
- * An interface representing CsmOperationDescriptionProperties.
- * Properties available for a Microsoft.Web resource provider operation.
+ * An interface representing Operation.
+ * An operation on a resource.
  *
  */
-export interface CsmOperationDescriptionProperties {
+export interface Operation {
   /**
-   * @member {ServiceSpecification} [serviceSpecification]
+   * @member {string} [id] Operation ID.
    */
-  serviceSpecification?: ServiceSpecification;
-}
-
-/**
- * @interface
- * An interface representing CsmOperationDisplay.
- * Meta data about operation used for display in portal.
- *
- */
-export interface CsmOperationDisplay {
+  id?: string;
   /**
-   * @member {string} [provider]
-   */
-  provider?: string;
-  /**
-   * @member {string} [resource]
-   */
-  resource?: string;
-  /**
-   * @member {string} [operation]
-   */
-  operation?: string;
-  /**
-   * @member {string} [description]
-   */
-  description?: string;
-}
-
-/**
- * @interface
- * An interface representing CsmOperationDescription.
- * Description of an operation available for Microsoft.Web resource provider.
- *
- */
-export interface CsmOperationDescription {
-  /**
-   * @member {string} [name]
+   * @member {string} [name] Operation name.
    */
   name?: string;
   /**
-   * @member {CsmOperationDisplay} [display]
+   * @member {OperationStatus} [status] The current status of the operation.
+   * Possible values include: 'InProgress', 'Failed', 'Succeeded', 'TimedOut',
+   * 'Created'
    */
-  display?: CsmOperationDisplay;
+  status?: OperationStatus;
   /**
-   * @member {string} [origin]
+   * @member {ErrorEntity[]} [errors] Any errors associate with the operation.
    */
-  origin?: string;
+  errors?: ErrorEntity[];
   /**
-   * @member {CsmOperationDescriptionProperties} [properties]
+   * @member {Date} [createdTime] Time when operation has started.
    */
-  properties?: CsmOperationDescriptionProperties;
+  createdTime?: Date;
+  /**
+   * @member {Date} [modifiedTime] Time when operation has been updated.
+   */
+  modifiedTime?: Date;
+  /**
+   * @member {Date} [expirationTime] Time when operation will expire.
+   */
+  expirationTime?: Date;
+  /**
+   * @member {string} [geoMasterOperationId] Applicable only for stamp
+   * operation ids.
+   */
+  geoMasterOperationId?: string;
 }
 
 /**
  * @interface
- * An interface representing Address.
- * Address information for domain registration.
+ * An interface representing AppServicePlanPatchResource.
+ * ARM resource for a app service plan.
  *
+ * @extends ProxyOnlyResource
  */
-export interface Address {
+export interface AppServicePlanPatchResource extends ProxyOnlyResource {
   /**
-   * @member {string} address1 First line of an Address.
+   * @member {string} [workerTierName] Target worker tier assigned to the App
+   * Service plan.
    */
-  address1: string;
+  workerTierName?: string;
   /**
-   * @member {string} [address2] The second line of the Address. Optional.
-   */
-  address2?: string;
-  /**
-   * @member {string} city The city for the address.
-   */
-  city: string;
-  /**
-   * @member {string} country The country for the address.
-   */
-  country: string;
-  /**
-   * @member {string} postalCode The postal code for the address.
-   */
-  postalCode: string;
-  /**
-   * @member {string} state The state or province for the address.
-   */
-  state: string;
-}
-
-/**
- * @interface
- * An interface representing Contact.
- * Contact information for domain registration. If 'Domain Privacy' option is
- * not selected then the contact information is made publicly available through
- * the Whois
- * directories as per ICANN requirements.
- *
- */
-export interface Contact {
-  /**
-   * @member {Address} [addressMailing] Mailing address.
-   */
-  addressMailing?: Address;
-  /**
-   * @member {string} email Email address.
-   */
-  email: string;
-  /**
-   * @member {string} [fax] Fax number.
-   */
-  fax?: string;
-  /**
-   * @member {string} [jobTitle] Job title.
-   */
-  jobTitle?: string;
-  /**
-   * @member {string} nameFirst First name.
-   */
-  nameFirst: string;
-  /**
-   * @member {string} nameLast Last name.
-   */
-  nameLast: string;
-  /**
-   * @member {string} [nameMiddle] Middle name.
-   */
-  nameMiddle?: string;
-  /**
-   * @member {string} [organization] Organization contact belongs to.
-   */
-  organization?: string;
-  /**
-   * @member {string} phone Phone number.
-   */
-  phone: string;
-}
-
-/**
- * @interface
- * An interface representing HostName.
- * Details of a hostname derived from a domain.
- *
- */
-export interface HostName {
-  /**
-   * @member {string} [name] Name of the hostname.
-   */
-  name?: string;
-  /**
-   * @member {string[]} [siteNames] List of apps the hostname is assigned to.
-   * This list will have more than one app only if the hostname is pointing to
-   * a Traffic Manager.
-   */
-  siteNames?: string[];
-  /**
-   * @member {string} [azureResourceName] Name of the Azure resource the
-   * hostname is assigned to. If it is assigned to a Traffic Manager then it
-   * will be the Traffic Manager name otherwise it will be the app name.
-   */
-  azureResourceName?: string;
-  /**
-   * @member {AzureResourceType} [azureResourceType] Type of the Azure resource
-   * the hostname is assigned to. Possible values include: 'Website',
-   * 'TrafficManager'
-   */
-  azureResourceType?: AzureResourceType;
-  /**
-   * @member {CustomHostNameDnsRecordType} [customHostNameDnsRecordType] Type
-   * of the DNS record. Possible values include: 'CName', 'A'
-   */
-  customHostNameDnsRecordType?: CustomHostNameDnsRecordType;
-  /**
-   * @member {HostNameType} [hostNameType] Type of the hostname. Possible
-   * values include: 'Verified', 'Managed'
-   */
-  hostNameType?: HostNameType;
-}
-
-/**
- * @interface
- * An interface representing DomainPurchaseConsent.
- * Domain purchase consent object, representing acceptance of applicable legal
- * agreements.
- *
- */
-export interface DomainPurchaseConsent {
-  /**
-   * @member {string[]} [agreementKeys] List of applicable legal agreement
-   * keys. This list can be retrieved using ListLegalAgreements API under
-   * <code>TopLevelDomain</code> resource.
-   */
-  agreementKeys?: string[];
-  /**
-   * @member {string} [agreedBy] Client IP address.
-   */
-  agreedBy?: string;
-  /**
-   * @member {Date} [agreedAt] Timestamp when the agreements were accepted.
-   */
-  agreedAt?: Date;
-}
-
-/**
- * @interface
- * An interface representing Domain.
- * Information about a domain.
- *
- * @extends Resource
- */
-export interface Domain extends Resource {
-  /**
-   * @member {Contact} contactAdmin Administrative contact.
-   */
-  contactAdmin: Contact;
-  /**
-   * @member {Contact} contactBilling Billing contact.
-   */
-  contactBilling: Contact;
-  /**
-   * @member {Contact} contactRegistrant Registrant contact.
-   */
-  contactRegistrant: Contact;
-  /**
-   * @member {Contact} contactTech Technical contact.
-   */
-  contactTech: Contact;
-  /**
-   * @member {DomainStatus} [registrationStatus] Domain registration status.
-   * Possible values include: 'Active', 'Awaiting', 'Cancelled', 'Confiscated',
-   * 'Disabled', 'Excluded', 'Expired', 'Failed', 'Held', 'Locked', 'Parked',
-   * 'Pending', 'Reserved', 'Reverted', 'Suspended', 'Transferred', 'Unknown',
-   * 'Unlocked', 'Unparked', 'Updated', 'JsonConverterFailed'
+   * @member {StatusOptions} [status] App Service plan status. Possible values
+   * include: 'Ready', 'Pending', 'Creating'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly registrationStatus?: DomainStatus;
+  readonly status?: StatusOptions;
   /**
-   * @member {ProvisioningState} [provisioningState] Domain provisioning state.
-   * Possible values include: 'Succeeded', 'Failed', 'Canceled', 'InProgress',
-   * 'Deleting'
+   * @member {string} [subscription] App Service plan subscription.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly subscription?: string;
+  /**
+   * @member {string} [adminSiteName] App Service plan administration site.
+   */
+  adminSiteName?: string;
+  /**
+   * @member {HostingEnvironmentProfile} [hostingEnvironmentProfile]
+   * Specification for the App Service Environment to use for the App Service
+   * plan.
+   */
+  hostingEnvironmentProfile?: HostingEnvironmentProfile;
+  /**
+   * @member {number} [maximumNumberOfWorkers] Maximum number of instances that
+   * can be assigned to this App Service plan.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly maximumNumberOfWorkers?: number;
+  /**
+   * @member {string} [geoRegion] Geographical location for the App Service
+   * plan.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly geoRegion?: string;
+  /**
+   * @member {boolean} [perSiteScaling] If <code>true</code>, apps assigned to
+   * this App Service plan can be scaled independently.
+   * If <code>false</code>, apps assigned to this App Service plan will scale
+   * to all instances of the plan. Default value: false .
+   */
+  perSiteScaling?: boolean;
+  /**
+   * @member {number} [maximumElasticWorkerCount] Maximum number of total
+   * workers allowed for this ElasticScaleEnabled App Service Plan
+   */
+  maximumElasticWorkerCount?: number;
+  /**
+   * @member {number} [numberOfSites] Number of apps assigned to this App
+   * Service plan.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly numberOfSites?: number;
+  /**
+   * @member {boolean} [isSpot] If <code>true</code>, this App Service Plan
+   * owns spot instances.
+   */
+  isSpot?: boolean;
+  /**
+   * @member {Date} [spotExpirationTime] The time when the server farm expires.
+   * Valid only if it is a spot server farm.
+   */
+  spotExpirationTime?: Date;
+  /**
+   * @member {Date} [freeOfferExpirationTime] The time when the server farm
+   * free offer expires.
+   */
+  freeOfferExpirationTime?: Date;
+  /**
+   * @member {string} [resourceGroup] Resource group of the App Service plan.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly resourceGroup?: string;
+  /**
+   * @member {boolean} [reserved] If Linux app service plan <code>true</code>,
+   * <code>false</code> otherwise. Default value: false .
+   */
+  reserved?: boolean;
+  /**
+   * @member {boolean} [isXenon] Obsolete: If Hyper-V container app service
+   * plan <code>true</code>, <code>false</code> otherwise. Default value: false
+   * .
+   */
+  isXenon?: boolean;
+  /**
+   * @member {boolean} [hyperV] If Hyper-V container app service plan
+   * <code>true</code>, <code>false</code> otherwise. Default value: false .
+   */
+  hyperV?: boolean;
+  /**
+   * @member {number} [targetWorkerCount] Scaling worker count.
+   */
+  targetWorkerCount?: number;
+  /**
+   * @member {number} [targetWorkerSizeId] Scaling worker size ID.
+   */
+  targetWorkerSizeId?: number;
+  /**
+   * @member {ProvisioningState} [provisioningState] Provisioning state of the
+   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
+   * 'Canceled', 'InProgress', 'Deleting'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
   readonly provisioningState?: ProvisioningState;
-  /**
-   * @member {string[]} [nameServers] Name servers.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nameServers?: string[];
-  /**
-   * @member {boolean} [privacy] <code>true</code> if domain privacy is enabled
-   * for this domain; otherwise, <code>false</code>.
-   */
-  privacy?: boolean;
-  /**
-   * @member {Date} [createdTime] Domain creation timestamp.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly createdTime?: Date;
-  /**
-   * @member {Date} [expirationTime] Domain expiration timestamp.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly expirationTime?: Date;
-  /**
-   * @member {Date} [lastRenewedTime] Timestamp when the domain was renewed
-   * last time.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastRenewedTime?: Date;
-  /**
-   * @member {boolean} [autoRenew] <code>true</code> if the domain should be
-   * automatically renewed; otherwise, <code>false</code>. Default value: true
-   * .
-   */
-  autoRenew?: boolean;
-  /**
-   * @member {boolean} [readyForDnsRecordManagement] <code>true</code> if Azure
-   * can assign this domain to App Service apps; otherwise, <code>false</code>.
-   * This value will be <code>true</code> if domain registration status is
-   * active and
-   * it is hosted on name servers Azure has programmatic access to.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly readyForDnsRecordManagement?: boolean;
-  /**
-   * @member {HostName[]} [managedHostNames] All hostnames derived from the
-   * domain and assigned to Azure resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly managedHostNames?: HostName[];
-  /**
-   * @member {DomainPurchaseConsent} consent Legal agreement consent.
-   */
-  consent: DomainPurchaseConsent;
-  /**
-   * @member {string[]} [domainNotRenewableReasons] Reasons why domain is not
-   * renewable.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly domainNotRenewableReasons?: string[];
-  /**
-   * @member {DnsType} [dnsType] Current DNS type. Possible values include:
-   * 'AzureDns', 'DefaultDomainRegistrarDns'
-   */
-  dnsType?: DnsType;
-  /**
-   * @member {string} [dnsZoneId] Azure DNS Zone to use
-   */
-  dnsZoneId?: string;
-  /**
-   * @member {DnsType} [targetDnsType] Target DNS type (would be used for
-   * migration). Possible values include: 'AzureDns',
-   * 'DefaultDomainRegistrarDns'
-   */
-  targetDnsType?: DnsType;
-  /**
-   * @member {string} [authCode]
-   */
-  authCode?: string;
 }
 
 /**
  * @interface
- * An interface representing DomainAvailablilityCheckResult.
- * Domain availablility check result.
- *
- */
-export interface DomainAvailablilityCheckResult {
-  /**
-   * @member {string} [name] Name of the domain.
-   */
-  name?: string;
-  /**
-   * @member {boolean} [available] <code>true</code> if domain can be purchased
-   * using CreateDomain API; otherwise, <code>false</code>.
-   */
-  available?: boolean;
-  /**
-   * @member {DomainType} [domainType] Valid values are Regular domain: Azure
-   * will charge the full price of domain registration, SoftDeleted: Purchasing
-   * this domain will simply restore it and this operation will not cost
-   * anything. Possible values include: 'Regular', 'SoftDeleted'
-   */
-  domainType?: DomainType;
-}
-
-/**
- * @interface
- * An interface representing DomainControlCenterSsoRequest.
- * Single sign-on request information for domain management.
- *
- */
-export interface DomainControlCenterSsoRequest {
-  /**
-   * @member {string} [url] URL where the single sign-on request is to be made.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly url?: string;
-  /**
-   * @member {string} [postParameterKey] Post parameter key.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly postParameterKey?: string;
-  /**
-   * @member {string} [postParameterValue] Post parameter value. Client should
-   * use 'application/x-www-form-urlencoded' encoding for this value.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly postParameterValue?: string;
-}
-
-/**
- * @interface
- * An interface representing DomainOwnershipIdentifier.
- * Domain ownership Identifier.
+ * An interface representing HybridConnectionLimits.
+ * Hybrid Connection limits contract. This is used to return the plan limits of
+ * Hybrid Connections.
  *
  * @extends ProxyOnlyResource
  */
-export interface DomainOwnershipIdentifier extends ProxyOnlyResource {
+export interface HybridConnectionLimits extends ProxyOnlyResource {
   /**
-   * @member {string} [ownershipId] Ownership Id.
-   */
-  ownershipId?: string;
-}
-
-/**
- * @interface
- * An interface representing DomainPatchResource.
- * ARM resource for a domain.
- *
- * @extends ProxyOnlyResource
- */
-export interface DomainPatchResource extends ProxyOnlyResource {
-  /**
-   * @member {Contact} contactAdmin Administrative contact.
-   */
-  contactAdmin: Contact;
-  /**
-   * @member {Contact} contactBilling Billing contact.
-   */
-  contactBilling: Contact;
-  /**
-   * @member {Contact} contactRegistrant Registrant contact.
-   */
-  contactRegistrant: Contact;
-  /**
-   * @member {Contact} contactTech Technical contact.
-   */
-  contactTech: Contact;
-  /**
-   * @member {DomainStatus} [registrationStatus] Domain registration status.
-   * Possible values include: 'Active', 'Awaiting', 'Cancelled', 'Confiscated',
-   * 'Disabled', 'Excluded', 'Expired', 'Failed', 'Held', 'Locked', 'Parked',
-   * 'Pending', 'Reserved', 'Reverted', 'Suspended', 'Transferred', 'Unknown',
-   * 'Unlocked', 'Unparked', 'Updated', 'JsonConverterFailed'
+   * @member {number} [current] The current number of Hybrid Connections.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly registrationStatus?: DomainStatus;
+  readonly current?: number;
   /**
-   * @member {ProvisioningState} [provisioningState] Domain provisioning state.
-   * Possible values include: 'Succeeded', 'Failed', 'Canceled', 'InProgress',
-   * 'Deleting'
+   * @member {number} [maximum] The maximum number of Hybrid Connections
+   * allowed.
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
-  readonly provisioningState?: ProvisioningState;
-  /**
-   * @member {string[]} [nameServers] Name servers.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nameServers?: string[];
-  /**
-   * @member {boolean} [privacy] <code>true</code> if domain privacy is enabled
-   * for this domain; otherwise, <code>false</code>.
-   */
-  privacy?: boolean;
-  /**
-   * @member {Date} [createdTime] Domain creation timestamp.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly createdTime?: Date;
-  /**
-   * @member {Date} [expirationTime] Domain expiration timestamp.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly expirationTime?: Date;
-  /**
-   * @member {Date} [lastRenewedTime] Timestamp when the domain was renewed
-   * last time.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastRenewedTime?: Date;
-  /**
-   * @member {boolean} [autoRenew] <code>true</code> if the domain should be
-   * automatically renewed; otherwise, <code>false</code>. Default value: true
-   * .
-   */
-  autoRenew?: boolean;
-  /**
-   * @member {boolean} [readyForDnsRecordManagement] <code>true</code> if Azure
-   * can assign this domain to App Service apps; otherwise, <code>false</code>.
-   * This value will be <code>true</code> if domain registration status is
-   * active and
-   * it is hosted on name servers Azure has programmatic access to.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly readyForDnsRecordManagement?: boolean;
-  /**
-   * @member {HostName[]} [managedHostNames] All hostnames derived from the
-   * domain and assigned to Azure resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly managedHostNames?: HostName[];
-  /**
-   * @member {DomainPurchaseConsent} consent Legal agreement consent.
-   */
-  consent: DomainPurchaseConsent;
-  /**
-   * @member {string[]} [domainNotRenewableReasons] Reasons why domain is not
-   * renewable.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly domainNotRenewableReasons?: string[];
-  /**
-   * @member {DnsType} [dnsType] Current DNS type. Possible values include:
-   * 'AzureDns', 'DefaultDomainRegistrarDns'
-   */
-  dnsType?: DnsType;
-  /**
-   * @member {string} [dnsZoneId] Azure DNS Zone to use
-   */
-  dnsZoneId?: string;
-  /**
-   * @member {DnsType} [targetDnsType] Target DNS type (would be used for
-   * migration). Possible values include: 'AzureDns',
-   * 'DefaultDomainRegistrarDns'
-   */
-  targetDnsType?: DnsType;
-  /**
-   * @member {string} [authCode]
-   */
-  authCode?: string;
-}
-
-/**
- * @interface
- * An interface representing DomainRecommendationSearchParameters.
- * Domain recommendation search parameters.
- *
- */
-export interface DomainRecommendationSearchParameters {
-  /**
-   * @member {string} [keywords] Keywords to be used for generating domain
-   * recommendations.
-   */
-  keywords?: string;
-  /**
-   * @member {number} [maxDomainRecommendations] Maximum number of
-   * recommendations.
-   */
-  maxDomainRecommendations?: number;
-}
-
-/**
- * @interface
- * An interface representing TldLegalAgreement.
- * Legal agreement for a top level domain.
- *
- */
-export interface TldLegalAgreement {
-  /**
-   * @member {string} agreementKey Unique identifier for the agreement.
-   */
-  agreementKey: string;
-  /**
-   * @member {string} title Agreement title.
-   */
-  title: string;
-  /**
-   * @member {string} content Agreement details.
-   */
-  content: string;
-  /**
-   * @member {string} [url] URL where a copy of the agreement details is
-   * hosted.
-   */
-  url?: string;
-}
-
-/**
- * @interface
- * An interface representing TopLevelDomain.
- * A top level domain object.
- *
- * @extends ProxyOnlyResource
- */
-export interface TopLevelDomain extends ProxyOnlyResource {
-  /**
-   * @member {boolean} [privacy] If <code>true</code>, then the top level
-   * domain supports domain privacy; otherwise, <code>false</code>.
-   */
-  privacy?: boolean;
-}
-
-/**
- * @interface
- * An interface representing TopLevelDomainAgreementOption.
- * Options for retrieving the list of top level domain legal agreements.
- *
- */
-export interface TopLevelDomainAgreementOption {
-  /**
-   * @member {boolean} [includePrivacy] If <code>true</code>, then the list of
-   * agreements will include agreements for domain privacy as well; otherwise,
-   * <code>false</code>.
-   */
-  includePrivacy?: boolean;
-  /**
-   * @member {boolean} [forTransfer] If <code>true</code>, then the list of
-   * agreements will include agreements for domain transfer as well; otherwise,
-   * <code>false</code>.
-   */
-  forTransfer?: boolean;
+  readonly maximum?: number;
 }
 
 /**
@@ -3476,696 +3709,229 @@ export interface CertificatePatchResource extends ProxyOnlyResource {
 
 /**
  * @interface
- * An interface representing VirtualNetworkProfile.
- * Specification for using a Virtual Network.
+ * An interface representing CsmOperationDisplay.
+ * Meta data about operation used for display in portal.
  *
  */
-export interface VirtualNetworkProfile {
+export interface CsmOperationDisplay {
   /**
-   * @member {string} [id] Resource id of the Virtual Network.
+   * @member {string} [provider]
    */
-  id?: string;
+  provider?: string;
   /**
-   * @member {string} [name] Name of the Virtual Network (read-only).
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [resource]
    */
-  readonly name?: string;
+  resource?: string;
   /**
-   * @member {string} [type] Resource type of the Virtual Network (read-only).
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [operation]
    */
-  readonly type?: string;
+  operation?: string;
   /**
-   * @member {string} [subnet] Subnet within the Virtual Network.
-   */
-  subnet?: string;
-}
-
-/**
- * @interface
- * An interface representing WorkerPool.
- * Worker pool of an App Service Environment.
- *
- */
-export interface WorkerPool {
-  /**
-   * @member {number} [workerSizeId] Worker size ID for referencing this worker
-   * pool.
-   */
-  workerSizeId?: number;
-  /**
-   * @member {ComputeModeOptions} [computeMode] Shared or dedicated app
-   * hosting. Possible values include: 'Shared', 'Dedicated', 'Dynamic'
-   */
-  computeMode?: ComputeModeOptions;
-  /**
-   * @member {string} [workerSize] VM size of the worker pool instances.
-   */
-  workerSize?: string;
-  /**
-   * @member {number} [workerCount] Number of instances in the worker pool.
-   */
-  workerCount?: number;
-  /**
-   * @member {string[]} [instanceNames] Names of all instances in the worker
-   * pool (read only).
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly instanceNames?: string[];
-}
-
-/**
- * @interface
- * An interface representing VirtualIPMapping.
- * Virtual IP mapping.
- *
- */
-export interface VirtualIPMapping {
-  /**
-   * @member {string} [virtualIP] Virtual IP address.
-   */
-  virtualIP?: string;
-  /**
-   * @member {number} [internalHttpPort] Internal HTTP port.
-   */
-  internalHttpPort?: number;
-  /**
-   * @member {number} [internalHttpsPort] Internal HTTPS port.
-   */
-  internalHttpsPort?: number;
-  /**
-   * @member {boolean} [inUse] Is virtual IP mapping in use.
-   */
-  inUse?: boolean;
-}
-
-/**
- * @interface
- * An interface representing StampCapacity.
- * Stamp capacity information.
- *
- */
-export interface StampCapacity {
-  /**
-   * @member {string} [name] Name of the stamp.
-   */
-  name?: string;
-  /**
-   * @member {number} [availableCapacity] Available capacity (# of machines,
-   * bytes of storage etc...).
-   */
-  availableCapacity?: number;
-  /**
-   * @member {number} [totalCapacity] Total capacity (# of machines, bytes of
-   * storage etc...).
-   */
-  totalCapacity?: number;
-  /**
-   * @member {string} [unit] Name of the unit.
-   */
-  unit?: string;
-  /**
-   * @member {ComputeModeOptions} [computeMode] Shared/dedicated workers.
-   * Possible values include: 'Shared', 'Dedicated', 'Dynamic'
-   */
-  computeMode?: ComputeModeOptions;
-  /**
-   * @member {WorkerSizeOptions} [workerSize] Size of the machines. Possible
-   * values include: 'Small', 'Medium', 'Large', 'D1', 'D2', 'D3', 'Default'
-   */
-  workerSize?: WorkerSizeOptions;
-  /**
-   * @member {number} [workerSizeId] Size ID of machines:
-   * 0 - Small
-   * 1 - Medium
-   * 2 - Large
-   */
-  workerSizeId?: number;
-  /**
-   * @member {boolean} [excludeFromCapacityAllocation] If <code>true</code>, it
-   * includes basic apps.
-   * Basic apps are not used for capacity allocation.
-   */
-  excludeFromCapacityAllocation?: boolean;
-  /**
-   * @member {boolean} [isApplicableForAllComputeModes] <code>true</code> if
-   * capacity is applicable for all apps; otherwise, <code>false</code>.
-   */
-  isApplicableForAllComputeModes?: boolean;
-  /**
-   * @member {string} [siteMode] Shared or Dedicated.
-   */
-  siteMode?: string;
-  /**
-   * @member {boolean} [isLinux] Is this a linux stamp capacity
-   */
-  isLinux?: boolean;
-}
-
-/**
- * @interface
- * An interface representing NetworkAccessControlEntry.
- * Network access control entry.
- *
- */
-export interface NetworkAccessControlEntry {
-  /**
-   * @member {AccessControlEntryAction} [action] Action object. Possible values
-   * include: 'Permit', 'Deny'
-   */
-  action?: AccessControlEntryAction;
-  /**
-   * @member {string} [description] Description of network access control
-   * entry.
+   * @member {string} [description]
    */
   description?: string;
-  /**
-   * @member {number} [order] Order of precedence.
-   */
-  order?: number;
-  /**
-   * @member {string} [remoteSubnet] Remote subnet.
-   */
-  remoteSubnet?: string;
 }
 
 /**
  * @interface
- * An interface representing AppServiceEnvironment.
- * Description of an App Service Environment.
+ * An interface representing Dimension.
+ * Dimension of a resource metric. For e.g. instance specific HTTP requests for
+ * a web app,
+ * where instance name is dimension of the metric HTTP request
  *
  */
-export interface AppServiceEnvironment {
+export interface Dimension {
   /**
-   * @member {string} name Name of the App Service Environment.
-   */
-  name: string;
-  /**
-   * @member {string} location Location of the App Service Environment, e.g.
-   * "West US".
-   */
-  location: string;
-  /**
-   * @member {ProvisioningState} [provisioningState] Provisioning state of the
-   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
-   * 'Canceled', 'InProgress', 'Deleting'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly provisioningState?: ProvisioningState;
-  /**
-   * @member {HostingEnvironmentStatus} [status] Current status of the App
-   * Service Environment. Possible values include: 'Preparing', 'Ready',
-   * 'Scaling', 'Deleting'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly status?: HostingEnvironmentStatus;
-  /**
-   * @member {string} [vnetName] Name of the Virtual Network for the App
-   * Service Environment.
-   */
-  vnetName?: string;
-  /**
-   * @member {string} [vnetResourceGroupName] Resource group of the Virtual
-   * Network.
-   */
-  vnetResourceGroupName?: string;
-  /**
-   * @member {string} [vnetSubnetName] Subnet of the Virtual Network.
-   */
-  vnetSubnetName?: string;
-  /**
-   * @member {VirtualNetworkProfile} virtualNetwork Description of the Virtual
-   * Network.
-   */
-  virtualNetwork: VirtualNetworkProfile;
-  /**
-   * @member {InternalLoadBalancingMode} [internalLoadBalancingMode] Specifies
-   * which endpoints to serve internally in the Virtual Network for the App
-   * Service Environment. Possible values include: 'None', 'Web', 'Publishing'
-   */
-  internalLoadBalancingMode?: InternalLoadBalancingMode;
-  /**
-   * @member {string} [multiSize] Front-end VM size, e.g. "Medium", "Large".
-   */
-  multiSize?: string;
-  /**
-   * @member {number} [multiRoleCount] Number of front-end instances.
-   */
-  multiRoleCount?: number;
-  /**
-   * @member {WorkerPool[]} workerPools Description of worker pools with worker
-   * size IDs, VM sizes, and number of workers in each pool.
-   */
-  workerPools: WorkerPool[];
-  /**
-   * @member {number} [ipsslAddressCount] Number of IP SSL addresses reserved
-   * for the App Service Environment.
-   */
-  ipsslAddressCount?: number;
-  /**
-   * @member {string} [databaseEdition] Edition of the metadata database for
-   * the App Service Environment, e.g. "Standard".
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly databaseEdition?: string;
-  /**
-   * @member {string} [databaseServiceObjective] Service objective of the
-   * metadata database for the App Service Environment, e.g. "S0".
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly databaseServiceObjective?: string;
-  /**
-   * @member {number} [upgradeDomains] Number of upgrade domains of the App
-   * Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly upgradeDomains?: number;
-  /**
-   * @member {string} [subscriptionId] Subscription of the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly subscriptionId?: string;
-  /**
-   * @member {string} [dnsSuffix] DNS suffix of the App Service Environment.
-   */
-  dnsSuffix?: string;
-  /**
-   * @member {string} [lastAction] Last deployment action on the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastAction?: string;
-  /**
-   * @member {string} [lastActionResult] Result of the last deployment action
-   * on the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastActionResult?: string;
-  /**
-   * @member {string} [allowedMultiSizes] List of comma separated strings
-   * describing which VM sizes are allowed for front-ends.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly allowedMultiSizes?: string;
-  /**
-   * @member {string} [allowedWorkerSizes] List of comma separated strings
-   * describing which VM sizes are allowed for workers.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly allowedWorkerSizes?: string;
-  /**
-   * @member {number} [maximumNumberOfMachines] Maximum number of VMs in the
-   * App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly maximumNumberOfMachines?: number;
-  /**
-   * @member {VirtualIPMapping[]} [vipMappings] Description of IP SSL mapping
-   * for the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly vipMappings?: VirtualIPMapping[];
-  /**
-   * @member {StampCapacity[]} [environmentCapacities] Current total, used, and
-   * available worker capacities.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentCapacities?: StampCapacity[];
-  /**
-   * @member {NetworkAccessControlEntry[]} [networkAccessControlList] Access
-   * control list for controlling traffic to the App Service Environment.
-   */
-  networkAccessControlList?: NetworkAccessControlEntry[];
-  /**
-   * @member {boolean} [environmentIsHealthy] True/false indicating whether the
-   * App Service Environment is healthy.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentIsHealthy?: boolean;
-  /**
-   * @member {string} [environmentStatus] Detailed message about with results
-   * of the last check of the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentStatus?: string;
-  /**
-   * @member {string} [resourceGroup] Resource group of the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly resourceGroup?: string;
-  /**
-   * @member {number} [frontEndScaleFactor] Scale factor for front-ends.
-   */
-  frontEndScaleFactor?: number;
-  /**
-   * @member {number} [defaultFrontEndScaleFactor] Default Scale Factor for
-   * FrontEnds.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly defaultFrontEndScaleFactor?: number;
-  /**
-   * @member {string} [apiManagementAccountId] API Management Account
-   * associated with the App Service Environment.
-   */
-  apiManagementAccountId?: string;
-  /**
-   * @member {boolean} [suspended] <code>true</code> if the App Service
-   * Environment is suspended; otherwise, <code>false</code>. The environment
-   * can be suspended, e.g. when the management endpoint is no longer available
-   * (most likely because NSG blocked the incoming traffic).
-   */
-  suspended?: boolean;
-  /**
-   * @member {boolean} [dynamicCacheEnabled] True/false indicating whether the
-   * App Service Environment is suspended. The environment can be suspended
-   * e.g. when the management endpoint is no longer available
-   * (most likely because NSG blocked the incoming traffic).
-   */
-  dynamicCacheEnabled?: boolean;
-  /**
-   * @member {NameValuePair[]} [clusterSettings] Custom settings for changing
-   * the behavior of the App Service Environment.
-   */
-  clusterSettings?: NameValuePair[];
-  /**
-   * @member {string[]} [userWhitelistedIpRanges] User added ip ranges to
-   * whitelist on ASE db
-   */
-  userWhitelistedIpRanges?: string[];
-  /**
-   * @member {boolean} [hasLinuxWorkers] Flag that displays whether an ASE has
-   * linux workers or not
-   */
-  hasLinuxWorkers?: boolean;
-  /**
-   * @member {string} [sslCertKeyVaultId] Key Vault ID for ILB App Service
-   * Environment default SSL certificate
-   */
-  sslCertKeyVaultId?: string;
-  /**
-   * @member {string} [sslCertKeyVaultSecretName] Key Vault Secret Name for ILB
-   * App Service Environment default SSL certificate
-   */
-  sslCertKeyVaultSecretName?: string;
-}
-
-/**
- * @interface
- * An interface representing LocalizableString.
- * Localizable string object containing the name and a localized value.
- *
- */
-export interface LocalizableString {
-  /**
-   * @member {string} [value] Non-localized name.
-   */
-  value?: string;
-  /**
-   * @member {string} [localizedValue] Localized name.
-   */
-  localizedValue?: string;
-}
-
-/**
- * @interface
- * An interface representing CsmUsageQuota.
- * Usage of the quota resource.
- *
- */
-export interface CsmUsageQuota {
-  /**
-   * @member {string} [unit] Units of measurement for the quota resourse.
-   */
-  unit?: string;
-  /**
-   * @member {Date} [nextResetTime] Next reset time for the resource counter.
-   */
-  nextResetTime?: Date;
-  /**
-   * @member {number} [currentValue] The current value of the resource counter.
-   */
-  currentValue?: number;
-  /**
-   * @member {number} [limit] The resource limit.
-   */
-  limit?: number;
-  /**
-   * @member {LocalizableString} [name] Quota name.
-   */
-  name?: LocalizableString;
-}
-
-/**
- * @interface
- * An interface representing ErrorEntity.
- * Body of the error response returned from the API.
- *
- */
-export interface ErrorEntity {
-  /**
-   * @member {string} [extendedCode] Type of error.
-   */
-  extendedCode?: string;
-  /**
-   * @member {string} [messageTemplate] Message template.
-   */
-  messageTemplate?: string;
-  /**
-   * @member {string[]} [parameters] Parameters for the template.
-   */
-  parameters?: string[];
-  /**
-   * @member {ErrorEntity[]} [innerErrors] Inner errors.
-   */
-  innerErrors?: ErrorEntity[];
-  /**
-   * @member {string} [code] Basic error code.
-   */
-  code?: string;
-  /**
-   * @member {string} [message] Any details of the error.
-   */
-  message?: string;
-}
-
-/**
- * @interface
- * An interface representing Operation.
- * An operation on a resource.
- *
- */
-export interface Operation {
-  /**
-   * @member {string} [id] Operation ID.
-   */
-  id?: string;
-  /**
-   * @member {string} [name] Operation name.
+   * @member {string} [name]
    */
   name?: string;
   /**
-   * @member {OperationStatus} [status] The current status of the operation.
-   * Possible values include: 'InProgress', 'Failed', 'Succeeded', 'TimedOut',
-   * 'Created'
+   * @member {string} [displayName]
    */
-  status?: OperationStatus;
+  displayName?: string;
   /**
-   * @member {ErrorEntity[]} [errors] Any errors associate with the operation.
+   * @member {string} [internalName]
    */
-  errors?: ErrorEntity[];
+  internalName?: string;
   /**
-   * @member {Date} [createdTime] Time when operation has started.
+   * @member {boolean} [toBeExportedForShoebox]
    */
-  createdTime?: Date;
-  /**
-   * @member {Date} [modifiedTime] Time when operation has been updated.
-   */
-  modifiedTime?: Date;
-  /**
-   * @member {Date} [expirationTime] Time when operation will expire.
-   */
-  expirationTime?: Date;
-  /**
-   * @member {string} [geoMasterOperationId] Applicable only for stamp
-   * operation ids.
-   */
-  geoMasterOperationId?: string;
+  toBeExportedForShoebox?: boolean;
 }
 
 /**
  * @interface
- * An interface representing ResourceMetricName.
- * Name of a metric for any resource .
+ * An interface representing MetricAvailability.
+ * Retention policy of a resource metric.
  *
  */
-export interface ResourceMetricName {
+export interface MetricAvailability {
   /**
-   * @member {string} [value] metric name value.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [timeGrain]
    */
-  readonly value?: string;
+  timeGrain?: string;
   /**
-   * @member {string} [localizedValue] Localized metric name value.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [blobDuration]
    */
-  readonly localizedValue?: string;
+  blobDuration?: string;
 }
 
 /**
  * @interface
- * An interface representing ResourceMetricProperty.
- * Resource metric property.
+ * An interface representing MetricSpecification.
+ * Definition of a single resource metric.
  *
  */
-export interface ResourceMetricProperty {
+export interface MetricSpecification {
   /**
-   * @member {string} [key] Key for resource metric property.
+   * @member {string} [name]
    */
-  key?: string;
+  name?: string;
   /**
-   * @member {string} [value] Value of pair.
+   * @member {string} [displayName]
    */
-  value?: string;
+  displayName?: string;
+  /**
+   * @member {string} [displayDescription]
+   */
+  displayDescription?: string;
+  /**
+   * @member {string} [unit]
+   */
+  unit?: string;
+  /**
+   * @member {string} [aggregationType]
+   */
+  aggregationType?: string;
+  /**
+   * @member {boolean} [supportsInstanceLevelAggregation]
+   */
+  supportsInstanceLevelAggregation?: boolean;
+  /**
+   * @member {boolean} [enableRegionalMdmAccount]
+   */
+  enableRegionalMdmAccount?: boolean;
+  /**
+   * @member {string} [sourceMdmAccount]
+   */
+  sourceMdmAccount?: string;
+  /**
+   * @member {string} [sourceMdmNamespace]
+   */
+  sourceMdmNamespace?: string;
+  /**
+   * @member {string} [metricFilterPattern]
+   */
+  metricFilterPattern?: string;
+  /**
+   * @member {boolean} [fillGapWithZero]
+   */
+  fillGapWithZero?: boolean;
+  /**
+   * @member {boolean} [isInternal]
+   */
+  isInternal?: boolean;
+  /**
+   * @member {Dimension[]} [dimensions]
+   */
+  dimensions?: Dimension[];
+  /**
+   * @member {string} [category]
+   */
+  category?: string;
+  /**
+   * @member {MetricAvailability[]} [availabilities]
+   */
+  availabilities?: MetricAvailability[];
 }
 
 /**
  * @interface
- * An interface representing ResourceMetricValue.
- * Value of resource metric.
+ * An interface representing LogSpecification.
+ * Log Definition of a single resource metric.
  *
  */
-export interface ResourceMetricValue {
+export interface LogSpecification {
   /**
-   * @member {string} [timestamp] Value timestamp.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [name]
    */
-  readonly timestamp?: string;
+  name?: string;
   /**
-   * @member {number} [average] Value average.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [displayName]
    */
-  readonly average?: number;
+  displayName?: string;
   /**
-   * @member {number} [minimum] Value minimum.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [blobDuration]
    */
-  readonly minimum?: number;
-  /**
-   * @member {number} [maximum] Value maximum.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly maximum?: number;
-  /**
-   * @member {number} [total] Value total.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly total?: number;
-  /**
-   * @member {number} [count] Value count.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly count?: number;
-  /**
-   * @member {ResourceMetricProperty[]} [properties] Resource metric properties
-   * collection.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly properties?: ResourceMetricProperty[];
+  blobDuration?: string;
 }
 
 /**
  * @interface
- * An interface representing ResourceMetric.
- * Object representing a metric for any resource .
+ * An interface representing ServiceSpecification.
+ * Resource metrics service provided by Microsoft.Insights resource provider.
  *
  */
-export interface ResourceMetric {
+export interface ServiceSpecification {
   /**
-   * @member {ResourceMetricName} [name] Name of metric.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {MetricSpecification[]} [metricSpecifications]
    */
-  readonly name?: ResourceMetricName;
+  metricSpecifications?: MetricSpecification[];
   /**
-   * @member {string} [unit] Metric unit.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {LogSpecification[]} [logSpecifications]
    */
-  readonly unit?: string;
+  logSpecifications?: LogSpecification[];
+}
+
+/**
+ * @interface
+ * An interface representing CsmOperationDescriptionProperties.
+ * Properties available for a Microsoft.Web resource provider operation.
+ *
+ */
+export interface CsmOperationDescriptionProperties {
   /**
-   * @member {string} [timeGrain] Metric granularity. E.g PT1H, PT5M, P1D
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {ServiceSpecification} [serviceSpecification]
    */
-  readonly timeGrain?: string;
+  serviceSpecification?: ServiceSpecification;
+}
+
+/**
+ * @interface
+ * An interface representing CsmOperationDescription.
+ * Description of an operation available for Microsoft.Web resource provider.
+ *
+ */
+export interface CsmOperationDescription {
   /**
-   * @member {Date} [startTime] Metric start time.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [name]
    */
-  readonly startTime?: Date;
+  name?: string;
   /**
-   * @member {Date} [endTime] Metric end time.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {CsmOperationDisplay} [display]
    */
-  readonly endTime?: Date;
+  display?: CsmOperationDisplay;
   /**
-   * @member {string} [resourceId] Metric resource Id.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [origin]
    */
-  readonly resourceId?: string;
+  origin?: string;
   /**
-   * @member {string} [id] Resource Id.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {CsmOperationDescriptionProperties} [properties]
    */
-  readonly id?: string;
+  properties?: CsmOperationDescriptionProperties;
+}
+
+/**
+ * @interface
+ * An interface representing NameIdentifier.
+ * Identifies an object.
+ *
+ */
+export interface NameIdentifier {
   /**
-   * @member {ResourceMetricValue[]} [metricValues] Metric values.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
+   * @member {string} [name] Name of the object.
    */
-  readonly metricValues?: ResourceMetricValue[];
-  /**
-   * @member {ResourceMetricProperty[]} [properties] Resource metric properties
-   * collection.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly properties?: ResourceMetricProperty[];
+  name?: string;
 }
 
 /**
@@ -4973,6 +4739,26 @@ export interface RecommendationRule extends ProxyOnlyResource {
    * associated with the rule. Applicable to dynamic rule only.
    */
   forwardLink?: string;
+}
+
+/**
+ * @interface
+ * An interface representing ResourceHealthMetadata.
+ * Used for getting ResourceHealthCheck settings.
+ *
+ * @extends ProxyOnlyResource
+ */
+export interface ResourceHealthMetadata extends ProxyOnlyResource {
+  /**
+   * @member {string} [category] The category that the resource matches in the
+   * RHC Policy File
+   */
+  category?: string;
+  /**
+   * @member {boolean} [signalAvailability] Is there a health signal for the
+   * resource
+   */
+  signalAvailability?: boolean;
 }
 
 /**
@@ -8407,912 +8193,285 @@ export interface WebJob extends ProxyOnlyResource {
 
 /**
  * @interface
- * An interface representing AddressResponse.
- * Describes main public IP address and any extra virtual IPs.
+ * An interface representing AppServiceEnvironmentsDeleteMethodOptionalParams.
+ * Optional Parameters.
  *
+ * @extends RequestOptionsBase
  */
-export interface AddressResponse {
+export interface AppServiceEnvironmentsDeleteMethodOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {string} [serviceIpAddress] Main public virtual IP.
+   * @member {boolean} [forceDelete] Specify <code>true</code> to force the
+   * deletion even if the App Service Environment contains resources. The
+   * default is <code>false</code>.
    */
-  serviceIpAddress?: string;
-  /**
-   * @member {string} [internalIpAddress] Virtual Network internal IP address
-   * of the App Service Environment if it is in internal load-balancing mode.
-   */
-  internalIpAddress?: string;
-  /**
-   * @member {string[]} [outboundIpAddresses] IP addresses appearing on
-   * outbound connections.
-   */
-  outboundIpAddresses?: string[];
-  /**
-   * @member {VirtualIPMapping[]} [vipMappings] Additional virtual IPs.
-   */
-  vipMappings?: VirtualIPMapping[];
+  forceDelete?: boolean;
 }
 
 /**
  * @interface
- * An interface representing AppServiceEnvironmentResource.
- * App Service Environment ARM resource.
+ * An interface representing AppServiceEnvironmentsListMetricsOptionalParams.
+ * Optional Parameters.
  *
- * @extends Resource
+ * @extends RequestOptionsBase
  */
-export interface AppServiceEnvironmentResource extends Resource {
+export interface AppServiceEnvironmentsListMetricsOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {string} appServiceEnvironmentResourceName Name of the App Service
-   * Environment.
+   * @member {boolean} [details] Specify <code>true</code> to include instance
+   * details. The default is <code>false</code>.
    */
-  appServiceEnvironmentResourceName: string;
+  details?: boolean;
   /**
-   * @member {string} appServiceEnvironmentResourceLocation Location of the App
-   * Service Environment, e.g. "West US".
+   * @member {string} [filter] Return only usages/metrics specified in the
+   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
+   * 'Metric1' or name.value eq 'Metric2') and startTime eq
+   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+   * duration'[Hour|Minute|Day]'.
    */
-  appServiceEnvironmentResourceLocation: string;
-  /**
-   * @member {ProvisioningState} [provisioningState] Provisioning state of the
-   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
-   * 'Canceled', 'InProgress', 'Deleting'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly provisioningState?: ProvisioningState;
-  /**
-   * @member {HostingEnvironmentStatus} [status] Current status of the App
-   * Service Environment. Possible values include: 'Preparing', 'Ready',
-   * 'Scaling', 'Deleting'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly status?: HostingEnvironmentStatus;
-  /**
-   * @member {string} [vnetName] Name of the Virtual Network for the App
-   * Service Environment.
-   */
-  vnetName?: string;
-  /**
-   * @member {string} [vnetResourceGroupName] Resource group of the Virtual
-   * Network.
-   */
-  vnetResourceGroupName?: string;
-  /**
-   * @member {string} [vnetSubnetName] Subnet of the Virtual Network.
-   */
-  vnetSubnetName?: string;
-  /**
-   * @member {VirtualNetworkProfile} virtualNetwork Description of the Virtual
-   * Network.
-   */
-  virtualNetwork: VirtualNetworkProfile;
-  /**
-   * @member {InternalLoadBalancingMode} [internalLoadBalancingMode] Specifies
-   * which endpoints to serve internally in the Virtual Network for the App
-   * Service Environment. Possible values include: 'None', 'Web', 'Publishing'
-   */
-  internalLoadBalancingMode?: InternalLoadBalancingMode;
-  /**
-   * @member {string} [multiSize] Front-end VM size, e.g. "Medium", "Large".
-   */
-  multiSize?: string;
-  /**
-   * @member {number} [multiRoleCount] Number of front-end instances.
-   */
-  multiRoleCount?: number;
-  /**
-   * @member {WorkerPool[]} workerPools Description of worker pools with worker
-   * size IDs, VM sizes, and number of workers in each pool.
-   */
-  workerPools: WorkerPool[];
-  /**
-   * @member {number} [ipsslAddressCount] Number of IP SSL addresses reserved
-   * for the App Service Environment.
-   */
-  ipsslAddressCount?: number;
-  /**
-   * @member {string} [databaseEdition] Edition of the metadata database for
-   * the App Service Environment, e.g. "Standard".
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly databaseEdition?: string;
-  /**
-   * @member {string} [databaseServiceObjective] Service objective of the
-   * metadata database for the App Service Environment, e.g. "S0".
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly databaseServiceObjective?: string;
-  /**
-   * @member {number} [upgradeDomains] Number of upgrade domains of the App
-   * Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly upgradeDomains?: number;
-  /**
-   * @member {string} [subscriptionId] Subscription of the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly subscriptionId?: string;
-  /**
-   * @member {string} [dnsSuffix] DNS suffix of the App Service Environment.
-   */
-  dnsSuffix?: string;
-  /**
-   * @member {string} [lastAction] Last deployment action on the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastAction?: string;
-  /**
-   * @member {string} [lastActionResult] Result of the last deployment action
-   * on the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastActionResult?: string;
-  /**
-   * @member {string} [allowedMultiSizes] List of comma separated strings
-   * describing which VM sizes are allowed for front-ends.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly allowedMultiSizes?: string;
-  /**
-   * @member {string} [allowedWorkerSizes] List of comma separated strings
-   * describing which VM sizes are allowed for workers.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly allowedWorkerSizes?: string;
-  /**
-   * @member {number} [maximumNumberOfMachines] Maximum number of VMs in the
-   * App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly maximumNumberOfMachines?: number;
-  /**
-   * @member {VirtualIPMapping[]} [vipMappings] Description of IP SSL mapping
-   * for the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly vipMappings?: VirtualIPMapping[];
-  /**
-   * @member {StampCapacity[]} [environmentCapacities] Current total, used, and
-   * available worker capacities.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentCapacities?: StampCapacity[];
-  /**
-   * @member {NetworkAccessControlEntry[]} [networkAccessControlList] Access
-   * control list for controlling traffic to the App Service Environment.
-   */
-  networkAccessControlList?: NetworkAccessControlEntry[];
-  /**
-   * @member {boolean} [environmentIsHealthy] True/false indicating whether the
-   * App Service Environment is healthy.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentIsHealthy?: boolean;
-  /**
-   * @member {string} [environmentStatus] Detailed message about with results
-   * of the last check of the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentStatus?: string;
-  /**
-   * @member {string} [resourceGroup] Resource group of the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly resourceGroup?: string;
-  /**
-   * @member {number} [frontEndScaleFactor] Scale factor for front-ends.
-   */
-  frontEndScaleFactor?: number;
-  /**
-   * @member {number} [defaultFrontEndScaleFactor] Default Scale Factor for
-   * FrontEnds.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly defaultFrontEndScaleFactor?: number;
-  /**
-   * @member {string} [apiManagementAccountId] API Management Account
-   * associated with the App Service Environment.
-   */
-  apiManagementAccountId?: string;
-  /**
-   * @member {boolean} [suspended] <code>true</code> if the App Service
-   * Environment is suspended; otherwise, <code>false</code>. The environment
-   * can be suspended, e.g. when the management endpoint is no longer available
-   * (most likely because NSG blocked the incoming traffic).
-   */
-  suspended?: boolean;
-  /**
-   * @member {boolean} [dynamicCacheEnabled] True/false indicating whether the
-   * App Service Environment is suspended. The environment can be suspended
-   * e.g. when the management endpoint is no longer available
-   * (most likely because NSG blocked the incoming traffic).
-   */
-  dynamicCacheEnabled?: boolean;
-  /**
-   * @member {NameValuePair[]} [clusterSettings] Custom settings for changing
-   * the behavior of the App Service Environment.
-   */
-  clusterSettings?: NameValuePair[];
-  /**
-   * @member {string[]} [userWhitelistedIpRanges] User added ip ranges to
-   * whitelist on ASE db
-   */
-  userWhitelistedIpRanges?: string[];
-  /**
-   * @member {boolean} [hasLinuxWorkers] Flag that displays whether an ASE has
-   * linux workers or not
-   */
-  hasLinuxWorkers?: boolean;
-  /**
-   * @member {string} [sslCertKeyVaultId] Key Vault ID for ILB App Service
-   * Environment default SSL certificate
-   */
-  sslCertKeyVaultId?: string;
-  /**
-   * @member {string} [sslCertKeyVaultSecretName] Key Vault Secret Name for ILB
-   * App Service Environment default SSL certificate
-   */
-  sslCertKeyVaultSecretName?: string;
+  filter?: string;
 }
 
 /**
  * @interface
- * An interface representing AppServiceEnvironmentPatchResource.
- * ARM resource for a app service enviroment.
+ * An interface representing AppServiceEnvironmentsListMultiRolePoolInstanceMetricsOptionalParams.
+ * Optional Parameters.
  *
- * @extends ProxyOnlyResource
+ * @extends RequestOptionsBase
  */
-export interface AppServiceEnvironmentPatchResource extends ProxyOnlyResource {
+export interface AppServiceEnvironmentsListMultiRolePoolInstanceMetricsOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {string} appServiceEnvironmentPatchResourceName Name of the App
-   * Service Environment.
+   * @member {boolean} [details] Specify <code>true</code> to include instance
+   * details. The default is <code>false</code>.
    */
-  appServiceEnvironmentPatchResourceName: string;
-  /**
-   * @member {string} location Location of the App Service Environment, e.g.
-   * "West US".
-   */
-  location: string;
-  /**
-   * @member {ProvisioningState} [provisioningState] Provisioning state of the
-   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
-   * 'Canceled', 'InProgress', 'Deleting'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly provisioningState?: ProvisioningState;
-  /**
-   * @member {HostingEnvironmentStatus} [status] Current status of the App
-   * Service Environment. Possible values include: 'Preparing', 'Ready',
-   * 'Scaling', 'Deleting'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly status?: HostingEnvironmentStatus;
-  /**
-   * @member {string} [vnetName] Name of the Virtual Network for the App
-   * Service Environment.
-   */
-  vnetName?: string;
-  /**
-   * @member {string} [vnetResourceGroupName] Resource group of the Virtual
-   * Network.
-   */
-  vnetResourceGroupName?: string;
-  /**
-   * @member {string} [vnetSubnetName] Subnet of the Virtual Network.
-   */
-  vnetSubnetName?: string;
-  /**
-   * @member {VirtualNetworkProfile} virtualNetwork Description of the Virtual
-   * Network.
-   */
-  virtualNetwork: VirtualNetworkProfile;
-  /**
-   * @member {InternalLoadBalancingMode} [internalLoadBalancingMode] Specifies
-   * which endpoints to serve internally in the Virtual Network for the App
-   * Service Environment. Possible values include: 'None', 'Web', 'Publishing'
-   */
-  internalLoadBalancingMode?: InternalLoadBalancingMode;
-  /**
-   * @member {string} [multiSize] Front-end VM size, e.g. "Medium", "Large".
-   */
-  multiSize?: string;
-  /**
-   * @member {number} [multiRoleCount] Number of front-end instances.
-   */
-  multiRoleCount?: number;
-  /**
-   * @member {WorkerPool[]} workerPools Description of worker pools with worker
-   * size IDs, VM sizes, and number of workers in each pool.
-   */
-  workerPools: WorkerPool[];
-  /**
-   * @member {number} [ipsslAddressCount] Number of IP SSL addresses reserved
-   * for the App Service Environment.
-   */
-  ipsslAddressCount?: number;
-  /**
-   * @member {string} [databaseEdition] Edition of the metadata database for
-   * the App Service Environment, e.g. "Standard".
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly databaseEdition?: string;
-  /**
-   * @member {string} [databaseServiceObjective] Service objective of the
-   * metadata database for the App Service Environment, e.g. "S0".
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly databaseServiceObjective?: string;
-  /**
-   * @member {number} [upgradeDomains] Number of upgrade domains of the App
-   * Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly upgradeDomains?: number;
-  /**
-   * @member {string} [subscriptionId] Subscription of the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly subscriptionId?: string;
-  /**
-   * @member {string} [dnsSuffix] DNS suffix of the App Service Environment.
-   */
-  dnsSuffix?: string;
-  /**
-   * @member {string} [lastAction] Last deployment action on the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastAction?: string;
-  /**
-   * @member {string} [lastActionResult] Result of the last deployment action
-   * on the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly lastActionResult?: string;
-  /**
-   * @member {string} [allowedMultiSizes] List of comma separated strings
-   * describing which VM sizes are allowed for front-ends.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly allowedMultiSizes?: string;
-  /**
-   * @member {string} [allowedWorkerSizes] List of comma separated strings
-   * describing which VM sizes are allowed for workers.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly allowedWorkerSizes?: string;
-  /**
-   * @member {number} [maximumNumberOfMachines] Maximum number of VMs in the
-   * App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly maximumNumberOfMachines?: number;
-  /**
-   * @member {VirtualIPMapping[]} [vipMappings] Description of IP SSL mapping
-   * for the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly vipMappings?: VirtualIPMapping[];
-  /**
-   * @member {StampCapacity[]} [environmentCapacities] Current total, used, and
-   * available worker capacities.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentCapacities?: StampCapacity[];
-  /**
-   * @member {NetworkAccessControlEntry[]} [networkAccessControlList] Access
-   * control list for controlling traffic to the App Service Environment.
-   */
-  networkAccessControlList?: NetworkAccessControlEntry[];
-  /**
-   * @member {boolean} [environmentIsHealthy] True/false indicating whether the
-   * App Service Environment is healthy.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentIsHealthy?: boolean;
-  /**
-   * @member {string} [environmentStatus] Detailed message about with results
-   * of the last check of the App Service Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly environmentStatus?: string;
-  /**
-   * @member {string} [resourceGroup] Resource group of the App Service
-   * Environment.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly resourceGroup?: string;
-  /**
-   * @member {number} [frontEndScaleFactor] Scale factor for front-ends.
-   */
-  frontEndScaleFactor?: number;
-  /**
-   * @member {number} [defaultFrontEndScaleFactor] Default Scale Factor for
-   * FrontEnds.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly defaultFrontEndScaleFactor?: number;
-  /**
-   * @member {string} [apiManagementAccountId] API Management Account
-   * associated with the App Service Environment.
-   */
-  apiManagementAccountId?: string;
-  /**
-   * @member {boolean} [suspended] <code>true</code> if the App Service
-   * Environment is suspended; otherwise, <code>false</code>. The environment
-   * can be suspended, e.g. when the management endpoint is no longer available
-   * (most likely because NSG blocked the incoming traffic).
-   */
-  suspended?: boolean;
-  /**
-   * @member {boolean} [dynamicCacheEnabled] True/false indicating whether the
-   * App Service Environment is suspended. The environment can be suspended
-   * e.g. when the management endpoint is no longer available
-   * (most likely because NSG blocked the incoming traffic).
-   */
-  dynamicCacheEnabled?: boolean;
-  /**
-   * @member {NameValuePair[]} [clusterSettings] Custom settings for changing
-   * the behavior of the App Service Environment.
-   */
-  clusterSettings?: NameValuePair[];
-  /**
-   * @member {string[]} [userWhitelistedIpRanges] User added ip ranges to
-   * whitelist on ASE db
-   */
-  userWhitelistedIpRanges?: string[];
-  /**
-   * @member {boolean} [hasLinuxWorkers] Flag that displays whether an ASE has
-   * linux workers or not
-   */
-  hasLinuxWorkers?: boolean;
-  /**
-   * @member {string} [sslCertKeyVaultId] Key Vault ID for ILB App Service
-   * Environment default SSL certificate
-   */
-  sslCertKeyVaultId?: string;
-  /**
-   * @member {string} [sslCertKeyVaultSecretName] Key Vault Secret Name for ILB
-   * App Service Environment default SSL certificate
-   */
-  sslCertKeyVaultSecretName?: string;
+  details?: boolean;
 }
 
 /**
  * @interface
- * An interface representing HostingEnvironmentDiagnostics.
- * Diagnostics for an App Service Environment.
+ * An interface representing AppServiceEnvironmentsListMultiRoleMetricsOptionalParams.
+ * Optional Parameters.
  *
+ * @extends RequestOptionsBase
  */
-export interface HostingEnvironmentDiagnostics {
+export interface AppServiceEnvironmentsListMultiRoleMetricsOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {string} [name] Name/identifier of the diagnostics.
+   * @member {string} [startTime] Beginning time of the metrics query.
    */
-  name?: string;
+  startTime?: string;
   /**
-   * @member {string} [diagnosicsOutput] Diagnostics output.
+   * @member {string} [endTime] End time of the metrics query.
    */
-  diagnosicsOutput?: string;
-}
-
-/**
- * @interface
- * An interface representing MetricAvailabilily.
- * Metric availability and retention.
- *
- */
-export interface MetricAvailabilily {
+  endTime?: string;
   /**
-   * @member {string} [timeGrain] Time grain.
+   * @member {string} [timeGrain] Time granularity of the metrics query.
    */
   timeGrain?: string;
   /**
-   * @member {string} [retention] Retention period for the current time grain.
+   * @member {boolean} [details] Specify <code>true</code> to include instance
+   * details. The default is <code>false</code>.
    */
-  retention?: string;
+  details?: boolean;
+  /**
+   * @member {string} [filter] Return only usages/metrics specified in the
+   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
+   * 'Metric1' or name.value eq 'Metric2') and startTime eq
+   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+   * duration'[Hour|Minute|Day]'.
+   */
+  filter?: string;
 }
 
 /**
  * @interface
- * An interface representing MetricDefinition.
- * Metadata for a metric.
- *
- * @extends ProxyOnlyResource
- */
-export interface MetricDefinition extends ProxyOnlyResource {
-  /**
-   * @member {string} [unit] Unit of the metric.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly unit?: string;
-  /**
-   * @member {string} [primaryAggregationType] Primary aggregation type.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly primaryAggregationType?: string;
-  /**
-   * @member {MetricAvailabilily[]} [metricAvailabilities] List of time grains
-   * supported for the metric together with retention period.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly metricAvailabilities?: MetricAvailabilily[];
-  /**
-   * @member {string} [displayName] Friendly name shown in the UI.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly displayName?: string;
-}
-
-/**
- * @interface
- * An interface representing SkuInfo.
- * SKU discovery information.
- *
- */
-export interface SkuInfo {
-  /**
-   * @member {string} [resourceType] Resource type that this SKU applies to.
-   */
-  resourceType?: string;
-  /**
-   * @member {SkuDescription} [sku] Name and tier of the SKU.
-   */
-  sku?: SkuDescription;
-  /**
-   * @member {SkuCapacity} [capacity] Min, max, and default scale values of the
-   * SKU.
-   */
-  capacity?: SkuCapacity;
-}
-
-/**
- * @interface
- * An interface representing Usage.
- * Usage of the quota resource.
- *
- * @extends ProxyOnlyResource
- */
-export interface Usage extends ProxyOnlyResource {
-  /**
-   * @member {string} [displayName] Friendly name shown in the UI.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly displayName?: string;
-  /**
-   * @member {string} [resourceName] Name of the quota resource.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly resourceName?: string;
-  /**
-   * @member {string} [unit] Units of measurement for the quota resource.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly unit?: string;
-  /**
-   * @member {number} [currentValue] The current value of the resource counter.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly currentValue?: number;
-  /**
-   * @member {number} [limit] The resource limit.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly limit?: number;
-  /**
-   * @member {Date} [nextResetTime] Next reset time for the resource counter.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextResetTime?: Date;
-  /**
-   * @member {ComputeModeOptions} [computeMode] Compute mode used for this
-   * usage. Possible values include: 'Shared', 'Dedicated', 'Dynamic'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly computeMode?: ComputeModeOptions;
-  /**
-   * @member {string} [siteMode] Site mode used for this usage.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly siteMode?: string;
-}
-
-/**
- * @interface
- * An interface representing WorkerPoolResource.
- * Worker pool of an App Service Environment ARM resource.
- *
- * @extends ProxyOnlyResource
- */
-export interface WorkerPoolResource extends ProxyOnlyResource {
-  /**
-   * @member {number} [workerSizeId] Worker size ID for referencing this worker
-   * pool.
-   */
-  workerSizeId?: number;
-  /**
-   * @member {ComputeModeOptions} [computeMode] Shared or dedicated app
-   * hosting. Possible values include: 'Shared', 'Dedicated', 'Dynamic'
-   */
-  computeMode?: ComputeModeOptions;
-  /**
-   * @member {string} [workerSize] VM size of the worker pool instances.
-   */
-  workerSize?: string;
-  /**
-   * @member {number} [workerCount] Number of instances in the worker pool.
-   */
-  workerCount?: number;
-  /**
-   * @member {string[]} [instanceNames] Names of all instances in the worker
-   * pool (read only).
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly instanceNames?: string[];
-  /**
-   * @member {SkuDescription} [sku]
-   */
-  sku?: SkuDescription;
-}
-
-/**
- * @interface
- * An interface representing AppServicePlanPatchResource.
- * ARM resource for a app service plan.
- *
- * @extends ProxyOnlyResource
- */
-export interface AppServicePlanPatchResource extends ProxyOnlyResource {
-  /**
-   * @member {string} [workerTierName] Target worker tier assigned to the App
-   * Service plan.
-   */
-  workerTierName?: string;
-  /**
-   * @member {StatusOptions} [status] App Service plan status. Possible values
-   * include: 'Ready', 'Pending', 'Creating'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly status?: StatusOptions;
-  /**
-   * @member {string} [subscription] App Service plan subscription.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly subscription?: string;
-  /**
-   * @member {string} [adminSiteName] App Service plan administration site.
-   */
-  adminSiteName?: string;
-  /**
-   * @member {HostingEnvironmentProfile} [hostingEnvironmentProfile]
-   * Specification for the App Service Environment to use for the App Service
-   * plan.
-   */
-  hostingEnvironmentProfile?: HostingEnvironmentProfile;
-  /**
-   * @member {number} [maximumNumberOfWorkers] Maximum number of instances that
-   * can be assigned to this App Service plan.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly maximumNumberOfWorkers?: number;
-  /**
-   * @member {string} [geoRegion] Geographical location for the App Service
-   * plan.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly geoRegion?: string;
-  /**
-   * @member {boolean} [perSiteScaling] If <code>true</code>, apps assigned to
-   * this App Service plan can be scaled independently.
-   * If <code>false</code>, apps assigned to this App Service plan will scale
-   * to all instances of the plan. Default value: false .
-   */
-  perSiteScaling?: boolean;
-  /**
-   * @member {number} [maximumElasticWorkerCount] Maximum number of total
-   * workers allowed for this ElasticScaleEnabled App Service Plan
-   */
-  maximumElasticWorkerCount?: number;
-  /**
-   * @member {number} [numberOfSites] Number of apps assigned to this App
-   * Service plan.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly numberOfSites?: number;
-  /**
-   * @member {boolean} [isSpot] If <code>true</code>, this App Service Plan
-   * owns spot instances.
-   */
-  isSpot?: boolean;
-  /**
-   * @member {Date} [spotExpirationTime] The time when the server farm expires.
-   * Valid only if it is a spot server farm.
-   */
-  spotExpirationTime?: Date;
-  /**
-   * @member {Date} [freeOfferExpirationTime] The time when the server farm
-   * free offer expires.
-   */
-  freeOfferExpirationTime?: Date;
-  /**
-   * @member {string} [resourceGroup] Resource group of the App Service plan.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly resourceGroup?: string;
-  /**
-   * @member {boolean} [reserved] If Linux app service plan <code>true</code>,
-   * <code>false</code> otherwise. Default value: false .
-   */
-  reserved?: boolean;
-  /**
-   * @member {boolean} [isXenon] Obsolete: If Hyper-V container app service
-   * plan <code>true</code>, <code>false</code> otherwise. Default value: false
-   * .
-   */
-  isXenon?: boolean;
-  /**
-   * @member {boolean} [hyperV] If Hyper-V container app service plan
-   * <code>true</code>, <code>false</code> otherwise. Default value: false .
-   */
-  hyperV?: boolean;
-  /**
-   * @member {number} [targetWorkerCount] Scaling worker count.
-   */
-  targetWorkerCount?: number;
-  /**
-   * @member {number} [targetWorkerSizeId] Scaling worker size ID.
-   */
-  targetWorkerSizeId?: number;
-  /**
-   * @member {ProvisioningState} [provisioningState] Provisioning state of the
-   * App Service Environment. Possible values include: 'Succeeded', 'Failed',
-   * 'Canceled', 'InProgress', 'Deleting'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly provisioningState?: ProvisioningState;
-}
-
-/**
- * @interface
- * An interface representing HybridConnectionLimits.
- * Hybrid Connection limits contract. This is used to return the plan limits of
- * Hybrid Connections.
- *
- * @extends ProxyOnlyResource
- */
-export interface HybridConnectionLimits extends ProxyOnlyResource {
-  /**
-   * @member {number} [current] The current number of Hybrid Connections.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly current?: number;
-  /**
-   * @member {number} [maximum] The maximum number of Hybrid Connections
-   * allowed.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly maximum?: number;
-}
-
-/**
- * @interface
- * An interface representing ResourceHealthMetadata.
- * Used for getting ResourceHealthCheck settings.
- *
- * @extends ProxyOnlyResource
- */
-export interface ResourceHealthMetadata extends ProxyOnlyResource {
-  /**
-   * @member {string} [category] The category that the resource matches in the
-   * RHC Policy File
-   */
-  category?: string;
-  /**
-   * @member {boolean} [signalAvailability] Is there a health signal for the
-   * resource
-   */
-  signalAvailability?: boolean;
-}
-
-/**
- * @interface
- * An interface representing AppServiceCertificateOrdersResendRequestEmailsOptionalParams.
+ * An interface representing AppServiceEnvironmentsListWebAppsOptionalParams.
  * Optional Parameters.
  *
  * @extends RequestOptionsBase
  */
-export interface AppServiceCertificateOrdersResendRequestEmailsOptionalParams extends msRest.RequestOptionsBase {
+export interface AppServiceEnvironmentsListWebAppsOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {string} [name] Name of the object.
+   * @member {string} [propertiesToInclude] Comma separated list of app
+   * properties to include.
    */
-  name?: string;
+  propertiesToInclude?: string;
 }
 
 /**
  * @interface
- * An interface representing DomainsCheckAvailabilityOptionalParams.
+ * An interface representing AppServiceEnvironmentsListUsagesOptionalParams.
  * Optional Parameters.
  *
  * @extends RequestOptionsBase
  */
-export interface DomainsCheckAvailabilityOptionalParams extends msRest.RequestOptionsBase {
+export interface AppServiceEnvironmentsListUsagesOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {string} [name] Name of the object.
+   * @member {string} [filter] Return only usages/metrics specified in the
+   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
+   * 'Metric1' or name.value eq 'Metric2') and startTime eq
+   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+   * duration'[Hour|Minute|Day]'.
    */
-  name?: string;
+  filter?: string;
 }
 
 /**
  * @interface
- * An interface representing DomainsDeleteMethodOptionalParams.
+ * An interface representing AppServiceEnvironmentsListWorkerPoolInstanceMetricsOptionalParams.
  * Optional Parameters.
  *
  * @extends RequestOptionsBase
  */
-export interface DomainsDeleteMethodOptionalParams extends msRest.RequestOptionsBase {
+export interface AppServiceEnvironmentsListWorkerPoolInstanceMetricsOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {boolean} [forceHardDeleteDomain] Specify <code>true</code> to
-   * delete the domain immediately. The default is <code>false</code> which
-   * deletes the domain after 24 hours.
+   * @member {boolean} [details] Specify <code>true</code> to include instance
+   * details. The default is <code>false</code>.
    */
-  forceHardDeleteDomain?: boolean;
+  details?: boolean;
+  /**
+   * @member {string} [filter] Return only usages/metrics specified in the
+   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
+   * 'Metric1' or name.value eq 'Metric2') and startTime eq
+   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+   * duration'[Hour|Minute|Day]'.
+   */
+  filter?: string;
+}
+
+/**
+ * @interface
+ * An interface representing AppServiceEnvironmentsListWebWorkerMetricsOptionalParams.
+ * Optional Parameters.
+ *
+ * @extends RequestOptionsBase
+ */
+export interface AppServiceEnvironmentsListWebWorkerMetricsOptionalParams extends msRest.RequestOptionsBase {
+  /**
+   * @member {boolean} [details] Specify <code>true</code> to include instance
+   * details. The default is <code>false</code>.
+   */
+  details?: boolean;
+  /**
+   * @member {string} [filter] Return only usages/metrics specified in the
+   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
+   * 'Metric1' or name.value eq 'Metric2') and startTime eq
+   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+   * duration'[Hour|Minute|Day]'.
+   */
+  filter?: string;
+}
+
+/**
+ * @interface
+ * An interface representing AppServiceEnvironmentsBeginDeleteMethodOptionalParams.
+ * Optional Parameters.
+ *
+ * @extends RequestOptionsBase
+ */
+export interface AppServiceEnvironmentsBeginDeleteMethodOptionalParams extends msRest.RequestOptionsBase {
+  /**
+   * @member {boolean} [forceDelete] Specify <code>true</code> to force the
+   * deletion even if the App Service Environment contains resources. The
+   * default is <code>false</code>.
+   */
+  forceDelete?: boolean;
+}
+
+/**
+ * @interface
+ * An interface representing AppServicePlansListOptionalParams.
+ * Optional Parameters.
+ *
+ * @extends RequestOptionsBase
+ */
+export interface AppServicePlansListOptionalParams extends msRest.RequestOptionsBase {
+  /**
+   * @member {boolean} [detailed] Specify <code>true</code> to return all App
+   * Service plan properties. The default is <code>false</code>, which returns
+   * a subset of the properties.
+   * Retrieval of all properties may increase the API latency.
+   */
+  detailed?: boolean;
+}
+
+/**
+ * @interface
+ * An interface representing AppServicePlansListMetricsOptionalParams.
+ * Optional Parameters.
+ *
+ * @extends RequestOptionsBase
+ */
+export interface AppServicePlansListMetricsOptionalParams extends msRest.RequestOptionsBase {
+  /**
+   * @member {boolean} [details] Specify <code>true</code> to include instance
+   * details. The default is <code>false</code>.
+   */
+  details?: boolean;
+  /**
+   * @member {string} [filter] Return only usages/metrics specified in the
+   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
+   * 'Metric1' or name.value eq 'Metric2') and startTime eq
+   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
+   * duration'[Hour|Minute|Day]'.
+   */
+  filter?: string;
+}
+
+/**
+ * @interface
+ * An interface representing AppServicePlansRestartWebAppsOptionalParams.
+ * Optional Parameters.
+ *
+ * @extends RequestOptionsBase
+ */
+export interface AppServicePlansRestartWebAppsOptionalParams extends msRest.RequestOptionsBase {
+  /**
+   * @member {boolean} [softRestart] Specify <code>true</code> to performa a
+   * soft restart, applies the configuration settings and restarts the apps if
+   * necessary. The default is <code>false</code>, which always restarts and
+   * reprovisions the apps
+   */
+  softRestart?: boolean;
+}
+
+/**
+ * @interface
+ * An interface representing AppServicePlansListWebAppsOptionalParams.
+ * Optional Parameters.
+ *
+ * @extends RequestOptionsBase
+ */
+export interface AppServicePlansListWebAppsOptionalParams extends msRest.RequestOptionsBase {
+  /**
+   * @member {string} [skipToken] Skip to a web app in the list of webapps
+   * associated with app service plan. If specified, the resulting list will
+   * contain web apps starting from (including) the skipToken. Otherwise, the
+   * resulting list contains web apps from the start of the list
+   */
+  skipToken?: string;
+  /**
+   * @member {string} [filter] Supported filter: $filter=state eq running.
+   * Returns only web apps that are currently running
+   */
+  filter?: string;
+  /**
+   * @member {string} [top] List page size. If specified, results are paged.
+   */
+  top?: string;
+}
+
+/**
+ * @interface
+ * An interface representing AppServicePlansListUsagesOptionalParams.
+ * Optional Parameters.
+ *
+ * @extends RequestOptionsBase
+ */
+export interface AppServicePlansListUsagesOptionalParams extends msRest.RequestOptionsBase {
+  /**
+   * @member {string} [filter] Return only usages/metrics specified in the
+   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
+   * 'Metric1' or name.value eq 'Metric2').
+   */
+  filter?: string;
 }
 
 /**
@@ -10150,289 +9309,6 @@ export interface WebAppsBeginStartNetworkTraceOptionalParams extends msRest.Requ
 
 /**
  * @interface
- * An interface representing AppServiceEnvironmentsDeleteMethodOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsDeleteMethodOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [forceDelete] Specify <code>true</code> to force the
-   * deletion even if the App Service Environment contains resources. The
-   * default is <code>false</code>.
-   */
-  forceDelete?: boolean;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsListMetricsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsListMetricsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [details] Specify <code>true</code> to include instance
-   * details. The default is <code>false</code>.
-   */
-  details?: boolean;
-  /**
-   * @member {string} [filter] Return only usages/metrics specified in the
-   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
-   * 'Metric1' or name.value eq 'Metric2') and startTime eq
-   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
-   * duration'[Hour|Minute|Day]'.
-   */
-  filter?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsListMultiRolePoolInstanceMetricsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsListMultiRolePoolInstanceMetricsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [details] Specify <code>true</code> to include instance
-   * details. The default is <code>false</code>.
-   */
-  details?: boolean;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsListMultiRoleMetricsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsListMultiRoleMetricsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {string} [startTime] Beginning time of the metrics query.
-   */
-  startTime?: string;
-  /**
-   * @member {string} [endTime] End time of the metrics query.
-   */
-  endTime?: string;
-  /**
-   * @member {string} [timeGrain] Time granularity of the metrics query.
-   */
-  timeGrain?: string;
-  /**
-   * @member {boolean} [details] Specify <code>true</code> to include instance
-   * details. The default is <code>false</code>.
-   */
-  details?: boolean;
-  /**
-   * @member {string} [filter] Return only usages/metrics specified in the
-   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
-   * 'Metric1' or name.value eq 'Metric2') and startTime eq
-   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
-   * duration'[Hour|Minute|Day]'.
-   */
-  filter?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsListWebAppsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsListWebAppsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {string} [propertiesToInclude] Comma separated list of app
-   * properties to include.
-   */
-  propertiesToInclude?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsListUsagesOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsListUsagesOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {string} [filter] Return only usages/metrics specified in the
-   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
-   * 'Metric1' or name.value eq 'Metric2') and startTime eq
-   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
-   * duration'[Hour|Minute|Day]'.
-   */
-  filter?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsListWorkerPoolInstanceMetricsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsListWorkerPoolInstanceMetricsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [details] Specify <code>true</code> to include instance
-   * details. The default is <code>false</code>.
-   */
-  details?: boolean;
-  /**
-   * @member {string} [filter] Return only usages/metrics specified in the
-   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
-   * 'Metric1' or name.value eq 'Metric2') and startTime eq
-   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
-   * duration'[Hour|Minute|Day]'.
-   */
-  filter?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsListWebWorkerMetricsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsListWebWorkerMetricsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [details] Specify <code>true</code> to include instance
-   * details. The default is <code>false</code>.
-   */
-  details?: boolean;
-  /**
-   * @member {string} [filter] Return only usages/metrics specified in the
-   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
-   * 'Metric1' or name.value eq 'Metric2') and startTime eq
-   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
-   * duration'[Hour|Minute|Day]'.
-   */
-  filter?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServiceEnvironmentsBeginDeleteMethodOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServiceEnvironmentsBeginDeleteMethodOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [forceDelete] Specify <code>true</code> to force the
-   * deletion even if the App Service Environment contains resources. The
-   * default is <code>false</code>.
-   */
-  forceDelete?: boolean;
-}
-
-/**
- * @interface
- * An interface representing AppServicePlansListOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServicePlansListOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [detailed] Specify <code>true</code> to return all App
-   * Service plan properties. The default is <code>false</code>, which returns
-   * a subset of the properties.
-   * Retrieval of all properties may increase the API latency.
-   */
-  detailed?: boolean;
-}
-
-/**
- * @interface
- * An interface representing AppServicePlansListMetricsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServicePlansListMetricsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [details] Specify <code>true</code> to include instance
-   * details. The default is <code>false</code>.
-   */
-  details?: boolean;
-  /**
-   * @member {string} [filter] Return only usages/metrics specified in the
-   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
-   * 'Metric1' or name.value eq 'Metric2') and startTime eq
-   * 2014-01-01T00:00:00Z and endTime eq 2014-12-31T23:59:59Z and timeGrain eq
-   * duration'[Hour|Minute|Day]'.
-   */
-  filter?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServicePlansRestartWebAppsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServicePlansRestartWebAppsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {boolean} [softRestart] Specify <code>true</code> to performa a
-   * soft restart, applies the configuration settings and restarts the apps if
-   * necessary. The default is <code>false</code>, which always restarts and
-   * reprovisions the apps
-   */
-  softRestart?: boolean;
-}
-
-/**
- * @interface
- * An interface representing AppServicePlansListWebAppsOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServicePlansListWebAppsOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {string} [skipToken] Skip to a web app in the list of webapps
-   * associated with app service plan. If specified, the resulting list will
-   * contain web apps starting from (including) the skipToken. Otherwise, the
-   * resulting list contains web apps from the start of the list
-   */
-  skipToken?: string;
-  /**
-   * @member {string} [filter] Supported filter: $filter=state eq running.
-   * Returns only web apps that are currently running
-   */
-  filter?: string;
-  /**
-   * @member {string} [top] List page size. If specified, results are paged.
-   */
-  top?: string;
-}
-
-/**
- * @interface
- * An interface representing AppServicePlansListUsagesOptionalParams.
- * Optional Parameters.
- *
- * @extends RequestOptionsBase
- */
-export interface AppServicePlansListUsagesOptionalParams extends msRest.RequestOptionsBase {
-  /**
-   * @member {string} [filter] Return only usages/metrics specified in the
-   * filter. Filter conforms to odata syntax. Example: $filter=(name.value eq
-   * 'Metric1' or name.value eq 'Metric2').
-   */
-  filter?: string;
-}
-
-/**
- * @interface
  * An interface representing WebSiteManagementClientOptions.
  * @extends AzureServiceClientOptions
  */
@@ -10446,12 +9322,12 @@ export interface WebSiteManagementClientOptions extends AzureServiceClientOption
 
 /**
  * @interface
- * An interface representing the AppServiceCertificateOrderCollection.
- * Collection of certitificate orders.
+ * An interface representing the AppServiceEnvironmentCollection.
+ * Collection of App Service Environments.
  *
- * @extends Array<AppServiceCertificateOrder>
+ * @extends Array<AppServiceEnvironmentResource>
  */
-export interface AppServiceCertificateOrderCollection extends Array<AppServiceCertificateOrder> {
+export interface AppServiceEnvironmentCollection extends Array<AppServiceEnvironmentResource> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10462,12 +9338,12 @@ export interface AppServiceCertificateOrderCollection extends Array<AppServiceCe
 
 /**
  * @interface
- * An interface representing the AppServiceCertificateCollection.
- * Collection of certitificateorder certificates.
+ * An interface representing the StampCapacityCollection.
+ * Collection of stamp capacities.
  *
- * @extends Array<AppServiceCertificateResource>
+ * @extends Array<StampCapacity>
  */
-export interface AppServiceCertificateCollection extends Array<AppServiceCertificateResource> {
+export interface StampCapacityCollection extends Array<StampCapacity> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10478,12 +9354,12 @@ export interface AppServiceCertificateCollection extends Array<AppServiceCertifi
 
 /**
  * @interface
- * An interface representing the CsmOperationCollection.
- * Collection of Azure resource manager operation metadata.
+ * An interface representing the WebAppCollection.
+ * Collection of App Service apps.
  *
- * @extends Array<CsmOperationDescription>
+ * @extends Array<Site>
  */
-export interface CsmOperationCollection extends Array<CsmOperationDescription> {
+export interface WebAppCollection extends Array<Site> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10494,12 +9370,12 @@ export interface CsmOperationCollection extends Array<CsmOperationDescription> {
 
 /**
  * @interface
- * An interface representing the DomainCollection.
- * Collection of domains.
+ * An interface representing the ResourceMetricCollection.
+ * Collection of metric responses.
  *
- * @extends Array<Domain>
+ * @extends Array<ResourceMetric>
  */
-export interface DomainCollection extends Array<Domain> {
+export interface ResourceMetricCollection extends Array<ResourceMetric> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10510,12 +9386,12 @@ export interface DomainCollection extends Array<Domain> {
 
 /**
  * @interface
- * An interface representing the NameIdentifierCollection.
- * Collection of domain name identifiers.
+ * An interface representing the WorkerPoolCollection.
+ * Collection of worker pools.
  *
- * @extends Array<NameIdentifier>
+ * @extends Array<WorkerPoolResource>
  */
-export interface NameIdentifierCollection extends Array<NameIdentifier> {
+export interface WorkerPoolCollection extends Array<WorkerPoolResource> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10526,12 +9402,12 @@ export interface NameIdentifierCollection extends Array<NameIdentifier> {
 
 /**
  * @interface
- * An interface representing the DomainOwnershipIdentifierCollection.
- * Collection of domain ownership identifiers.
+ * An interface representing the ResourceMetricDefinitionCollection.
+ * Collection of metric definitions.
  *
- * @extends Array<DomainOwnershipIdentifier>
+ * @extends Array<ResourceMetricDefinition>
  */
-export interface DomainOwnershipIdentifierCollection extends Array<DomainOwnershipIdentifier> {
+export interface ResourceMetricDefinitionCollection extends Array<ResourceMetricDefinition> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10542,12 +9418,12 @@ export interface DomainOwnershipIdentifierCollection extends Array<DomainOwnersh
 
 /**
  * @interface
- * An interface representing the TopLevelDomainCollection.
- * Collection of Top-level domains.
+ * An interface representing the SkuInfoCollection.
+ * Collection of SKU information.
  *
- * @extends Array<TopLevelDomain>
+ * @extends Array<SkuInfo>
  */
-export interface TopLevelDomainCollection extends Array<TopLevelDomain> {
+export interface SkuInfoCollection extends Array<SkuInfo> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10558,12 +9434,76 @@ export interface TopLevelDomainCollection extends Array<TopLevelDomain> {
 
 /**
  * @interface
- * An interface representing the TldLegalAgreementCollection.
- * Collection of top-level domain legal agreements.
+ * An interface representing the UsageCollection.
+ * Collection of usages.
  *
- * @extends Array<TldLegalAgreement>
+ * @extends Array<Usage>
  */
-export interface TldLegalAgreementCollection extends Array<TldLegalAgreement> {
+export interface UsageCollection extends Array<Usage> {
+  /**
+   * @member {string} [nextLink] Link to next page of resources.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly nextLink?: string;
+}
+
+/**
+ * @interface
+ * An interface representing the AppServicePlanCollection.
+ * Collection of App Service plans.
+ *
+ * @extends Array<AppServicePlan>
+ */
+export interface AppServicePlanCollection extends Array<AppServicePlan> {
+  /**
+   * @member {string} [nextLink] Link to next page of resources.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly nextLink?: string;
+}
+
+/**
+ * @interface
+ * An interface representing the CsmUsageQuotaCollection.
+ * Collection of CSM usage quotas.
+ *
+ * @extends Array<CsmUsageQuota>
+ */
+export interface CsmUsageQuotaCollection extends Array<CsmUsageQuota> {
+  /**
+   * @member {string} [nextLink] Link to next page of resources.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly nextLink?: string;
+}
+
+/**
+ * @interface
+ * An interface representing the ResourceCollection.
+ * Collection of resources.
+ *
+ * @extends Array<string>
+ */
+export interface ResourceCollection extends Array<string> {
+  /**
+   * @member {string} [nextLink] Link to next page of resources.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly nextLink?: string;
+}
+
+/**
+ * @interface
+ * An interface representing the HybridConnectionCollection.
+ * Collection of hostname bindings.
+ *
+ * @extends Array<HybridConnection>
+ */
+export interface HybridConnectionCollection extends Array<HybridConnection> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10686,12 +9626,44 @@ export interface ApplicationStackCollection extends Array<ApplicationStack> {
 
 /**
  * @interface
+ * An interface representing the CsmOperationCollection.
+ * Collection of Azure resource manager operation metadata.
+ *
+ * @extends Array<CsmOperationDescription>
+ */
+export interface CsmOperationCollection extends Array<CsmOperationDescription> {
+  /**
+   * @member {string} [nextLink] Link to next page of resources.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly nextLink?: string;
+}
+
+/**
+ * @interface
  * An interface representing the RecommendationCollection.
  * Collection of recommendations.
  *
  * @extends Array<Recommendation>
  */
 export interface RecommendationCollection extends Array<Recommendation> {
+  /**
+   * @member {string} [nextLink] Link to next page of resources.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly nextLink?: string;
+}
+
+/**
+ * @interface
+ * An interface representing the ResourceHealthMetadataCollection.
+ * Collection of resource health metadata.
+ *
+ * @extends Array<ResourceHealthMetadata>
+ */
+export interface ResourceHealthMetadataCollection extends Array<ResourceHealthMetadata> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10772,22 +9744,6 @@ export interface IdentifierCollection extends Array<Identifier> {
  * @extends Array<PremierAddOnOffer>
  */
 export interface PremierAddOnOfferCollection extends Array<PremierAddOnOffer> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the WebAppCollection.
- * Collection of App Service apps.
- *
- * @extends Array<Site>
- */
-export interface WebAppCollection extends Array<Site> {
   /**
    * @member {string} [nextLink] Link to next page of resources.
    * **NOTE: This property will not be serialized. It can only be populated by
@@ -10975,38 +9931,6 @@ export interface ProcessThreadInfoCollection extends Array<ProcessThreadInfo> {
 
 /**
  * @interface
- * An interface representing the ResourceMetricDefinitionCollection.
- * Collection of metric definitions.
- *
- * @extends Array<ResourceMetricDefinition>
- */
-export interface ResourceMetricDefinitionCollection extends Array<ResourceMetricDefinition> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the ResourceMetricCollection.
- * Collection of metric responses.
- *
- * @extends Array<ResourceMetric>
- */
-export interface ResourceMetricCollection extends Array<ResourceMetric> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
  * An interface representing the PerfMonCounterCollection.
  * Collection of performance monitor counters.
  *
@@ -11120,22 +10044,6 @@ export interface TriggeredJobHistoryCollection extends Array<TriggeredJobHistory
 
 /**
  * @interface
- * An interface representing the CsmUsageQuotaCollection.
- * Collection of CSM usage quotas.
- *
- * @extends Array<CsmUsageQuota>
- */
-export interface CsmUsageQuotaCollection extends Array<CsmUsageQuota> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
  * An interface representing the WebJobCollection.
  * Collection of Kudu web job information elements.
  *
@@ -11151,580 +10059,12 @@ export interface WebJobCollection extends Array<WebJob> {
 }
 
 /**
- * @interface
- * An interface representing the AppServiceEnvironmentCollection.
- * Collection of App Service Environments.
- *
- * @extends Array<AppServiceEnvironmentResource>
- */
-export interface AppServiceEnvironmentCollection extends Array<AppServiceEnvironmentResource> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the StampCapacityCollection.
- * Collection of stamp capacities.
- *
- * @extends Array<StampCapacity>
- */
-export interface StampCapacityCollection extends Array<StampCapacity> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the WorkerPoolCollection.
- * Collection of worker pools.
- *
- * @extends Array<WorkerPoolResource>
- */
-export interface WorkerPoolCollection extends Array<WorkerPoolResource> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the SkuInfoCollection.
- * Collection of SKU information.
- *
- * @extends Array<SkuInfo>
- */
-export interface SkuInfoCollection extends Array<SkuInfo> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the UsageCollection.
- * Collection of usages.
- *
- * @extends Array<Usage>
- */
-export interface UsageCollection extends Array<Usage> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the AppServicePlanCollection.
- * Collection of App Service plans.
- *
- * @extends Array<AppServicePlan>
- */
-export interface AppServicePlanCollection extends Array<AppServicePlan> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the ResourceCollection.
- * Collection of resources.
- *
- * @extends Array<string>
- */
-export interface ResourceCollection extends Array<string> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the HybridConnectionCollection.
- * Collection of hostname bindings.
- *
- * @extends Array<HybridConnection>
- */
-export interface HybridConnectionCollection extends Array<HybridConnection> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the ResourceHealthMetadataCollection.
- * Collection of resource health metadata.
- *
- * @extends Array<ResourceHealthMetadata>
- */
-export interface ResourceHealthMetadataCollection extends Array<ResourceHealthMetadata> {
-  /**
-   * @member {string} [nextLink] Link to next page of resources.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextLink?: string;
-}
-
-/**
- * Defines values for KeyVaultSecretStatus.
- * Possible values include: 'Initialized', 'WaitingOnCertificateOrder',
- * 'Succeeded', 'CertificateOrderFailed', 'OperationNotPermittedOnKeyVault',
- * 'AzureServiceUnauthorizedToAccessKeyVault', 'KeyVaultDoesNotExist',
- * 'KeyVaultSecretDoesNotExist', 'UnknownError', 'ExternalPrivateKey',
- * 'Unknown'
- * @readonly
- * @enum {string}
- */
-export enum KeyVaultSecretStatus {
-  Initialized = 'Initialized',
-  WaitingOnCertificateOrder = 'WaitingOnCertificateOrder',
-  Succeeded = 'Succeeded',
-  CertificateOrderFailed = 'CertificateOrderFailed',
-  OperationNotPermittedOnKeyVault = 'OperationNotPermittedOnKeyVault',
-  AzureServiceUnauthorizedToAccessKeyVault = 'AzureServiceUnauthorizedToAccessKeyVault',
-  KeyVaultDoesNotExist = 'KeyVaultDoesNotExist',
-  KeyVaultSecretDoesNotExist = 'KeyVaultSecretDoesNotExist',
-  UnknownError = 'UnknownError',
-  ExternalPrivateKey = 'ExternalPrivateKey',
-  Unknown = 'Unknown',
-}
-
-/**
- * Defines values for CertificateProductType.
- * Possible values include: 'StandardDomainValidatedSsl',
- * 'StandardDomainValidatedWildCardSsl'
- * @readonly
- * @enum {string}
- */
-export enum CertificateProductType {
-  StandardDomainValidatedSsl = 'StandardDomainValidatedSsl',
-  StandardDomainValidatedWildCardSsl = 'StandardDomainValidatedWildCardSsl',
-}
-
-/**
  * Defines values for ProvisioningState.
- * Possible values include: 'Succeeded', 'Failed', 'Canceled', 'InProgress',
- * 'Deleting'
+ * Possible values include: 'Succeeded', 'Failed', 'Canceled', 'InProgress', 'Deleting'
  * @readonly
  * @enum {string}
  */
-export enum ProvisioningState {
-  Succeeded = 'Succeeded',
-  Failed = 'Failed',
-  Canceled = 'Canceled',
-  InProgress = 'InProgress',
-  Deleting = 'Deleting',
-}
-
-/**
- * Defines values for CertificateOrderStatus.
- * Possible values include: 'Pendingissuance', 'Issued', 'Revoked', 'Canceled',
- * 'Denied', 'Pendingrevocation', 'PendingRekey', 'Unused', 'Expired',
- * 'NotSubmitted'
- * @readonly
- * @enum {string}
- */
-export enum CertificateOrderStatus {
-  Pendingissuance = 'Pendingissuance',
-  Issued = 'Issued',
-  Revoked = 'Revoked',
-  Canceled = 'Canceled',
-  Denied = 'Denied',
-  Pendingrevocation = 'Pendingrevocation',
-  PendingRekey = 'PendingRekey',
-  Unused = 'Unused',
-  Expired = 'Expired',
-  NotSubmitted = 'NotSubmitted',
-}
-
-/**
- * Defines values for CertificateOrderActionType.
- * Possible values include: 'CertificateIssued', 'CertificateOrderCanceled',
- * 'CertificateOrderCreated', 'CertificateRevoked', 'DomainValidationComplete',
- * 'FraudDetected', 'OrgNameChange', 'OrgValidationComplete', 'SanDrop',
- * 'FraudCleared', 'CertificateExpired', 'CertificateExpirationWarning',
- * 'FraudDocumentationRequired', 'Unknown'
- * @readonly
- * @enum {string}
- */
-export enum CertificateOrderActionType {
-  CertificateIssued = 'CertificateIssued',
-  CertificateOrderCanceled = 'CertificateOrderCanceled',
-  CertificateOrderCreated = 'CertificateOrderCreated',
-  CertificateRevoked = 'CertificateRevoked',
-  DomainValidationComplete = 'DomainValidationComplete',
-  FraudDetected = 'FraudDetected',
-  OrgNameChange = 'OrgNameChange',
-  OrgValidationComplete = 'OrgValidationComplete',
-  SanDrop = 'SanDrop',
-  FraudCleared = 'FraudCleared',
-  CertificateExpired = 'CertificateExpired',
-  CertificateExpirationWarning = 'CertificateExpirationWarning',
-  FraudDocumentationRequired = 'FraudDocumentationRequired',
-  Unknown = 'Unknown',
-}
-
-/**
- * Defines values for RouteType.
- * Possible values include: 'DEFAULT', 'INHERITED', 'STATIC'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: RouteType = <RouteType>"someUnknownValueThatWillStillBeValid";
- * @readonly
- * @enum {string}
- */
-export enum RouteType {
-  DEFAULT = 'DEFAULT',
-  INHERITED = 'INHERITED',
-  STATIC = 'STATIC',
-}
-
-/**
- * Defines values for ManagedServiceIdentityType.
- * Possible values include: 'SystemAssigned', 'UserAssigned'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: ManagedServiceIdentityType =
- * <ManagedServiceIdentityType>"someUnknownValueThatWillStillBeValid";
- * @readonly
- * @enum {string}
- */
-export enum ManagedServiceIdentityType {
-  SystemAssigned = 'SystemAssigned',
-  UserAssigned = 'UserAssigned',
-}
-
-/**
- * Defines values for IpFilterTag.
- * Possible values include: 'Default', 'XffProxy'
- * @readonly
- * @enum {string}
- */
-export enum IpFilterTag {
-  Default = 'Default',
-  XffProxy = 'XffProxy',
-}
-
-/**
- * Defines values for AutoHealActionType.
- * Possible values include: 'Recycle', 'LogEvent', 'CustomAction'
- * @readonly
- * @enum {string}
- */
-export enum AutoHealActionType {
-  Recycle = 'Recycle',
-  LogEvent = 'LogEvent',
-  CustomAction = 'CustomAction',
-}
-
-/**
- * Defines values for ConnectionStringType.
- * Possible values include: 'MySql', 'SQLServer', 'SQLAzure', 'Custom',
- * 'NotificationHub', 'ServiceBus', 'EventHub', 'ApiHub', 'DocDb',
- * 'RedisCache', 'PostgreSQL'
- * @readonly
- * @enum {string}
- */
-export enum ConnectionStringType {
-  MySql = 'MySql',
-  SQLServer = 'SQLServer',
-  SQLAzure = 'SQLAzure',
-  Custom = 'Custom',
-  NotificationHub = 'NotificationHub',
-  ServiceBus = 'ServiceBus',
-  EventHub = 'EventHub',
-  ApiHub = 'ApiHub',
-  DocDb = 'DocDb',
-  RedisCache = 'RedisCache',
-  PostgreSQL = 'PostgreSQL',
-}
-
-/**
- * Defines values for AzureStorageType.
- * Possible values include: 'AzureFiles', 'AzureBlob'
- * @readonly
- * @enum {string}
- */
-export enum AzureStorageType {
-  AzureFiles = 'AzureFiles',
-  AzureBlob = 'AzureBlob',
-}
-
-/**
- * Defines values for AzureStorageState.
- * Possible values include: 'Ok', 'InvalidCredentials', 'InvalidShare'
- * @readonly
- * @enum {string}
- */
-export enum AzureStorageState {
-  Ok = 'Ok',
-  InvalidCredentials = 'InvalidCredentials',
-  InvalidShare = 'InvalidShare',
-}
-
-/**
- * Defines values for ScmType.
- * Possible values include: 'None', 'Dropbox', 'Tfs', 'LocalGit', 'GitHub',
- * 'CodePlexGit', 'CodePlexHg', 'BitbucketGit', 'BitbucketHg', 'ExternalGit',
- * 'ExternalHg', 'OneDrive', 'VSO'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: ScmType = <ScmType>"someUnknownValueThatWillStillBeValid";
- * @readonly
- * @enum {string}
- */
-export enum ScmType {
-  None = 'None',
-  Dropbox = 'Dropbox',
-  Tfs = 'Tfs',
-  LocalGit = 'LocalGit',
-  GitHub = 'GitHub',
-  CodePlexGit = 'CodePlexGit',
-  CodePlexHg = 'CodePlexHg',
-  BitbucketGit = 'BitbucketGit',
-  BitbucketHg = 'BitbucketHg',
-  ExternalGit = 'ExternalGit',
-  ExternalHg = 'ExternalHg',
-  OneDrive = 'OneDrive',
-  VSO = 'VSO',
-}
-
-/**
- * Defines values for ManagedPipelineMode.
- * Possible values include: 'Integrated', 'Classic'
- * @readonly
- * @enum {string}
- */
-export enum ManagedPipelineMode {
-  Integrated = 'Integrated',
-  Classic = 'Classic',
-}
-
-/**
- * Defines values for SiteLoadBalancing.
- * Possible values include: 'WeightedRoundRobin', 'LeastRequests',
- * 'LeastResponseTime', 'WeightedTotalTraffic', 'RequestHash'
- * @readonly
- * @enum {string}
- */
-export enum SiteLoadBalancing {
-  WeightedRoundRobin = 'WeightedRoundRobin',
-  LeastRequests = 'LeastRequests',
-  LeastResponseTime = 'LeastResponseTime',
-  WeightedTotalTraffic = 'WeightedTotalTraffic',
-  RequestHash = 'RequestHash',
-}
-
-/**
- * Defines values for SupportedTlsVersions.
- * Possible values include: '1.0', '1.1', '1.2'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: SupportedTlsVersions =
- * <SupportedTlsVersions>"someUnknownValueThatWillStillBeValid";
- * @readonly
- * @enum {string}
- */
-export enum SupportedTlsVersions {
-  OneFullStopZero = '1.0',
-  OneFullStopOne = '1.1',
-  OneFullStopTwo = '1.2',
-}
-
-/**
- * Defines values for FtpsState.
- * Possible values include: 'AllAllowed', 'FtpsOnly', 'Disabled'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: FtpsState = <FtpsState>"someUnknownValueThatWillStillBeValid";
- * @readonly
- * @enum {string}
- */
-export enum FtpsState {
-  AllAllowed = 'AllAllowed',
-  FtpsOnly = 'FtpsOnly',
-  Disabled = 'Disabled',
-}
-
-/**
- * Defines values for SslState.
- * Possible values include: 'Disabled', 'SniEnabled', 'IpBasedEnabled'
- * @readonly
- * @enum {string}
- */
-export enum SslState {
-  Disabled = 'Disabled',
-  SniEnabled = 'SniEnabled',
-  IpBasedEnabled = 'IpBasedEnabled',
-}
-
-/**
- * Defines values for HostType.
- * Possible values include: 'Standard', 'Repository'
- * @readonly
- * @enum {string}
- */
-export enum HostType {
-  Standard = 'Standard',
-  Repository = 'Repository',
-}
-
-/**
- * Defines values for UsageState.
- * Possible values include: 'Normal', 'Exceeded'
- * @readonly
- * @enum {string}
- */
-export enum UsageState {
-  Normal = 'Normal',
-  Exceeded = 'Exceeded',
-}
-
-/**
- * Defines values for SiteAvailabilityState.
- * Possible values include: 'Normal', 'Limited', 'DisasterRecoveryMode'
- * @readonly
- * @enum {string}
- */
-export enum SiteAvailabilityState {
-  Normal = 'Normal',
-  Limited = 'Limited',
-  DisasterRecoveryMode = 'DisasterRecoveryMode',
-}
-
-/**
- * Defines values for StatusOptions.
- * Possible values include: 'Ready', 'Pending', 'Creating'
- * @readonly
- * @enum {string}
- */
-export enum StatusOptions {
-  Ready = 'Ready',
-  Pending = 'Pending',
-  Creating = 'Creating',
-}
-
-/**
- * Defines values for DomainStatus.
- * Possible values include: 'Active', 'Awaiting', 'Cancelled', 'Confiscated',
- * 'Disabled', 'Excluded', 'Expired', 'Failed', 'Held', 'Locked', 'Parked',
- * 'Pending', 'Reserved', 'Reverted', 'Suspended', 'Transferred', 'Unknown',
- * 'Unlocked', 'Unparked', 'Updated', 'JsonConverterFailed'
- * @readonly
- * @enum {string}
- */
-export enum DomainStatus {
-  Active = 'Active',
-  Awaiting = 'Awaiting',
-  Cancelled = 'Cancelled',
-  Confiscated = 'Confiscated',
-  Disabled = 'Disabled',
-  Excluded = 'Excluded',
-  Expired = 'Expired',
-  Failed = 'Failed',
-  Held = 'Held',
-  Locked = 'Locked',
-  Parked = 'Parked',
-  Pending = 'Pending',
-  Reserved = 'Reserved',
-  Reverted = 'Reverted',
-  Suspended = 'Suspended',
-  Transferred = 'Transferred',
-  Unknown = 'Unknown',
-  Unlocked = 'Unlocked',
-  Unparked = 'Unparked',
-  Updated = 'Updated',
-  JsonConverterFailed = 'JsonConverterFailed',
-}
-
-/**
- * Defines values for AzureResourceType.
- * Possible values include: 'Website', 'TrafficManager'
- * @readonly
- * @enum {string}
- */
-export enum AzureResourceType {
-  Website = 'Website',
-  TrafficManager = 'TrafficManager',
-}
-
-/**
- * Defines values for CustomHostNameDnsRecordType.
- * Possible values include: 'CName', 'A'
- * @readonly
- * @enum {string}
- */
-export enum CustomHostNameDnsRecordType {
-  CName = 'CName',
-  A = 'A',
-}
-
-/**
- * Defines values for HostNameType.
- * Possible values include: 'Verified', 'Managed'
- * @readonly
- * @enum {string}
- */
-export enum HostNameType {
-  Verified = 'Verified',
-  Managed = 'Managed',
-}
-
-/**
- * Defines values for DnsType.
- * Possible values include: 'AzureDns', 'DefaultDomainRegistrarDns'
- * @readonly
- * @enum {string}
- */
-export enum DnsType {
-  AzureDns = 'AzureDns',
-  DefaultDomainRegistrarDns = 'DefaultDomainRegistrarDns',
-}
-
-/**
- * Defines values for DomainType.
- * Possible values include: 'Regular', 'SoftDeleted'
- * @readonly
- * @enum {string}
- */
-export enum DomainType {
-  Regular = 'Regular',
-  SoftDeleted = 'SoftDeleted',
-}
+export type ProvisioningState = 'Succeeded' | 'Failed' | 'Canceled' | 'InProgress' | 'Deleting';
 
 /**
  * Defines values for HostingEnvironmentStatus.
@@ -11732,12 +10072,7 @@ export enum DomainType {
  * @readonly
  * @enum {string}
  */
-export enum HostingEnvironmentStatus {
-  Preparing = 'Preparing',
-  Ready = 'Ready',
-  Scaling = 'Scaling',
-  Deleting = 'Deleting',
-}
+export type HostingEnvironmentStatus = 'Preparing' | 'Ready' | 'Scaling' | 'Deleting';
 
 /**
  * Defines values for InternalLoadBalancingMode.
@@ -11745,11 +10080,7 @@ export enum HostingEnvironmentStatus {
  * @readonly
  * @enum {string}
  */
-export enum InternalLoadBalancingMode {
-  None = 'None',
-  Web = 'Web',
-  Publishing = 'Publishing',
-}
+export type InternalLoadBalancingMode = 'None' | 'Web' | 'Publishing';
 
 /**
  * Defines values for ComputeModeOptions.
@@ -11757,28 +10088,15 @@ export enum InternalLoadBalancingMode {
  * @readonly
  * @enum {string}
  */
-export enum ComputeModeOptions {
-  Shared = 'Shared',
-  Dedicated = 'Dedicated',
-  Dynamic = 'Dynamic',
-}
+export type ComputeModeOptions = 'Shared' | 'Dedicated' | 'Dynamic';
 
 /**
  * Defines values for WorkerSizeOptions.
- * Possible values include: 'Small', 'Medium', 'Large', 'D1', 'D2', 'D3',
- * 'Default'
+ * Possible values include: 'Small', 'Medium', 'Large', 'D1', 'D2', 'D3', 'Default'
  * @readonly
  * @enum {string}
  */
-export enum WorkerSizeOptions {
-  Small = 'Small',
-  Medium = 'Medium',
-  Large = 'Large',
-  D1 = 'D1',
-  D2 = 'D2',
-  D3 = 'D3',
-  Default = 'Default',
-}
+export type WorkerSizeOptions = 'Small' | 'Medium' | 'Large' | 'D1' | 'D2' | 'D3' | 'Default';
 
 /**
  * Defines values for AccessControlEntryAction.
@@ -11786,102 +10104,206 @@ export enum WorkerSizeOptions {
  * @readonly
  * @enum {string}
  */
-export enum AccessControlEntryAction {
-  Permit = 'Permit',
-  Deny = 'Deny',
-}
+export type AccessControlEntryAction = 'Permit' | 'Deny';
+
+/**
+ * Defines values for RouteType.
+ * Possible values include: 'DEFAULT', 'INHERITED', 'STATIC'
+ * @readonly
+ * @enum {string}
+ */
+export type RouteType = 'DEFAULT' | 'INHERITED' | 'STATIC';
+
+/**
+ * Defines values for ManagedServiceIdentityType.
+ * Possible values include: 'SystemAssigned', 'UserAssigned'
+ * @readonly
+ * @enum {string}
+ */
+export type ManagedServiceIdentityType = 'SystemAssigned' | 'UserAssigned';
+
+/**
+ * Defines values for IpFilterTag.
+ * Possible values include: 'Default', 'XffProxy'
+ * @readonly
+ * @enum {string}
+ */
+export type IpFilterTag = 'Default' | 'XffProxy';
+
+/**
+ * Defines values for AutoHealActionType.
+ * Possible values include: 'Recycle', 'LogEvent', 'CustomAction'
+ * @readonly
+ * @enum {string}
+ */
+export type AutoHealActionType = 'Recycle' | 'LogEvent' | 'CustomAction';
+
+/**
+ * Defines values for ConnectionStringType.
+ * Possible values include: 'MySql', 'SQLServer', 'SQLAzure', 'Custom', 'NotificationHub',
+ * 'ServiceBus', 'EventHub', 'ApiHub', 'DocDb', 'RedisCache', 'PostgreSQL'
+ * @readonly
+ * @enum {string}
+ */
+export type ConnectionStringType = 'MySql' | 'SQLServer' | 'SQLAzure' | 'Custom' | 'NotificationHub' | 'ServiceBus' | 'EventHub' | 'ApiHub' | 'DocDb' | 'RedisCache' | 'PostgreSQL';
+
+/**
+ * Defines values for AzureStorageType.
+ * Possible values include: 'AzureFiles', 'AzureBlob'
+ * @readonly
+ * @enum {string}
+ */
+export type AzureStorageType = 'AzureFiles' | 'AzureBlob';
+
+/**
+ * Defines values for AzureStorageState.
+ * Possible values include: 'Ok', 'InvalidCredentials', 'InvalidShare'
+ * @readonly
+ * @enum {string}
+ */
+export type AzureStorageState = 'Ok' | 'InvalidCredentials' | 'InvalidShare';
+
+/**
+ * Defines values for ScmType.
+ * Possible values include: 'None', 'Dropbox', 'Tfs', 'LocalGit', 'GitHub', 'CodePlexGit',
+ * 'CodePlexHg', 'BitbucketGit', 'BitbucketHg', 'ExternalGit', 'ExternalHg', 'OneDrive', 'VSO'
+ * @readonly
+ * @enum {string}
+ */
+export type ScmType = 'None' | 'Dropbox' | 'Tfs' | 'LocalGit' | 'GitHub' | 'CodePlexGit' | 'CodePlexHg' | 'BitbucketGit' | 'BitbucketHg' | 'ExternalGit' | 'ExternalHg' | 'OneDrive' | 'VSO';
+
+/**
+ * Defines values for ManagedPipelineMode.
+ * Possible values include: 'Integrated', 'Classic'
+ * @readonly
+ * @enum {string}
+ */
+export type ManagedPipelineMode = 'Integrated' | 'Classic';
+
+/**
+ * Defines values for SiteLoadBalancing.
+ * Possible values include: 'WeightedRoundRobin', 'LeastRequests', 'LeastResponseTime',
+ * 'WeightedTotalTraffic', 'RequestHash'
+ * @readonly
+ * @enum {string}
+ */
+export type SiteLoadBalancing = 'WeightedRoundRobin' | 'LeastRequests' | 'LeastResponseTime' | 'WeightedTotalTraffic' | 'RequestHash';
+
+/**
+ * Defines values for SupportedTlsVersions.
+ * Possible values include: '1.0', '1.1', '1.2'
+ * @readonly
+ * @enum {string}
+ */
+export type SupportedTlsVersions = '1.0' | '1.1' | '1.2';
+
+/**
+ * Defines values for FtpsState.
+ * Possible values include: 'AllAllowed', 'FtpsOnly', 'Disabled'
+ * @readonly
+ * @enum {string}
+ */
+export type FtpsState = 'AllAllowed' | 'FtpsOnly' | 'Disabled';
+
+/**
+ * Defines values for SslState.
+ * Possible values include: 'Disabled', 'SniEnabled', 'IpBasedEnabled'
+ * @readonly
+ * @enum {string}
+ */
+export type SslState = 'Disabled' | 'SniEnabled' | 'IpBasedEnabled';
+
+/**
+ * Defines values for HostType.
+ * Possible values include: 'Standard', 'Repository'
+ * @readonly
+ * @enum {string}
+ */
+export type HostType = 'Standard' | 'Repository';
+
+/**
+ * Defines values for UsageState.
+ * Possible values include: 'Normal', 'Exceeded'
+ * @readonly
+ * @enum {string}
+ */
+export type UsageState = 'Normal' | 'Exceeded';
+
+/**
+ * Defines values for SiteAvailabilityState.
+ * Possible values include: 'Normal', 'Limited', 'DisasterRecoveryMode'
+ * @readonly
+ * @enum {string}
+ */
+export type SiteAvailabilityState = 'Normal' | 'Limited' | 'DisasterRecoveryMode';
+
+/**
+ * Defines values for StatusOptions.
+ * Possible values include: 'Ready', 'Pending', 'Creating'
+ * @readonly
+ * @enum {string}
+ */
+export type StatusOptions = 'Ready' | 'Pending' | 'Creating';
 
 /**
  * Defines values for OperationStatus.
- * Possible values include: 'InProgress', 'Failed', 'Succeeded', 'TimedOut',
- * 'Created'
+ * Possible values include: 'InProgress', 'Failed', 'Succeeded', 'TimedOut', 'Created'
  * @readonly
  * @enum {string}
  */
-export enum OperationStatus {
-  InProgress = 'InProgress',
-  Failed = 'Failed',
-  Succeeded = 'Succeeded',
-  TimedOut = 'TimedOut',
-  Created = 'Created',
-}
+export type OperationStatus = 'InProgress' | 'Failed' | 'Succeeded' | 'TimedOut' | 'Created';
+
+/**
+ * Defines values for KeyVaultSecretStatus.
+ * Possible values include: 'Initialized', 'WaitingOnCertificateOrder', 'Succeeded',
+ * 'CertificateOrderFailed', 'OperationNotPermittedOnKeyVault',
+ * 'AzureServiceUnauthorizedToAccessKeyVault', 'KeyVaultDoesNotExist',
+ * 'KeyVaultSecretDoesNotExist', 'UnknownError', 'ExternalPrivateKey', 'Unknown'
+ * @readonly
+ * @enum {string}
+ */
+export type KeyVaultSecretStatus = 'Initialized' | 'WaitingOnCertificateOrder' | 'Succeeded' | 'CertificateOrderFailed' | 'OperationNotPermittedOnKeyVault' | 'AzureServiceUnauthorizedToAccessKeyVault' | 'KeyVaultDoesNotExist' | 'KeyVaultSecretDoesNotExist' | 'UnknownError' | 'ExternalPrivateKey' | 'Unknown';
 
 /**
  * Defines values for IssueType.
- * Possible values include: 'ServiceIncident', 'AppDeployment', 'AppCrash',
- * 'RuntimeIssueDetected', 'AseDeployment', 'UserIssue', 'PlatformIssue',
- * 'Other'
+ * Possible values include: 'ServiceIncident', 'AppDeployment', 'AppCrash', 'RuntimeIssueDetected',
+ * 'AseDeployment', 'UserIssue', 'PlatformIssue', 'Other'
  * @readonly
  * @enum {string}
  */
-export enum IssueType {
-  ServiceIncident = 'ServiceIncident',
-  AppDeployment = 'AppDeployment',
-  AppCrash = 'AppCrash',
-  RuntimeIssueDetected = 'RuntimeIssueDetected',
-  AseDeployment = 'AseDeployment',
-  UserIssue = 'UserIssue',
-  PlatformIssue = 'PlatformIssue',
-  Other = 'Other',
-}
+export type IssueType = 'ServiceIncident' | 'AppDeployment' | 'AppCrash' | 'RuntimeIssueDetected' | 'AseDeployment' | 'UserIssue' | 'PlatformIssue' | 'Other';
 
 /**
  * Defines values for SolutionType.
- * Possible values include: 'QuickSolution', 'DeepInvestigation',
- * 'BestPractices'
+ * Possible values include: 'QuickSolution', 'DeepInvestigation', 'BestPractices'
  * @readonly
  * @enum {string}
  */
-export enum SolutionType {
-  QuickSolution = 'QuickSolution',
-  DeepInvestigation = 'DeepInvestigation',
-  BestPractices = 'BestPractices',
-}
+export type SolutionType = 'QuickSolution' | 'DeepInvestigation' | 'BestPractices';
 
 /**
  * Defines values for RenderingType.
- * Possible values include: 'NoGraph', 'Table', 'TimeSeries',
- * 'TimeSeriesPerInstance'
+ * Possible values include: 'NoGraph', 'Table', 'TimeSeries', 'TimeSeriesPerInstance'
  * @readonly
  * @enum {string}
  */
-export enum RenderingType {
-  NoGraph = 'NoGraph',
-  Table = 'Table',
-  TimeSeries = 'TimeSeries',
-  TimeSeriesPerInstance = 'TimeSeriesPerInstance',
-}
+export type RenderingType = 'NoGraph' | 'Table' | 'TimeSeries' | 'TimeSeriesPerInstance';
 
 /**
  * Defines values for ResourceScopeType.
  * Possible values include: 'ServerFarm', 'Subscription', 'WebSite'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: ResourceScopeType =
- * <ResourceScopeType>"someUnknownValueThatWillStillBeValid";
  * @readonly
  * @enum {string}
  */
-export enum ResourceScopeType {
-  ServerFarm = 'ServerFarm',
-  Subscription = 'Subscription',
-  WebSite = 'WebSite',
-}
+export type ResourceScopeType = 'ServerFarm' | 'Subscription' | 'WebSite';
 
 /**
  * Defines values for NotificationLevel.
- * Possible values include: 'Critical', 'Warning', 'Information',
- * 'NonUrgentSuggestion'
+ * Possible values include: 'Critical', 'Warning', 'Information', 'NonUrgentSuggestion'
  * @readonly
  * @enum {string}
  */
-export enum NotificationLevel {
-  Critical = 'Critical',
-  Warning = 'Warning',
-  Information = 'Information',
-  NonUrgentSuggestion = 'NonUrgentSuggestion',
-}
+export type NotificationLevel = 'Critical' | 'Warning' | 'Information' | 'NonUrgentSuggestion';
 
 /**
  * Defines values for Channels.
@@ -11889,85 +10311,41 @@ export enum NotificationLevel {
  * @readonly
  * @enum {string}
  */
-export enum Channels {
-  Notification = 'Notification',
-  Api = 'Api',
-  Email = 'Email',
-  Webhook = 'Webhook',
-  All = 'All',
-}
+export type Channels = 'Notification' | 'Api' | 'Email' | 'Webhook' | 'All';
 
 /**
  * Defines values for AppServicePlanRestrictions.
- * Possible values include: 'None', 'Free', 'Shared', 'Basic', 'Standard',
- * 'Premium'
+ * Possible values include: 'None', 'Free', 'Shared', 'Basic', 'Standard', 'Premium'
  * @readonly
  * @enum {string}
  */
-export enum AppServicePlanRestrictions {
-  None = 'None',
-  Free = 'Free',
-  Shared = 'Shared',
-  Basic = 'Basic',
-  Standard = 'Standard',
-  Premium = 'Premium',
-}
+export type AppServicePlanRestrictions = 'None' | 'Free' | 'Shared' | 'Basic' | 'Standard' | 'Premium';
 
 /**
  * Defines values for InAvailabilityReasonType.
  * Possible values include: 'Invalid', 'AlreadyExists'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: InAvailabilityReasonType =
- * <InAvailabilityReasonType>"someUnknownValueThatWillStillBeValid";
  * @readonly
  * @enum {string}
  */
-export enum InAvailabilityReasonType {
-  Invalid = 'Invalid',
-  AlreadyExists = 'AlreadyExists',
-}
+export type InAvailabilityReasonType = 'Invalid' | 'AlreadyExists';
 
 /**
  * Defines values for CheckNameResourceTypes.
- * Possible values include: 'Site', 'Slot', 'HostingEnvironment',
- * 'PublishingUser', 'Microsoft.Web/sites', 'Microsoft.Web/sites/slots',
- * 'Microsoft.Web/hostingEnvironments', 'Microsoft.Web/publishingUsers'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: CheckNameResourceTypes =
- * <CheckNameResourceTypes>"someUnknownValueThatWillStillBeValid";
+ * Possible values include: 'Site', 'Slot', 'HostingEnvironment', 'PublishingUser',
+ * 'Microsoft.Web/sites', 'Microsoft.Web/sites/slots', 'Microsoft.Web/hostingEnvironments',
+ * 'Microsoft.Web/publishingUsers'
  * @readonly
  * @enum {string}
  */
-export enum CheckNameResourceTypes {
-  Site = 'Site',
-  Slot = 'Slot',
-  HostingEnvironment = 'HostingEnvironment',
-  PublishingUser = 'PublishingUser',
-  MicrosoftWebsites = 'Microsoft.Web/sites',
-  MicrosoftWebsitesslots = 'Microsoft.Web/sites/slots',
-  MicrosoftWebhostingEnvironments = 'Microsoft.Web/hostingEnvironments',
-  MicrosoftWebpublishingUsers = 'Microsoft.Web/publishingUsers',
-}
+export type CheckNameResourceTypes = 'Site' | 'Slot' | 'HostingEnvironment' | 'PublishingUser' | 'Microsoft.Web/sites' | 'Microsoft.Web/sites/slots' | 'Microsoft.Web/hostingEnvironments' | 'Microsoft.Web/publishingUsers';
 
 /**
  * Defines values for ValidateResourceTypes.
  * Possible values include: 'ServerFarm', 'Site'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: ValidateResourceTypes =
- * <ValidateResourceTypes>"someUnknownValueThatWillStillBeValid";
  * @readonly
  * @enum {string}
  */
-export enum ValidateResourceTypes {
-  ServerFarm = 'ServerFarm',
-  Site = 'Site',
-}
+export type ValidateResourceTypes = 'ServerFarm' | 'Site';
 
 /**
  * Defines values for LogLevel.
@@ -11975,52 +10353,24 @@ export enum ValidateResourceTypes {
  * @readonly
  * @enum {string}
  */
-export enum LogLevel {
-  Off = 'Off',
-  Verbose = 'Verbose',
-  Information = 'Information',
-  Warning = 'Warning',
-  Error = 'Error',
-}
+export type LogLevel = 'Off' | 'Verbose' | 'Information' | 'Warning' | 'Error';
 
 /**
  * Defines values for BackupItemStatus.
- * Possible values include: 'InProgress', 'Failed', 'Succeeded', 'TimedOut',
- * 'Created', 'Skipped', 'PartiallySucceeded', 'DeleteInProgress',
- * 'DeleteFailed', 'Deleted'
+ * Possible values include: 'InProgress', 'Failed', 'Succeeded', 'TimedOut', 'Created', 'Skipped',
+ * 'PartiallySucceeded', 'DeleteInProgress', 'DeleteFailed', 'Deleted'
  * @readonly
  * @enum {string}
  */
-export enum BackupItemStatus {
-  InProgress = 'InProgress',
-  Failed = 'Failed',
-  Succeeded = 'Succeeded',
-  TimedOut = 'TimedOut',
-  Created = 'Created',
-  Skipped = 'Skipped',
-  PartiallySucceeded = 'PartiallySucceeded',
-  DeleteInProgress = 'DeleteInProgress',
-  DeleteFailed = 'DeleteFailed',
-  Deleted = 'Deleted',
-}
+export type BackupItemStatus = 'InProgress' | 'Failed' | 'Succeeded' | 'TimedOut' | 'Created' | 'Skipped' | 'PartiallySucceeded' | 'DeleteInProgress' | 'DeleteFailed' | 'Deleted';
 
 /**
  * Defines values for DatabaseType.
  * Possible values include: 'SqlAzure', 'MySql', 'LocalMySql', 'PostgreSql'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: DatabaseType =
- * <DatabaseType>"someUnknownValueThatWillStillBeValid";
  * @readonly
  * @enum {string}
  */
-export enum DatabaseType {
-  SqlAzure = 'SqlAzure',
-  MySql = 'MySql',
-  LocalMySql = 'LocalMySql',
-  PostgreSql = 'PostgreSql',
-}
+export type DatabaseType = 'SqlAzure' | 'MySql' | 'LocalMySql' | 'PostgreSql';
 
 /**
  * Defines values for FrequencyUnit.
@@ -12028,25 +10378,15 @@ export enum DatabaseType {
  * @readonly
  * @enum {string}
  */
-export enum FrequencyUnit {
-  Day = 'Day',
-  Hour = 'Hour',
-}
+export type FrequencyUnit = 'Day' | 'Hour';
 
 /**
  * Defines values for ContinuousWebJobStatus.
- * Possible values include: 'Initializing', 'Starting', 'Running',
- * 'PendingRestart', 'Stopped'
+ * Possible values include: 'Initializing', 'Starting', 'Running', 'PendingRestart', 'Stopped'
  * @readonly
  * @enum {string}
  */
-export enum ContinuousWebJobStatus {
-  Initializing = 'Initializing',
-  Starting = 'Starting',
-  Running = 'Running',
-  PendingRestart = 'PendingRestart',
-  Stopped = 'Stopped',
-}
+export type ContinuousWebJobStatus = 'Initializing' | 'Starting' | 'Running' | 'PendingRestart' | 'Stopped';
 
 /**
  * Defines values for WebJobType.
@@ -12054,27 +10394,15 @@ export enum ContinuousWebJobStatus {
  * @readonly
  * @enum {string}
  */
-export enum WebJobType {
-  Continuous = 'Continuous',
-  Triggered = 'Triggered',
-}
+export type WebJobType = 'Continuous' | 'Triggered';
 
 /**
  * Defines values for PublishingProfileFormat.
  * Possible values include: 'FileZilla3', 'WebDeploy', 'Ftp'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: PublishingProfileFormat =
- * <PublishingProfileFormat>"someUnknownValueThatWillStillBeValid";
  * @readonly
  * @enum {string}
  */
-export enum PublishingProfileFormat {
-  FileZilla3 = 'FileZilla3',
-  WebDeploy = 'WebDeploy',
-  Ftp = 'Ftp',
-}
+export type PublishingProfileFormat = 'FileZilla3' | 'WebDeploy' | 'Ftp';
 
 /**
  * Defines values for DnsVerificationTestResult.
@@ -12082,11 +10410,31 @@ export enum PublishingProfileFormat {
  * @readonly
  * @enum {string}
  */
-export enum DnsVerificationTestResult {
-  Passed = 'Passed',
-  Failed = 'Failed',
-  Skipped = 'Skipped',
-}
+export type DnsVerificationTestResult = 'Passed' | 'Failed' | 'Skipped';
+
+/**
+ * Defines values for AzureResourceType.
+ * Possible values include: 'Website', 'TrafficManager'
+ * @readonly
+ * @enum {string}
+ */
+export type AzureResourceType = 'Website' | 'TrafficManager';
+
+/**
+ * Defines values for CustomHostNameDnsRecordType.
+ * Possible values include: 'CName', 'A'
+ * @readonly
+ * @enum {string}
+ */
+export type CustomHostNameDnsRecordType = 'CName' | 'A';
+
+/**
+ * Defines values for HostNameType.
+ * Possible values include: 'Verified', 'Managed'
+ * @readonly
+ * @enum {string}
+ */
+export type HostNameType = 'Verified' | 'Managed';
 
 /**
  * Defines values for MSDeployLogEntryType.
@@ -12094,26 +10442,15 @@ export enum DnsVerificationTestResult {
  * @readonly
  * @enum {string}
  */
-export enum MSDeployLogEntryType {
-  Message = 'Message',
-  Warning = 'Warning',
-  Error = 'Error',
-}
+export type MSDeployLogEntryType = 'Message' | 'Warning' | 'Error';
 
 /**
  * Defines values for MSDeployProvisioningState.
- * Possible values include: 'accepted', 'running', 'succeeded', 'failed',
- * 'canceled'
+ * Possible values include: 'accepted', 'running', 'succeeded', 'failed', 'canceled'
  * @readonly
  * @enum {string}
  */
-export enum MSDeployProvisioningState {
-  Accepted = 'accepted',
-  Running = 'running',
-  Succeeded = 'succeeded',
-  Failed = 'failed',
-  Canceled = 'canceled',
-}
+export type MSDeployProvisioningState = 'accepted' | 'running' | 'succeeded' | 'failed' | 'canceled';
 
 /**
  * Defines values for MySqlMigrationType.
@@ -12121,10 +10458,7 @@ export enum MSDeployProvisioningState {
  * @readonly
  * @enum {string}
  */
-export enum MySqlMigrationType {
-  LocalToRemote = 'LocalToRemote',
-  RemoteToLocal = 'RemoteToLocal',
-}
+export type MySqlMigrationType = 'LocalToRemote' | 'RemoteToLocal';
 
 /**
  * Defines values for PublicCertificateLocation.
@@ -12132,26 +10466,15 @@ export enum MySqlMigrationType {
  * @readonly
  * @enum {string}
  */
-export enum PublicCertificateLocation {
-  CurrentUserMy = 'CurrentUserMy',
-  LocalMachineMy = 'LocalMachineMy',
-  Unknown = 'Unknown',
-}
+export type PublicCertificateLocation = 'CurrentUserMy' | 'LocalMachineMy' | 'Unknown';
 
 /**
  * Defines values for BackupRestoreOperationType.
- * Possible values include: 'Default', 'Clone', 'Relocation', 'Snapshot',
- * 'CloudFS'
+ * Possible values include: 'Default', 'Clone', 'Relocation', 'Snapshot', 'CloudFS'
  * @readonly
  * @enum {string}
  */
-export enum BackupRestoreOperationType {
-  Default = 'Default',
-  Clone = 'Clone',
-  Relocation = 'Relocation',
-  Snapshot = 'Snapshot',
-  CloudFS = 'CloudFS',
-}
+export type BackupRestoreOperationType = 'Default' | 'Clone' | 'Relocation' | 'Snapshot' | 'CloudFS';
 
 /**
  * Defines values for UnauthenticatedClientAction.
@@ -12159,25 +10482,16 @@ export enum BackupRestoreOperationType {
  * @readonly
  * @enum {string}
  */
-export enum UnauthenticatedClientAction {
-  RedirectToLoginPage = 'RedirectToLoginPage',
-  AllowAnonymous = 'AllowAnonymous',
-}
+export type UnauthenticatedClientAction = 'RedirectToLoginPage' | 'AllowAnonymous';
 
 /**
  * Defines values for BuiltInAuthenticationProvider.
- * Possible values include: 'AzureActiveDirectory', 'Facebook', 'Google',
- * 'MicrosoftAccount', 'Twitter'
+ * Possible values include: 'AzureActiveDirectory', 'Facebook', 'Google', 'MicrosoftAccount',
+ * 'Twitter'
  * @readonly
  * @enum {string}
  */
-export enum BuiltInAuthenticationProvider {
-  AzureActiveDirectory = 'AzureActiveDirectory',
-  Facebook = 'Facebook',
-  Google = 'Google',
-  MicrosoftAccount = 'MicrosoftAccount',
-  Twitter = 'Twitter',
-}
+export type BuiltInAuthenticationProvider = 'AzureActiveDirectory' | 'Facebook' | 'Google' | 'MicrosoftAccount' | 'Twitter';
 
 /**
  * Defines values for CloneAbilityResult.
@@ -12185,11 +10499,7 @@ export enum BuiltInAuthenticationProvider {
  * @readonly
  * @enum {string}
  */
-export enum CloneAbilityResult {
-  Cloneable = 'Cloneable',
-  PartiallyCloneable = 'PartiallyCloneable',
-  NotCloneable = 'NotCloneable',
-}
+export type CloneAbilityResult = 'Cloneable' | 'PartiallyCloneable' | 'NotCloneable';
 
 /**
  * Defines values for SiteExtensionType.
@@ -12197,10 +10507,7 @@ export enum CloneAbilityResult {
  * @readonly
  * @enum {string}
  */
-export enum SiteExtensionType {
-  Gallery = 'Gallery',
-  WebRoot = 'WebRoot',
-}
+export type SiteExtensionType = 'Gallery' | 'WebRoot';
 
 /**
  * Defines values for TriggeredWebJobStatus.
@@ -12208,78 +10515,37 @@ export enum SiteExtensionType {
  * @readonly
  * @enum {string}
  */
-export enum TriggeredWebJobStatus {
-  Success = 'Success',
-  Failed = 'Failed',
-  Error = 'Error',
-}
+export type TriggeredWebJobStatus = 'Success' | 'Failed' | 'Error';
 
 /**
  * Defines values for SkuName.
- * Possible values include: 'Free', 'Shared', 'Basic', 'Standard', 'Premium',
- * 'Dynamic', 'Isolated', 'PremiumV2', 'ElasticPremium', 'ElasticIsolated'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: SkuName = <SkuName>"someUnknownValueThatWillStillBeValid";
+ * Possible values include: 'Free', 'Shared', 'Basic', 'Standard', 'Premium', 'Dynamic',
+ * 'Isolated', 'PremiumV2', 'ElasticPremium', 'ElasticIsolated'
  * @readonly
  * @enum {string}
  */
-export enum SkuName {
-  Free = 'Free',
-  Shared = 'Shared',
-  Basic = 'Basic',
-  Standard = 'Standard',
-  Premium = 'Premium',
-  Dynamic = 'Dynamic',
-  Isolated = 'Isolated',
-  PremiumV2 = 'PremiumV2',
-  ElasticPremium = 'ElasticPremium',
-  ElasticIsolated = 'ElasticIsolated',
-}
+export type SkuName = 'Free' | 'Shared' | 'Basic' | 'Standard' | 'Premium' | 'Dynamic' | 'Isolated' | 'PremiumV2' | 'ElasticPremium' | 'ElasticIsolated';
 
 /**
  * Defines values for OsTypeSelected.
- * Possible values include: 'Windows', 'Linux', 'WindowsFunctions',
- * 'LinuxFunctions'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: OsTypeSelected =
- * <OsTypeSelected>"someUnknownValueThatWillStillBeValid";
+ * Possible values include: 'Windows', 'Linux', 'WindowsFunctions', 'LinuxFunctions'
  * @readonly
  * @enum {string}
  */
-export enum OsTypeSelected {
-  Windows = 'Windows',
-  Linux = 'Linux',
-  WindowsFunctions = 'WindowsFunctions',
-  LinuxFunctions = 'LinuxFunctions',
-}
+export type OsTypeSelected = 'Windows' | 'Linux' | 'WindowsFunctions' | 'LinuxFunctions';
 
 /**
  * Defines values for OsTypeSelected1.
- * Possible values include: 'Windows', 'Linux', 'WindowsFunctions',
- * 'LinuxFunctions'
- * There could be more values for this enum apart from the ones defined here.If
- * you want to set a value that is not from the known values then you can do
- * the following:
- * let param: OsTypeSelected1 =
- * <OsTypeSelected1>"someUnknownValueThatWillStillBeValid";
+ * Possible values include: 'Windows', 'Linux', 'WindowsFunctions', 'LinuxFunctions'
  * @readonly
  * @enum {string}
  */
-export enum OsTypeSelected1 {
-  Windows = 'Windows',
-  Linux = 'Linux',
-  WindowsFunctions = 'WindowsFunctions',
-  LinuxFunctions = 'LinuxFunctions',
-}
+export type OsTypeSelected1 = 'Windows' | 'Linux' | 'WindowsFunctions' | 'LinuxFunctions';
 
 /**
  * Contains response data for the list operation.
  */
-export type AppServiceCertificateOrdersListResponse = AppServiceCertificateOrderCollection & {
+export type AppServiceEnvironmentsListResponse = AppServiceEnvironmentCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12291,14 +10557,14 @@ export type AppServiceCertificateOrdersListResponse = AppServiceCertificateOrder
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrderCollection;
+      parsedBody: AppServiceEnvironmentCollection;
     };
 };
 
 /**
  * Contains response data for the listByResourceGroup operation.
  */
-export type AppServiceCertificateOrdersListByResourceGroupResponse = AppServiceCertificateOrderCollection & {
+export type AppServiceEnvironmentsListByResourceGroupResponse = AppServiceEnvironmentCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12310,14 +10576,14 @@ export type AppServiceCertificateOrdersListByResourceGroupResponse = AppServiceC
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrderCollection;
+      parsedBody: AppServiceEnvironmentCollection;
     };
 };
 
 /**
  * Contains response data for the get operation.
  */
-export type AppServiceCertificateOrdersGetResponse = AppServiceCertificateOrder & {
+export type AppServiceEnvironmentsGetResponse = AppServiceEnvironmentResource & {
   /**
    * The underlying HTTP response.
    */
@@ -12329,14 +10595,14 @@ export type AppServiceCertificateOrdersGetResponse = AppServiceCertificateOrder 
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrder;
+      parsedBody: AppServiceEnvironmentResource;
     };
 };
 
 /**
  * Contains response data for the createOrUpdate operation.
  */
-export type AppServiceCertificateOrdersCreateOrUpdateResponse = AppServiceCertificateOrder & {
+export type AppServiceEnvironmentsCreateOrUpdateResponse = AppServiceEnvironmentResource & {
   /**
    * The underlying HTTP response.
    */
@@ -12348,14 +10614,14 @@ export type AppServiceCertificateOrdersCreateOrUpdateResponse = AppServiceCertif
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrder;
+      parsedBody: AppServiceEnvironmentResource;
     };
 };
 
 /**
  * Contains response data for the update operation.
  */
-export type AppServiceCertificateOrdersUpdateResponse = AppServiceCertificateOrder & {
+export type AppServiceEnvironmentsUpdateResponse = AppServiceEnvironmentResource & {
   /**
    * The underlying HTTP response.
    */
@@ -12367,14 +10633,14 @@ export type AppServiceCertificateOrdersUpdateResponse = AppServiceCertificateOrd
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrder;
+      parsedBody: AppServiceEnvironmentResource;
     };
 };
 
 /**
- * Contains response data for the listCertificates operation.
+ * Contains response data for the listCapacities operation.
  */
-export type AppServiceCertificateOrdersListCertificatesResponse = AppServiceCertificateCollection & {
+export type AppServiceEnvironmentsListCapacitiesResponse = StampCapacityCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12386,14 +10652,14 @@ export type AppServiceCertificateOrdersListCertificatesResponse = AppServiceCert
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateCollection;
+      parsedBody: StampCapacityCollection;
     };
 };
 
 /**
- * Contains response data for the getCertificate operation.
+ * Contains response data for the listVips operation.
  */
-export type AppServiceCertificateOrdersGetCertificateResponse = AppServiceCertificateResource & {
+export type AppServiceEnvironmentsListVipsResponse = AddressResponse & {
   /**
    * The underlying HTTP response.
    */
@@ -12405,14 +10671,14 @@ export type AppServiceCertificateOrdersGetCertificateResponse = AppServiceCertif
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateResource;
+      parsedBody: AddressResponse;
     };
 };
 
 /**
- * Contains response data for the createOrUpdateCertificate operation.
+ * Contains response data for the changeVnet operation.
  */
-export type AppServiceCertificateOrdersCreateOrUpdateCertificateResponse = AppServiceCertificateResource & {
+export type AppServiceEnvironmentsChangeVnetResponse = WebAppCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12424,14 +10690,14 @@ export type AppServiceCertificateOrdersCreateOrUpdateCertificateResponse = AppSe
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateResource;
+      parsedBody: WebAppCollection;
     };
 };
 
 /**
- * Contains response data for the updateCertificate operation.
+ * Contains response data for the listDiagnostics operation.
  */
-export type AppServiceCertificateOrdersUpdateCertificateResponse = AppServiceCertificateResource & {
+export type AppServiceEnvironmentsListDiagnosticsResponse = Array<HostingEnvironmentDiagnostics> & {
   /**
    * The underlying HTTP response.
    */
@@ -12443,14 +10709,14 @@ export type AppServiceCertificateOrdersUpdateCertificateResponse = AppServiceCer
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateResource;
+      parsedBody: HostingEnvironmentDiagnostics[];
     };
 };
 
 /**
- * Contains response data for the retrieveSiteSeal operation.
+ * Contains response data for the getDiagnosticsItem operation.
  */
-export type AppServiceCertificateOrdersRetrieveSiteSealResponse = SiteSeal & {
+export type AppServiceEnvironmentsGetDiagnosticsItemResponse = HostingEnvironmentDiagnostics & {
   /**
    * The underlying HTTP response.
    */
@@ -12462,14 +10728,14 @@ export type AppServiceCertificateOrdersRetrieveSiteSealResponse = SiteSeal & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: SiteSeal;
+      parsedBody: HostingEnvironmentDiagnostics;
     };
 };
 
 /**
- * Contains response data for the retrieveCertificateActions operation.
+ * Contains response data for the listMetricDefinitions operation.
  */
-export type AppServiceCertificateOrdersRetrieveCertificateActionsResponse = Array<CertificateOrderAction> & {
+export type AppServiceEnvironmentsListMetricDefinitionsResponse = MetricDefinition & {
   /**
    * The underlying HTTP response.
    */
@@ -12481,14 +10747,14 @@ export type AppServiceCertificateOrdersRetrieveCertificateActionsResponse = Arra
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: CertificateOrderAction[];
+      parsedBody: MetricDefinition;
     };
 };
 
 /**
- * Contains response data for the retrieveCertificateEmailHistory operation.
+ * Contains response data for the listMetrics operation.
  */
-export type AppServiceCertificateOrdersRetrieveCertificateEmailHistoryResponse = Array<CertificateEmail> & {
+export type AppServiceEnvironmentsListMetricsResponse = ResourceMetricCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12500,14 +10766,14 @@ export type AppServiceCertificateOrdersRetrieveCertificateEmailHistoryResponse =
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: CertificateEmail[];
+      parsedBody: ResourceMetricCollection;
     };
 };
 
 /**
- * Contains response data for the beginCreateOrUpdate operation.
+ * Contains response data for the listMultiRolePools operation.
  */
-export type AppServiceCertificateOrdersBeginCreateOrUpdateResponse = AppServiceCertificateOrder & {
+export type AppServiceEnvironmentsListMultiRolePoolsResponse = WorkerPoolCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12519,14 +10785,14 @@ export type AppServiceCertificateOrdersBeginCreateOrUpdateResponse = AppServiceC
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrder;
+      parsedBody: WorkerPoolCollection;
     };
 };
 
 /**
- * Contains response data for the beginCreateOrUpdateCertificate operation.
+ * Contains response data for the getMultiRolePool operation.
  */
-export type AppServiceCertificateOrdersBeginCreateOrUpdateCertificateResponse = AppServiceCertificateResource & {
+export type AppServiceEnvironmentsGetMultiRolePoolResponse = WorkerPoolResource & {
   /**
    * The underlying HTTP response.
    */
@@ -12538,14 +10804,14 @@ export type AppServiceCertificateOrdersBeginCreateOrUpdateCertificateResponse = 
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateResource;
+      parsedBody: WorkerPoolResource;
     };
 };
 
 /**
- * Contains response data for the listNext operation.
+ * Contains response data for the createOrUpdateMultiRolePool operation.
  */
-export type AppServiceCertificateOrdersListNextResponse = AppServiceCertificateOrderCollection & {
+export type AppServiceEnvironmentsCreateOrUpdateMultiRolePoolResponse = WorkerPoolResource & {
   /**
    * The underlying HTTP response.
    */
@@ -12557,14 +10823,14 @@ export type AppServiceCertificateOrdersListNextResponse = AppServiceCertificateO
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrderCollection;
+      parsedBody: WorkerPoolResource;
     };
 };
 
 /**
- * Contains response data for the listByResourceGroupNext operation.
+ * Contains response data for the updateMultiRolePool operation.
  */
-export type AppServiceCertificateOrdersListByResourceGroupNextResponse = AppServiceCertificateOrderCollection & {
+export type AppServiceEnvironmentsUpdateMultiRolePoolResponse = WorkerPoolResource & {
   /**
    * The underlying HTTP response.
    */
@@ -12576,14 +10842,14 @@ export type AppServiceCertificateOrdersListByResourceGroupNextResponse = AppServ
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateOrderCollection;
+      parsedBody: WorkerPoolResource;
     };
 };
 
 /**
- * Contains response data for the listCertificatesNext operation.
+ * Contains response data for the listMultiRolePoolInstanceMetricDefinitions operation.
  */
-export type AppServiceCertificateOrdersListCertificatesNextResponse = AppServiceCertificateCollection & {
+export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12595,14 +10861,109 @@ export type AppServiceCertificateOrdersListCertificatesNextResponse = AppService
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: AppServiceCertificateCollection;
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRolePoolInstanceMetrics operation.
+ */
+export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricsResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRoleMetricDefinitions operation.
+ */
+export type AppServiceEnvironmentsListMultiRoleMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRoleMetrics operation.
+ */
+export type AppServiceEnvironmentsListMultiRoleMetricsResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRolePoolSkus operation.
+ */
+export type AppServiceEnvironmentsListMultiRolePoolSkusResponse = SkuInfoCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: SkuInfoCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRoleUsages operation.
+ */
+export type AppServiceEnvironmentsListMultiRoleUsagesResponse = UsageCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: UsageCollection;
     };
 };
 
 /**
  * Contains response data for the listOperations operation.
  */
-export type CertificateRegistrationProviderListOperationsResponse = CsmOperationCollection & {
+export type AppServiceEnvironmentsListOperationsResponse = Array<Operation> & {
   /**
    * The underlying HTTP response.
    */
@@ -12614,14 +10975,14 @@ export type CertificateRegistrationProviderListOperationsResponse = CsmOperation
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: CsmOperationCollection;
+      parsedBody: Operation[];
     };
 };
 
 /**
- * Contains response data for the listOperationsNext operation.
+ * Contains response data for the resume operation.
  */
-export type CertificateRegistrationProviderListOperationsNextResponse = CsmOperationCollection & {
+export type AppServiceEnvironmentsResumeResponse = WebAppCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12633,14 +10994,14 @@ export type CertificateRegistrationProviderListOperationsNextResponse = CsmOpera
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: CsmOperationCollection;
+      parsedBody: WebAppCollection;
     };
 };
 
 /**
- * Contains response data for the checkAvailability operation.
+ * Contains response data for the listAppServicePlans operation.
  */
-export type DomainsCheckAvailabilityResponse = DomainAvailablilityCheckResult & {
+export type AppServiceEnvironmentsListAppServicePlansResponse = AppServicePlanCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12652,14 +11013,888 @@ export type DomainsCheckAvailabilityResponse = DomainAvailablilityCheckResult & 
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainAvailablilityCheckResult;
+      parsedBody: AppServicePlanCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebApps operation.
+ */
+export type AppServiceEnvironmentsListWebAppsResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the suspend operation.
+ */
+export type AppServiceEnvironmentsSuspendResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the listUsages operation.
+ */
+export type AppServiceEnvironmentsListUsagesResponse = CsmUsageQuotaCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: CsmUsageQuotaCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPools operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolsResponse = WorkerPoolCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolCollection;
+    };
+};
+
+/**
+ * Contains response data for the getWorkerPool operation.
+ */
+export type AppServiceEnvironmentsGetWorkerPoolResponse = WorkerPoolResource & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolResource;
+    };
+};
+
+/**
+ * Contains response data for the createOrUpdateWorkerPool operation.
+ */
+export type AppServiceEnvironmentsCreateOrUpdateWorkerPoolResponse = WorkerPoolResource & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolResource;
+    };
+};
+
+/**
+ * Contains response data for the updateWorkerPool operation.
+ */
+export type AppServiceEnvironmentsUpdateWorkerPoolResponse = WorkerPoolResource & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolResource;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPoolInstanceMetricDefinitions operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolInstanceMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPoolInstanceMetrics operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolInstanceMetricsResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebWorkerMetricDefinitions operation.
+ */
+export type AppServiceEnvironmentsListWebWorkerMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebWorkerMetrics operation.
+ */
+export type AppServiceEnvironmentsListWebWorkerMetricsResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPoolSkus operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolSkusResponse = SkuInfoCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: SkuInfoCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebWorkerUsages operation.
+ */
+export type AppServiceEnvironmentsListWebWorkerUsagesResponse = UsageCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: UsageCollection;
+    };
+};
+
+/**
+ * Contains response data for the beginCreateOrUpdate operation.
+ */
+export type AppServiceEnvironmentsBeginCreateOrUpdateResponse = AppServiceEnvironmentResource & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: AppServiceEnvironmentResource;
+    };
+};
+
+/**
+ * Contains response data for the beginChangeVnet operation.
+ */
+export type AppServiceEnvironmentsBeginChangeVnetResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the beginCreateOrUpdateMultiRolePool operation.
+ */
+export type AppServiceEnvironmentsBeginCreateOrUpdateMultiRolePoolResponse = WorkerPoolResource & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolResource;
+    };
+};
+
+/**
+ * Contains response data for the beginResume operation.
+ */
+export type AppServiceEnvironmentsBeginResumeResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the beginSuspend operation.
+ */
+export type AppServiceEnvironmentsBeginSuspendResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the beginCreateOrUpdateWorkerPool operation.
+ */
+export type AppServiceEnvironmentsBeginCreateOrUpdateWorkerPoolResponse = WorkerPoolResource & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolResource;
+    };
+};
+
+/**
+ * Contains response data for the listNext operation.
+ */
+export type AppServiceEnvironmentsListNextResponse = AppServiceEnvironmentCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: AppServiceEnvironmentCollection;
+    };
+};
+
+/**
+ * Contains response data for the listByResourceGroupNext operation.
+ */
+export type AppServiceEnvironmentsListByResourceGroupNextResponse = AppServiceEnvironmentCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: AppServiceEnvironmentCollection;
+    };
+};
+
+/**
+ * Contains response data for the listCapacitiesNext operation.
+ */
+export type AppServiceEnvironmentsListCapacitiesNextResponse = StampCapacityCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: StampCapacityCollection;
+    };
+};
+
+/**
+ * Contains response data for the changeVnetNext operation.
+ */
+export type AppServiceEnvironmentsChangeVnetNextResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMetricsNext operation.
+ */
+export type AppServiceEnvironmentsListMetricsNextResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRolePoolsNext operation.
+ */
+export type AppServiceEnvironmentsListMultiRolePoolsNextResponse = WorkerPoolCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRolePoolInstanceMetricDefinitionsNext operation.
+ */
+export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRolePoolInstanceMetricsNext operation.
+ */
+export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricsNextResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRoleMetricDefinitionsNext operation.
+ */
+export type AppServiceEnvironmentsListMultiRoleMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRoleMetricsNext operation.
+ */
+export type AppServiceEnvironmentsListMultiRoleMetricsNextResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRolePoolSkusNext operation.
+ */
+export type AppServiceEnvironmentsListMultiRolePoolSkusNextResponse = SkuInfoCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: SkuInfoCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMultiRoleUsagesNext operation.
+ */
+export type AppServiceEnvironmentsListMultiRoleUsagesNextResponse = UsageCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: UsageCollection;
+    };
+};
+
+/**
+ * Contains response data for the resumeNext operation.
+ */
+export type AppServiceEnvironmentsResumeNextResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the listAppServicePlansNext operation.
+ */
+export type AppServiceEnvironmentsListAppServicePlansNextResponse = AppServicePlanCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: AppServicePlanCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebAppsNext operation.
+ */
+export type AppServiceEnvironmentsListWebAppsNextResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the suspendNext operation.
+ */
+export type AppServiceEnvironmentsSuspendNextResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the listUsagesNext operation.
+ */
+export type AppServiceEnvironmentsListUsagesNextResponse = CsmUsageQuotaCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: CsmUsageQuotaCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPoolsNext operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolsNextResponse = WorkerPoolCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WorkerPoolCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPoolInstanceMetricDefinitionsNext operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolInstanceMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPoolInstanceMetricsNext operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolInstanceMetricsNextResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebWorkerMetricDefinitionsNext operation.
+ */
+export type AppServiceEnvironmentsListWebWorkerMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebWorkerMetricsNext operation.
+ */
+export type AppServiceEnvironmentsListWebWorkerMetricsNextResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWorkerPoolSkusNext operation.
+ */
+export type AppServiceEnvironmentsListWorkerPoolSkusNextResponse = SkuInfoCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: SkuInfoCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebWorkerUsagesNext operation.
+ */
+export type AppServiceEnvironmentsListWebWorkerUsagesNextResponse = UsageCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: UsageCollection;
+    };
+};
+
+/**
+ * Contains response data for the beginChangeVnetNext operation.
+ */
+export type AppServiceEnvironmentsBeginChangeVnetNextResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the beginResumeNext operation.
+ */
+export type AppServiceEnvironmentsBeginResumeNextResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the beginSuspendNext operation.
+ */
+export type AppServiceEnvironmentsBeginSuspendNextResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
     };
 };
 
 /**
  * Contains response data for the list operation.
  */
-export type DomainsListResponse = DomainCollection & {
+export type AppServicePlansListResponse = AppServicePlanCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12671,52 +11906,14 @@ export type DomainsListResponse = DomainCollection & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainCollection;
-    };
-};
-
-/**
- * Contains response data for the getControlCenterSsoRequest operation.
- */
-export type DomainsGetControlCenterSsoRequestResponse = DomainControlCenterSsoRequest & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: DomainControlCenterSsoRequest;
-    };
-};
-
-/**
- * Contains response data for the listRecommendations operation.
- */
-export type DomainsListRecommendationsResponse = NameIdentifierCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: NameIdentifierCollection;
+      parsedBody: AppServicePlanCollection;
     };
 };
 
 /**
  * Contains response data for the listByResourceGroup operation.
  */
-export type DomainsListByResourceGroupResponse = DomainCollection & {
+export type AppServicePlansListByResourceGroupResponse = AppServicePlanCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12728,14 +11925,14 @@ export type DomainsListByResourceGroupResponse = DomainCollection & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainCollection;
+      parsedBody: AppServicePlanCollection;
     };
 };
 
 /**
  * Contains response data for the get operation.
  */
-export type DomainsGetResponse = Domain & {
+export type AppServicePlansGetResponse = AppServicePlan & {
   /**
    * The underlying HTTP response.
    */
@@ -12747,14 +11944,14 @@ export type DomainsGetResponse = Domain & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: Domain;
+      parsedBody: AppServicePlan;
     };
 };
 
 /**
  * Contains response data for the createOrUpdate operation.
  */
-export type DomainsCreateOrUpdateResponse = Domain & {
+export type AppServicePlansCreateOrUpdateResponse = AppServicePlan & {
   /**
    * The underlying HTTP response.
    */
@@ -12766,14 +11963,14 @@ export type DomainsCreateOrUpdateResponse = Domain & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: Domain;
+      parsedBody: AppServicePlan;
     };
 };
 
 /**
  * Contains response data for the update operation.
  */
-export type DomainsUpdateResponse = Domain & {
+export type AppServicePlansUpdateResponse = AppServicePlan & {
   /**
    * The underlying HTTP response.
    */
@@ -12785,14 +11982,14 @@ export type DomainsUpdateResponse = Domain & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: Domain;
+      parsedBody: AppServicePlan;
     };
 };
 
 /**
- * Contains response data for the listOwnershipIdentifiers operation.
+ * Contains response data for the listCapabilities operation.
  */
-export type DomainsListOwnershipIdentifiersResponse = DomainOwnershipIdentifierCollection & {
+export type AppServicePlansListCapabilitiesResponse = Array<Capability> & {
   /**
    * The underlying HTTP response.
    */
@@ -12804,14 +12001,14 @@ export type DomainsListOwnershipIdentifiersResponse = DomainOwnershipIdentifierC
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainOwnershipIdentifierCollection;
+      parsedBody: Capability[];
     };
 };
 
 /**
- * Contains response data for the getOwnershipIdentifier operation.
+ * Contains response data for the getHybridConnection operation.
  */
-export type DomainsGetOwnershipIdentifierResponse = DomainOwnershipIdentifier & {
+export type AppServicePlansGetHybridConnectionResponse = HybridConnection & {
   /**
    * The underlying HTTP response.
    */
@@ -12823,14 +12020,14 @@ export type DomainsGetOwnershipIdentifierResponse = DomainOwnershipIdentifier & 
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainOwnershipIdentifier;
+      parsedBody: HybridConnection;
     };
 };
 
 /**
- * Contains response data for the createOrUpdateOwnershipIdentifier operation.
+ * Contains response data for the listHybridConnectionKeys operation.
  */
-export type DomainsCreateOrUpdateOwnershipIdentifierResponse = DomainOwnershipIdentifier & {
+export type AppServicePlansListHybridConnectionKeysResponse = HybridConnectionKey & {
   /**
    * The underlying HTTP response.
    */
@@ -12842,14 +12039,14 @@ export type DomainsCreateOrUpdateOwnershipIdentifierResponse = DomainOwnershipId
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainOwnershipIdentifier;
+      parsedBody: HybridConnectionKey;
     };
 };
 
 /**
- * Contains response data for the updateOwnershipIdentifier operation.
+ * Contains response data for the listWebAppsByHybridConnection operation.
  */
-export type DomainsUpdateOwnershipIdentifierResponse = DomainOwnershipIdentifier & {
+export type AppServicePlansListWebAppsByHybridConnectionResponse = ResourceCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12861,14 +12058,303 @@ export type DomainsUpdateOwnershipIdentifierResponse = DomainOwnershipIdentifier
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainOwnershipIdentifier;
+      parsedBody: ResourceCollection;
+    };
+};
+
+/**
+ * Contains response data for the getHybridConnectionPlanLimit operation.
+ */
+export type AppServicePlansGetHybridConnectionPlanLimitResponse = HybridConnectionLimits & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: HybridConnectionLimits;
+    };
+};
+
+/**
+ * Contains response data for the listHybridConnections operation.
+ */
+export type AppServicePlansListHybridConnectionsResponse = HybridConnectionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: HybridConnectionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMetricDefintions operation.
+ */
+export type AppServicePlansListMetricDefintionsResponse = ResourceMetricDefinitionCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricDefinitionCollection;
+    };
+};
+
+/**
+ * Contains response data for the listMetrics operation.
+ */
+export type AppServicePlansListMetricsResponse = ResourceMetricCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceMetricCollection;
+    };
+};
+
+/**
+ * Contains response data for the listWebApps operation.
+ */
+export type AppServicePlansListWebAppsResponse = WebAppCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: WebAppCollection;
+    };
+};
+
+/**
+ * Contains response data for the getServerFarmSkus operation.
+ */
+export type AppServicePlansGetServerFarmSkusResponse = {
+  /**
+   * The parsed response body.
+   */
+  body: any;
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: any;
+    };
+};
+
+/**
+ * Contains response data for the listUsages operation.
+ */
+export type AppServicePlansListUsagesResponse = CsmUsageQuotaCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: CsmUsageQuotaCollection;
+    };
+};
+
+/**
+ * Contains response data for the listVnets operation.
+ */
+export type AppServicePlansListVnetsResponse = Array<VnetInfo> & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetInfo[];
+    };
+};
+
+/**
+ * Contains response data for the getVnetFromServerFarm operation.
+ */
+export type AppServicePlansGetVnetFromServerFarmResponse = VnetInfo & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetInfo;
+    };
+};
+
+/**
+ * Contains response data for the getVnetGateway operation.
+ */
+export type AppServicePlansGetVnetGatewayResponse = VnetGateway & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetGateway;
+    };
+};
+
+/**
+ * Contains response data for the updateVnetGateway operation.
+ */
+export type AppServicePlansUpdateVnetGatewayResponse = VnetGateway & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetGateway;
+    };
+};
+
+/**
+ * Contains response data for the listRoutesForVnet operation.
+ */
+export type AppServicePlansListRoutesForVnetResponse = Array<VnetRoute> & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetRoute[];
+    };
+};
+
+/**
+ * Contains response data for the getRouteForVnet operation.
+ */
+export type AppServicePlansGetRouteForVnetResponse = Array<VnetRoute> & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetRoute[];
+    };
+};
+
+/**
+ * Contains response data for the createOrUpdateVnetRoute operation.
+ */
+export type AppServicePlansCreateOrUpdateVnetRouteResponse = VnetRoute & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetRoute;
+    };
+};
+
+/**
+ * Contains response data for the updateVnetRoute operation.
+ */
+export type AppServicePlansUpdateVnetRouteResponse = VnetRoute & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: VnetRoute;
     };
 };
 
 /**
  * Contains response data for the beginCreateOrUpdate operation.
  */
-export type DomainsBeginCreateOrUpdateResponse = Domain & {
+export type AppServicePlansBeginCreateOrUpdateResponse = AppServicePlan & {
   /**
    * The underlying HTTP response.
    */
@@ -12880,14 +12366,14 @@ export type DomainsBeginCreateOrUpdateResponse = Domain & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: Domain;
+      parsedBody: AppServicePlan;
     };
 };
 
 /**
  * Contains response data for the listNext operation.
  */
-export type DomainsListNextResponse = DomainCollection & {
+export type AppServicePlansListNextResponse = AppServicePlanCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12899,33 +12385,14 @@ export type DomainsListNextResponse = DomainCollection & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainCollection;
-    };
-};
-
-/**
- * Contains response data for the listRecommendationsNext operation.
- */
-export type DomainsListRecommendationsNextResponse = NameIdentifierCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: NameIdentifierCollection;
+      parsedBody: AppServicePlanCollection;
     };
 };
 
 /**
  * Contains response data for the listByResourceGroupNext operation.
  */
-export type DomainsListByResourceGroupNextResponse = DomainCollection & {
+export type AppServicePlansListByResourceGroupNextResponse = AppServicePlanCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12937,14 +12404,14 @@ export type DomainsListByResourceGroupNextResponse = DomainCollection & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainCollection;
+      parsedBody: AppServicePlanCollection;
     };
 };
 
 /**
- * Contains response data for the listOwnershipIdentifiersNext operation.
+ * Contains response data for the listWebAppsByHybridConnectionNext operation.
  */
-export type DomainsListOwnershipIdentifiersNextResponse = DomainOwnershipIdentifierCollection & {
+export type AppServicePlansListWebAppsByHybridConnectionNextResponse = ResourceCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12956,14 +12423,14 @@ export type DomainsListOwnershipIdentifiersNextResponse = DomainOwnershipIdentif
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: DomainOwnershipIdentifierCollection;
+      parsedBody: ResourceCollection;
     };
 };
 
 /**
- * Contains response data for the list operation.
+ * Contains response data for the listHybridConnectionsNext operation.
  */
-export type TopLevelDomainsListResponse = TopLevelDomainCollection & {
+export type AppServicePlansListHybridConnectionsNextResponse = HybridConnectionCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12975,14 +12442,14 @@ export type TopLevelDomainsListResponse = TopLevelDomainCollection & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: TopLevelDomainCollection;
+      parsedBody: HybridConnectionCollection;
     };
 };
 
 /**
- * Contains response data for the get operation.
+ * Contains response data for the listMetricDefintionsNext operation.
  */
-export type TopLevelDomainsGetResponse = TopLevelDomain & {
+export type AppServicePlansListMetricDefintionsNextResponse = ResourceMetricDefinitionCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -12994,14 +12461,14 @@ export type TopLevelDomainsGetResponse = TopLevelDomain & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: TopLevelDomain;
+      parsedBody: ResourceMetricDefinitionCollection;
     };
 };
 
 /**
- * Contains response data for the listAgreements operation.
+ * Contains response data for the listMetricsNext operation.
  */
-export type TopLevelDomainsListAgreementsResponse = TldLegalAgreementCollection & {
+export type AppServicePlansListMetricsNextResponse = ResourceMetricCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -13013,14 +12480,14 @@ export type TopLevelDomainsListAgreementsResponse = TldLegalAgreementCollection 
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: TldLegalAgreementCollection;
+      parsedBody: ResourceMetricCollection;
     };
 };
 
 /**
- * Contains response data for the listNext operation.
+ * Contains response data for the listWebAppsNext operation.
  */
-export type TopLevelDomainsListNextResponse = TopLevelDomainCollection & {
+export type AppServicePlansListWebAppsNextResponse = WebAppCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -13032,14 +12499,14 @@ export type TopLevelDomainsListNextResponse = TopLevelDomainCollection & {
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: TopLevelDomainCollection;
+      parsedBody: WebAppCollection;
     };
 };
 
 /**
- * Contains response data for the listAgreementsNext operation.
+ * Contains response data for the listUsagesNext operation.
  */
-export type TopLevelDomainsListAgreementsNextResponse = TldLegalAgreementCollection & {
+export type AppServicePlansListUsagesNextResponse = CsmUsageQuotaCollection & {
   /**
    * The underlying HTTP response.
    */
@@ -13051,45 +12518,7 @@ export type TopLevelDomainsListAgreementsNextResponse = TldLegalAgreementCollect
       /**
        * The response body as parsed JSON or XML
        */
-      parsedBody: TldLegalAgreementCollection;
-    };
-};
-
-/**
- * Contains response data for the listOperations operation.
- */
-export type DomainRegistrationProviderListOperationsResponse = CsmOperationCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CsmOperationCollection;
-    };
-};
-
-/**
- * Contains response data for the listOperationsNext operation.
- */
-export type DomainRegistrationProviderListOperationsNextResponse = CsmOperationCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CsmOperationCollection;
+      parsedBody: CsmUsageQuotaCollection;
     };
 };
 
@@ -14135,6 +13564,196 @@ export type RecommendationsListRecommendedRulesForWebAppNextResponse = Recommend
        * The response body as parsed JSON or XML
        */
       parsedBody: RecommendationCollection;
+    };
+};
+
+/**
+ * Contains response data for the list operation.
+ */
+export type ResourceHealthMetadataListResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
+    };
+};
+
+/**
+ * Contains response data for the listByResourceGroup operation.
+ */
+export type ResourceHealthMetadataListByResourceGroupResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
+    };
+};
+
+/**
+ * Contains response data for the listBySite operation.
+ */
+export type ResourceHealthMetadataListBySiteResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
+    };
+};
+
+/**
+ * Contains response data for the getBySite operation.
+ */
+export type ResourceHealthMetadataGetBySiteResponse = ResourceHealthMetadata & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadata;
+    };
+};
+
+/**
+ * Contains response data for the listBySiteSlot operation.
+ */
+export type ResourceHealthMetadataListBySiteSlotResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
+    };
+};
+
+/**
+ * Contains response data for the getBySiteSlot operation.
+ */
+export type ResourceHealthMetadataGetBySiteSlotResponse = ResourceHealthMetadata & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadata;
+    };
+};
+
+/**
+ * Contains response data for the listNext operation.
+ */
+export type ResourceHealthMetadataListNextResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
+    };
+};
+
+/**
+ * Contains response data for the listByResourceGroupNext operation.
+ */
+export type ResourceHealthMetadataListByResourceGroupNextResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
+    };
+};
+
+/**
+ * Contains response data for the listBySiteNext operation.
+ */
+export type ResourceHealthMetadataListBySiteNextResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
+    };
+};
+
+/**
+ * Contains response data for the listBySiteSlotNext operation.
+ */
+export type ResourceHealthMetadataListBySiteSlotNextResponse = ResourceHealthMetadataCollection & {
+  /**
+   * The underlying HTTP response.
+   */
+  _response: msRest.HttpResponse & {
+      /**
+       * The response body as text (string format)
+       */
+      bodyAsText: string;
+      /**
+       * The response body as parsed JSON or XML
+       */
+      parsedBody: ResourceHealthMetadataCollection;
     };
 };
 
@@ -21136,2175 +20755,5 @@ export type WebAppsListWebJobsNextResponse = WebJobCollection & {
        * The response body as parsed JSON or XML
        */
       parsedBody: WebJobCollection;
-    };
-};
-
-/**
- * Contains response data for the list operation.
- */
-export type AppServiceEnvironmentsListResponse = AppServiceEnvironmentCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentCollection;
-    };
-};
-
-/**
- * Contains response data for the listByResourceGroup operation.
- */
-export type AppServiceEnvironmentsListByResourceGroupResponse = AppServiceEnvironmentCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentCollection;
-    };
-};
-
-/**
- * Contains response data for the get operation.
- */
-export type AppServiceEnvironmentsGetResponse = AppServiceEnvironmentResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentResource;
-    };
-};
-
-/**
- * Contains response data for the createOrUpdate operation.
- */
-export type AppServiceEnvironmentsCreateOrUpdateResponse = AppServiceEnvironmentResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentResource;
-    };
-};
-
-/**
- * Contains response data for the update operation.
- */
-export type AppServiceEnvironmentsUpdateResponse = AppServiceEnvironmentResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentResource;
-    };
-};
-
-/**
- * Contains response data for the listCapacities operation.
- */
-export type AppServiceEnvironmentsListCapacitiesResponse = StampCapacityCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: StampCapacityCollection;
-    };
-};
-
-/**
- * Contains response data for the listVips operation.
- */
-export type AppServiceEnvironmentsListVipsResponse = AddressResponse & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AddressResponse;
-    };
-};
-
-/**
- * Contains response data for the changeVnet operation.
- */
-export type AppServiceEnvironmentsChangeVnetResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the listDiagnostics operation.
- */
-export type AppServiceEnvironmentsListDiagnosticsResponse = Array<HostingEnvironmentDiagnostics> & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: HostingEnvironmentDiagnostics[];
-    };
-};
-
-/**
- * Contains response data for the getDiagnosticsItem operation.
- */
-export type AppServiceEnvironmentsGetDiagnosticsItemResponse = HostingEnvironmentDiagnostics & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: HostingEnvironmentDiagnostics;
-    };
-};
-
-/**
- * Contains response data for the listMetricDefinitions operation.
- */
-export type AppServiceEnvironmentsListMetricDefinitionsResponse = MetricDefinition & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: MetricDefinition;
-    };
-};
-
-/**
- * Contains response data for the listMetrics operation.
- */
-export type AppServiceEnvironmentsListMetricsResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePools operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolsResponse = WorkerPoolCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolCollection;
-    };
-};
-
-/**
- * Contains response data for the getMultiRolePool operation.
- */
-export type AppServiceEnvironmentsGetMultiRolePoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the createOrUpdateMultiRolePool operation.
- */
-export type AppServiceEnvironmentsCreateOrUpdateMultiRolePoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the updateMultiRolePool operation.
- */
-export type AppServiceEnvironmentsUpdateMultiRolePoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePoolInstanceMetricDefinitions operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePoolInstanceMetrics operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricsResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRoleMetricDefinitions operation.
- */
-export type AppServiceEnvironmentsListMultiRoleMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRoleMetrics operation.
- */
-export type AppServiceEnvironmentsListMultiRoleMetricsResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePoolSkus operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolSkusResponse = SkuInfoCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: SkuInfoCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRoleUsages operation.
- */
-export type AppServiceEnvironmentsListMultiRoleUsagesResponse = UsageCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: UsageCollection;
-    };
-};
-
-/**
- * Contains response data for the listOperations operation.
- */
-export type AppServiceEnvironmentsListOperationsResponse = Array<Operation> & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: Operation[];
-    };
-};
-
-/**
- * Contains response data for the resume operation.
- */
-export type AppServiceEnvironmentsResumeResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the listAppServicePlans operation.
- */
-export type AppServiceEnvironmentsListAppServicePlansResponse = AppServicePlanCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlanCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebApps operation.
- */
-export type AppServiceEnvironmentsListWebAppsResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the suspend operation.
- */
-export type AppServiceEnvironmentsSuspendResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the listUsages operation.
- */
-export type AppServiceEnvironmentsListUsagesResponse = CsmUsageQuotaCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CsmUsageQuotaCollection;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPools operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolsResponse = WorkerPoolCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolCollection;
-    };
-};
-
-/**
- * Contains response data for the getWorkerPool operation.
- */
-export type AppServiceEnvironmentsGetWorkerPoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the createOrUpdateWorkerPool operation.
- */
-export type AppServiceEnvironmentsCreateOrUpdateWorkerPoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the updateWorkerPool operation.
- */
-export type AppServiceEnvironmentsUpdateWorkerPoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPoolInstanceMetricDefinitions operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolInstanceMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPoolInstanceMetrics operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolInstanceMetricsResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebWorkerMetricDefinitions operation.
- */
-export type AppServiceEnvironmentsListWebWorkerMetricDefinitionsResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebWorkerMetrics operation.
- */
-export type AppServiceEnvironmentsListWebWorkerMetricsResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPoolSkus operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolSkusResponse = SkuInfoCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: SkuInfoCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebWorkerUsages operation.
- */
-export type AppServiceEnvironmentsListWebWorkerUsagesResponse = UsageCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: UsageCollection;
-    };
-};
-
-/**
- * Contains response data for the beginCreateOrUpdate operation.
- */
-export type AppServiceEnvironmentsBeginCreateOrUpdateResponse = AppServiceEnvironmentResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentResource;
-    };
-};
-
-/**
- * Contains response data for the beginChangeVnet operation.
- */
-export type AppServiceEnvironmentsBeginChangeVnetResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the beginCreateOrUpdateMultiRolePool operation.
- */
-export type AppServiceEnvironmentsBeginCreateOrUpdateMultiRolePoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the beginResume operation.
- */
-export type AppServiceEnvironmentsBeginResumeResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the beginSuspend operation.
- */
-export type AppServiceEnvironmentsBeginSuspendResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the beginCreateOrUpdateWorkerPool operation.
- */
-export type AppServiceEnvironmentsBeginCreateOrUpdateWorkerPoolResponse = WorkerPoolResource & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolResource;
-    };
-};
-
-/**
- * Contains response data for the listNext operation.
- */
-export type AppServiceEnvironmentsListNextResponse = AppServiceEnvironmentCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentCollection;
-    };
-};
-
-/**
- * Contains response data for the listByResourceGroupNext operation.
- */
-export type AppServiceEnvironmentsListByResourceGroupNextResponse = AppServiceEnvironmentCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServiceEnvironmentCollection;
-    };
-};
-
-/**
- * Contains response data for the listCapacitiesNext operation.
- */
-export type AppServiceEnvironmentsListCapacitiesNextResponse = StampCapacityCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: StampCapacityCollection;
-    };
-};
-
-/**
- * Contains response data for the changeVnetNext operation.
- */
-export type AppServiceEnvironmentsChangeVnetNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the listMetricsNext operation.
- */
-export type AppServiceEnvironmentsListMetricsNextResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePoolsNext operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolsNextResponse = WorkerPoolCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePoolInstanceMetricDefinitionsNext operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePoolInstanceMetricsNext operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolInstanceMetricsNextResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRoleMetricDefinitionsNext operation.
- */
-export type AppServiceEnvironmentsListMultiRoleMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRoleMetricsNext operation.
- */
-export type AppServiceEnvironmentsListMultiRoleMetricsNextResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRolePoolSkusNext operation.
- */
-export type AppServiceEnvironmentsListMultiRolePoolSkusNextResponse = SkuInfoCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: SkuInfoCollection;
-    };
-};
-
-/**
- * Contains response data for the listMultiRoleUsagesNext operation.
- */
-export type AppServiceEnvironmentsListMultiRoleUsagesNextResponse = UsageCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: UsageCollection;
-    };
-};
-
-/**
- * Contains response data for the resumeNext operation.
- */
-export type AppServiceEnvironmentsResumeNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the listAppServicePlansNext operation.
- */
-export type AppServiceEnvironmentsListAppServicePlansNextResponse = AppServicePlanCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlanCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebAppsNext operation.
- */
-export type AppServiceEnvironmentsListWebAppsNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the suspendNext operation.
- */
-export type AppServiceEnvironmentsSuspendNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the listUsagesNext operation.
- */
-export type AppServiceEnvironmentsListUsagesNextResponse = CsmUsageQuotaCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CsmUsageQuotaCollection;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPoolsNext operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolsNextResponse = WorkerPoolCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WorkerPoolCollection;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPoolInstanceMetricDefinitionsNext operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolInstanceMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPoolInstanceMetricsNext operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolInstanceMetricsNextResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebWorkerMetricDefinitionsNext operation.
- */
-export type AppServiceEnvironmentsListWebWorkerMetricDefinitionsNextResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebWorkerMetricsNext operation.
- */
-export type AppServiceEnvironmentsListWebWorkerMetricsNextResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listWorkerPoolSkusNext operation.
- */
-export type AppServiceEnvironmentsListWorkerPoolSkusNextResponse = SkuInfoCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: SkuInfoCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebWorkerUsagesNext operation.
- */
-export type AppServiceEnvironmentsListWebWorkerUsagesNextResponse = UsageCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: UsageCollection;
-    };
-};
-
-/**
- * Contains response data for the beginChangeVnetNext operation.
- */
-export type AppServiceEnvironmentsBeginChangeVnetNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the beginResumeNext operation.
- */
-export type AppServiceEnvironmentsBeginResumeNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the beginSuspendNext operation.
- */
-export type AppServiceEnvironmentsBeginSuspendNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the list operation.
- */
-export type AppServicePlansListResponse = AppServicePlanCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlanCollection;
-    };
-};
-
-/**
- * Contains response data for the listByResourceGroup operation.
- */
-export type AppServicePlansListByResourceGroupResponse = AppServicePlanCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlanCollection;
-    };
-};
-
-/**
- * Contains response data for the get operation.
- */
-export type AppServicePlansGetResponse = AppServicePlan & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlan;
-    };
-};
-
-/**
- * Contains response data for the createOrUpdate operation.
- */
-export type AppServicePlansCreateOrUpdateResponse = AppServicePlan & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlan;
-    };
-};
-
-/**
- * Contains response data for the update operation.
- */
-export type AppServicePlansUpdateResponse = AppServicePlan & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlan;
-    };
-};
-
-/**
- * Contains response data for the listCapabilities operation.
- */
-export type AppServicePlansListCapabilitiesResponse = Array<Capability> & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: Capability[];
-    };
-};
-
-/**
- * Contains response data for the getHybridConnection operation.
- */
-export type AppServicePlansGetHybridConnectionResponse = HybridConnection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: HybridConnection;
-    };
-};
-
-/**
- * Contains response data for the listHybridConnectionKeys operation.
- */
-export type AppServicePlansListHybridConnectionKeysResponse = HybridConnectionKey & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: HybridConnectionKey;
-    };
-};
-
-/**
- * Contains response data for the listWebAppsByHybridConnection operation.
- */
-export type AppServicePlansListWebAppsByHybridConnectionResponse = ResourceCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceCollection;
-    };
-};
-
-/**
- * Contains response data for the getHybridConnectionPlanLimit operation.
- */
-export type AppServicePlansGetHybridConnectionPlanLimitResponse = HybridConnectionLimits & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: HybridConnectionLimits;
-    };
-};
-
-/**
- * Contains response data for the listHybridConnections operation.
- */
-export type AppServicePlansListHybridConnectionsResponse = HybridConnectionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: HybridConnectionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMetricDefintions operation.
- */
-export type AppServicePlansListMetricDefintionsResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMetrics operation.
- */
-export type AppServicePlansListMetricsResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebApps operation.
- */
-export type AppServicePlansListWebAppsResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the getServerFarmSkus operation.
- */
-export type AppServicePlansGetServerFarmSkusResponse = {
-  /**
-   * The parsed response body.
-   */
-  body: any;
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: any;
-    };
-};
-
-/**
- * Contains response data for the listUsages operation.
- */
-export type AppServicePlansListUsagesResponse = CsmUsageQuotaCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CsmUsageQuotaCollection;
-    };
-};
-
-/**
- * Contains response data for the listVnets operation.
- */
-export type AppServicePlansListVnetsResponse = Array<VnetInfo> & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetInfo[];
-    };
-};
-
-/**
- * Contains response data for the getVnetFromServerFarm operation.
- */
-export type AppServicePlansGetVnetFromServerFarmResponse = VnetInfo & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetInfo;
-    };
-};
-
-/**
- * Contains response data for the getVnetGateway operation.
- */
-export type AppServicePlansGetVnetGatewayResponse = VnetGateway & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetGateway;
-    };
-};
-
-/**
- * Contains response data for the updateVnetGateway operation.
- */
-export type AppServicePlansUpdateVnetGatewayResponse = VnetGateway & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetGateway;
-    };
-};
-
-/**
- * Contains response data for the listRoutesForVnet operation.
- */
-export type AppServicePlansListRoutesForVnetResponse = Array<VnetRoute> & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetRoute[];
-    };
-};
-
-/**
- * Contains response data for the getRouteForVnet operation.
- */
-export type AppServicePlansGetRouteForVnetResponse = Array<VnetRoute> & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetRoute[];
-    };
-};
-
-/**
- * Contains response data for the createOrUpdateVnetRoute operation.
- */
-export type AppServicePlansCreateOrUpdateVnetRouteResponse = VnetRoute & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetRoute;
-    };
-};
-
-/**
- * Contains response data for the updateVnetRoute operation.
- */
-export type AppServicePlansUpdateVnetRouteResponse = VnetRoute & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: VnetRoute;
-    };
-};
-
-/**
- * Contains response data for the beginCreateOrUpdate operation.
- */
-export type AppServicePlansBeginCreateOrUpdateResponse = AppServicePlan & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlan;
-    };
-};
-
-/**
- * Contains response data for the listNext operation.
- */
-export type AppServicePlansListNextResponse = AppServicePlanCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlanCollection;
-    };
-};
-
-/**
- * Contains response data for the listByResourceGroupNext operation.
- */
-export type AppServicePlansListByResourceGroupNextResponse = AppServicePlanCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: AppServicePlanCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebAppsByHybridConnectionNext operation.
- */
-export type AppServicePlansListWebAppsByHybridConnectionNextResponse = ResourceCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceCollection;
-    };
-};
-
-/**
- * Contains response data for the listHybridConnectionsNext operation.
- */
-export type AppServicePlansListHybridConnectionsNextResponse = HybridConnectionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: HybridConnectionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMetricDefintionsNext operation.
- */
-export type AppServicePlansListMetricDefintionsNextResponse = ResourceMetricDefinitionCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricDefinitionCollection;
-    };
-};
-
-/**
- * Contains response data for the listMetricsNext operation.
- */
-export type AppServicePlansListMetricsNextResponse = ResourceMetricCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceMetricCollection;
-    };
-};
-
-/**
- * Contains response data for the listWebAppsNext operation.
- */
-export type AppServicePlansListWebAppsNextResponse = WebAppCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: WebAppCollection;
-    };
-};
-
-/**
- * Contains response data for the listUsagesNext operation.
- */
-export type AppServicePlansListUsagesNextResponse = CsmUsageQuotaCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CsmUsageQuotaCollection;
-    };
-};
-
-/**
- * Contains response data for the list operation.
- */
-export type ResourceHealthMetadataListResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
-    };
-};
-
-/**
- * Contains response data for the listByResourceGroup operation.
- */
-export type ResourceHealthMetadataListByResourceGroupResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
-    };
-};
-
-/**
- * Contains response data for the listBySite operation.
- */
-export type ResourceHealthMetadataListBySiteResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
-    };
-};
-
-/**
- * Contains response data for the getBySite operation.
- */
-export type ResourceHealthMetadataGetBySiteResponse = ResourceHealthMetadata & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadata;
-    };
-};
-
-/**
- * Contains response data for the listBySiteSlot operation.
- */
-export type ResourceHealthMetadataListBySiteSlotResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
-    };
-};
-
-/**
- * Contains response data for the getBySiteSlot operation.
- */
-export type ResourceHealthMetadataGetBySiteSlotResponse = ResourceHealthMetadata & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadata;
-    };
-};
-
-/**
- * Contains response data for the listNext operation.
- */
-export type ResourceHealthMetadataListNextResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
-    };
-};
-
-/**
- * Contains response data for the listByResourceGroupNext operation.
- */
-export type ResourceHealthMetadataListByResourceGroupNextResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
-    };
-};
-
-/**
- * Contains response data for the listBySiteNext operation.
- */
-export type ResourceHealthMetadataListBySiteNextResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
-    };
-};
-
-/**
- * Contains response data for the listBySiteSlotNext operation.
- */
-export type ResourceHealthMetadataListBySiteSlotNextResponse = ResourceHealthMetadataCollection & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceHealthMetadataCollection;
     };
 };
