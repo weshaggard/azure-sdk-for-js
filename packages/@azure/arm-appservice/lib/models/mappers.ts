@@ -14,20 +14,338 @@ import * as msRest from "ms-rest-js";
 export const CloudError = CloudErrorMapper;
 export const BaseResource = BaseResourceMapper;
 
-export const AppServiceCertificate: msRest.CompositeMapper = {
-  serializedName: "AppServiceCertificate",
+export const VirtualIPMapping: msRest.CompositeMapper = {
+  serializedName: "VirtualIPMapping",
   type: {
     name: "Composite",
-    className: "AppServiceCertificate",
+    className: "VirtualIPMapping",
     modelProperties: {
-      keyVaultId: {
-        serializedName: "keyVaultId",
+      virtualIP: {
+        serializedName: "virtualIP",
         type: {
           name: "String"
         }
       },
-      keyVaultSecretName: {
-        serializedName: "keyVaultSecretName",
+      internalHttpPort: {
+        serializedName: "internalHttpPort",
+        type: {
+          name: "Number"
+        }
+      },
+      internalHttpsPort: {
+        serializedName: "internalHttpsPort",
+        type: {
+          name: "Number"
+        }
+      },
+      inUse: {
+        serializedName: "inUse",
+        type: {
+          name: "Boolean"
+        }
+      }
+    }
+  }
+};
+
+export const AddressResponse: msRest.CompositeMapper = {
+  serializedName: "AddressResponse",
+  type: {
+    name: "Composite",
+    className: "AddressResponse",
+    modelProperties: {
+      serviceIpAddress: {
+        serializedName: "serviceIpAddress",
+        type: {
+          name: "String"
+        }
+      },
+      internalIpAddress: {
+        serializedName: "internalIpAddress",
+        type: {
+          name: "String"
+        }
+      },
+      outboundIpAddresses: {
+        serializedName: "outboundIpAddresses",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
+        }
+      },
+      vipMappings: {
+        serializedName: "vipMappings",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "VirtualIPMapping"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const VirtualNetworkProfile: msRest.CompositeMapper = {
+  serializedName: "VirtualNetworkProfile",
+  type: {
+    name: "Composite",
+    className: "VirtualNetworkProfile",
+    modelProperties: {
+      id: {
+        serializedName: "id",
+        type: {
+          name: "String"
+        }
+      },
+      name: {
+        readOnly: true,
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      type: {
+        readOnly: true,
+        serializedName: "type",
+        type: {
+          name: "String"
+        }
+      },
+      subnet: {
+        serializedName: "subnet",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const WorkerPool: msRest.CompositeMapper = {
+  serializedName: "WorkerPool",
+  type: {
+    name: "Composite",
+    className: "WorkerPool",
+    modelProperties: {
+      workerSizeId: {
+        serializedName: "workerSizeId",
+        type: {
+          name: "Number"
+        }
+      },
+      computeMode: {
+        serializedName: "computeMode",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "Shared",
+            "Dedicated",
+            "Dynamic"
+          ]
+        }
+      },
+      workerSize: {
+        serializedName: "workerSize",
+        type: {
+          name: "String"
+        }
+      },
+      workerCount: {
+        serializedName: "workerCount",
+        type: {
+          name: "Number"
+        }
+      },
+      instanceNames: {
+        readOnly: true,
+        serializedName: "instanceNames",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const StampCapacity: msRest.CompositeMapper = {
+  serializedName: "StampCapacity",
+  type: {
+    name: "Composite",
+    className: "StampCapacity",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      availableCapacity: {
+        serializedName: "availableCapacity",
+        type: {
+          name: "Number"
+        }
+      },
+      totalCapacity: {
+        serializedName: "totalCapacity",
+        type: {
+          name: "Number"
+        }
+      },
+      unit: {
+        serializedName: "unit",
+        type: {
+          name: "String"
+        }
+      },
+      computeMode: {
+        serializedName: "computeMode",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "Shared",
+            "Dedicated",
+            "Dynamic"
+          ]
+        }
+      },
+      workerSize: {
+        serializedName: "workerSize",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "Small",
+            "Medium",
+            "Large",
+            "D1",
+            "D2",
+            "D3",
+            "Default"
+          ]
+        }
+      },
+      workerSizeId: {
+        serializedName: "workerSizeId",
+        type: {
+          name: "Number"
+        }
+      },
+      excludeFromCapacityAllocation: {
+        serializedName: "excludeFromCapacityAllocation",
+        type: {
+          name: "Boolean"
+        }
+      },
+      isApplicableForAllComputeModes: {
+        serializedName: "isApplicableForAllComputeModes",
+        type: {
+          name: "Boolean"
+        }
+      },
+      siteMode: {
+        serializedName: "siteMode",
+        type: {
+          name: "String"
+        }
+      },
+      isLinux: {
+        serializedName: "isLinux",
+        type: {
+          name: "Boolean"
+        }
+      }
+    }
+  }
+};
+
+export const NetworkAccessControlEntry: msRest.CompositeMapper = {
+  serializedName: "NetworkAccessControlEntry",
+  type: {
+    name: "Composite",
+    className: "NetworkAccessControlEntry",
+    modelProperties: {
+      action: {
+        serializedName: "action",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "Permit",
+            "Deny"
+          ]
+        }
+      },
+      description: {
+        serializedName: "description",
+        type: {
+          name: "String"
+        }
+      },
+      order: {
+        serializedName: "order",
+        type: {
+          name: "Number"
+        }
+      },
+      remoteSubnet: {
+        serializedName: "remoteSubnet",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const NameValuePair: msRest.CompositeMapper = {
+  serializedName: "NameValuePair",
+  type: {
+    name: "Composite",
+    className: "NameValuePair",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      value: {
+        serializedName: "value",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const AppServiceEnvironment: msRest.CompositeMapper = {
+  serializedName: "AppServiceEnvironment",
+  type: {
+    name: "Composite",
+    className: "AppServiceEnvironment",
+    modelProperties: {
+      name: {
+        required: true,
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      location: {
+        required: true,
+        serializedName: "location",
         type: {
           name: "String"
         }
@@ -38,18 +356,293 @@ export const AppServiceCertificate: msRest.CompositeMapper = {
         type: {
           name: "Enum",
           allowedValues: [
-            "Initialized",
-            "WaitingOnCertificateOrder",
             "Succeeded",
-            "CertificateOrderFailed",
-            "OperationNotPermittedOnKeyVault",
-            "AzureServiceUnauthorizedToAccessKeyVault",
-            "KeyVaultDoesNotExist",
-            "KeyVaultSecretDoesNotExist",
-            "UnknownError",
-            "ExternalPrivateKey",
-            "Unknown"
+            "Failed",
+            "Canceled",
+            "InProgress",
+            "Deleting"
           ]
+        }
+      },
+      status: {
+        readOnly: true,
+        serializedName: "status",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "Preparing",
+            "Ready",
+            "Scaling",
+            "Deleting"
+          ]
+        }
+      },
+      vnetName: {
+        serializedName: "vnetName",
+        type: {
+          name: "String"
+        }
+      },
+      vnetResourceGroupName: {
+        serializedName: "vnetResourceGroupName",
+        type: {
+          name: "String"
+        }
+      },
+      vnetSubnetName: {
+        serializedName: "vnetSubnetName",
+        type: {
+          name: "String"
+        }
+      },
+      virtualNetwork: {
+        required: true,
+        serializedName: "virtualNetwork",
+        type: {
+          name: "Composite",
+          className: "VirtualNetworkProfile"
+        }
+      },
+      internalLoadBalancingMode: {
+        serializedName: "internalLoadBalancingMode",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "None",
+            "Web",
+            "Publishing"
+          ]
+        }
+      },
+      multiSize: {
+        serializedName: "multiSize",
+        type: {
+          name: "String"
+        }
+      },
+      multiRoleCount: {
+        serializedName: "multiRoleCount",
+        type: {
+          name: "Number"
+        }
+      },
+      workerPools: {
+        required: true,
+        serializedName: "workerPools",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "WorkerPool"
+            }
+          }
+        }
+      },
+      ipsslAddressCount: {
+        serializedName: "ipsslAddressCount",
+        type: {
+          name: "Number"
+        }
+      },
+      databaseEdition: {
+        readOnly: true,
+        serializedName: "databaseEdition",
+        type: {
+          name: "String"
+        }
+      },
+      databaseServiceObjective: {
+        readOnly: true,
+        serializedName: "databaseServiceObjective",
+        type: {
+          name: "String"
+        }
+      },
+      upgradeDomains: {
+        readOnly: true,
+        serializedName: "upgradeDomains",
+        type: {
+          name: "Number"
+        }
+      },
+      subscriptionId: {
+        readOnly: true,
+        serializedName: "subscriptionId",
+        type: {
+          name: "String"
+        }
+      },
+      dnsSuffix: {
+        serializedName: "dnsSuffix",
+        type: {
+          name: "String"
+        }
+      },
+      lastAction: {
+        readOnly: true,
+        serializedName: "lastAction",
+        type: {
+          name: "String"
+        }
+      },
+      lastActionResult: {
+        readOnly: true,
+        serializedName: "lastActionResult",
+        type: {
+          name: "String"
+        }
+      },
+      allowedMultiSizes: {
+        readOnly: true,
+        serializedName: "allowedMultiSizes",
+        type: {
+          name: "String"
+        }
+      },
+      allowedWorkerSizes: {
+        readOnly: true,
+        serializedName: "allowedWorkerSizes",
+        type: {
+          name: "String"
+        }
+      },
+      maximumNumberOfMachines: {
+        readOnly: true,
+        serializedName: "maximumNumberOfMachines",
+        type: {
+          name: "Number"
+        }
+      },
+      vipMappings: {
+        readOnly: true,
+        serializedName: "vipMappings",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "VirtualIPMapping"
+            }
+          }
+        }
+      },
+      environmentCapacities: {
+        readOnly: true,
+        serializedName: "environmentCapacities",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "StampCapacity"
+            }
+          }
+        }
+      },
+      networkAccessControlList: {
+        serializedName: "networkAccessControlList",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "NetworkAccessControlEntry"
+            }
+          }
+        }
+      },
+      environmentIsHealthy: {
+        readOnly: true,
+        serializedName: "environmentIsHealthy",
+        type: {
+          name: "Boolean"
+        }
+      },
+      environmentStatus: {
+        readOnly: true,
+        serializedName: "environmentStatus",
+        type: {
+          name: "String"
+        }
+      },
+      resourceGroup: {
+        readOnly: true,
+        serializedName: "resourceGroup",
+        type: {
+          name: "String"
+        }
+      },
+      frontEndScaleFactor: {
+        serializedName: "frontEndScaleFactor",
+        type: {
+          name: "Number"
+        }
+      },
+      defaultFrontEndScaleFactor: {
+        readOnly: true,
+        serializedName: "defaultFrontEndScaleFactor",
+        type: {
+          name: "Number"
+        }
+      },
+      apiManagementAccountId: {
+        serializedName: "apiManagementAccountId",
+        type: {
+          name: "String"
+        }
+      },
+      suspended: {
+        serializedName: "suspended",
+        type: {
+          name: "Boolean"
+        }
+      },
+      dynamicCacheEnabled: {
+        serializedName: "dynamicCacheEnabled",
+        type: {
+          name: "Boolean"
+        }
+      },
+      clusterSettings: {
+        serializedName: "clusterSettings",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "NameValuePair"
+            }
+          }
+        }
+      },
+      userWhitelistedIpRanges: {
+        serializedName: "userWhitelistedIpRanges",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
+        }
+      },
+      hasLinuxWorkers: {
+        serializedName: "hasLinuxWorkers",
+        type: {
+          name: "Boolean"
+        }
+      },
+      sslCertKeyVaultId: {
+        serializedName: "sslCertKeyVaultId",
+        type: {
+          name: "String"
+        }
+      },
+      sslCertKeyVaultSecretName: {
+        serializedName: "sslCertKeyVaultSecretName",
+        type: {
+          name: "String"
         }
       }
     }
@@ -111,188 +704,25 @@ export const Resource: msRest.CompositeMapper = {
   }
 };
 
-export const AppServiceCertificateResource: msRest.CompositeMapper = {
-  serializedName: "AppServiceCertificateResource",
+export const AppServiceEnvironmentResource: msRest.CompositeMapper = {
+  serializedName: "AppServiceEnvironmentResource",
   type: {
     name: "Composite",
-    className: "AppServiceCertificateResource",
+    className: "AppServiceEnvironmentResource",
     modelProperties: {
       ...Resource.type.modelProperties,
-      keyVaultId: {
-        serializedName: "properties.keyVaultId",
-        type: {
-          name: "String"
-        }
-      },
-      keyVaultSecretName: {
-        serializedName: "properties.keyVaultSecretName",
-        type: {
-          name: "String"
-        }
-      },
-      provisioningState: {
-        readOnly: true,
-        serializedName: "properties.provisioningState",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Initialized",
-            "WaitingOnCertificateOrder",
-            "Succeeded",
-            "CertificateOrderFailed",
-            "OperationNotPermittedOnKeyVault",
-            "AzureServiceUnauthorizedToAccessKeyVault",
-            "KeyVaultDoesNotExist",
-            "KeyVaultSecretDoesNotExist",
-            "UnknownError",
-            "ExternalPrivateKey",
-            "Unknown"
-          ]
-        }
-      }
-    }
-  }
-};
-
-export const CertificateDetails: msRest.CompositeMapper = {
-  serializedName: "CertificateDetails",
-  type: {
-    name: "Composite",
-    className: "CertificateDetails",
-    modelProperties: {
-      version: {
-        readOnly: true,
-        serializedName: "version",
-        type: {
-          name: "Number"
-        }
-      },
-      serialNumber: {
-        readOnly: true,
-        serializedName: "serialNumber",
-        type: {
-          name: "String"
-        }
-      },
-      thumbprint: {
-        readOnly: true,
-        serializedName: "thumbprint",
-        type: {
-          name: "String"
-        }
-      },
-      subject: {
-        readOnly: true,
-        serializedName: "subject",
-        type: {
-          name: "String"
-        }
-      },
-      notBefore: {
-        readOnly: true,
-        serializedName: "notBefore",
-        type: {
-          name: "DateTime"
-        }
-      },
-      notAfter: {
-        readOnly: true,
-        serializedName: "notAfter",
-        type: {
-          name: "DateTime"
-        }
-      },
-      signatureAlgorithm: {
-        readOnly: true,
-        serializedName: "signatureAlgorithm",
-        type: {
-          name: "String"
-        }
-      },
-      issuer: {
-        readOnly: true,
-        serializedName: "issuer",
-        type: {
-          name: "String"
-        }
-      },
-      rawData: {
-        readOnly: true,
-        serializedName: "rawData",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const AppServiceCertificateOrder: msRest.CompositeMapper = {
-  serializedName: "AppServiceCertificateOrder",
-  type: {
-    name: "Composite",
-    className: "AppServiceCertificateOrder",
-    modelProperties: {
-      ...Resource.type.modelProperties,
-      certificates: {
-        serializedName: "properties.certificates",
-        type: {
-          name: "Dictionary",
-          value: {
-            type: {
-              name: "Composite",
-              className: "AppServiceCertificate"
-            }
-          }
-        }
-      },
-      distinguishedName: {
-        serializedName: "properties.distinguishedName",
-        type: {
-          name: "String"
-        }
-      },
-      domainVerificationToken: {
-        readOnly: true,
-        serializedName: "properties.domainVerificationToken",
-        type: {
-          name: "String"
-        }
-      },
-      validityInYears: {
-        serializedName: "properties.validityInYears",
-        defaultValue: 1,
-        constraints: {
-          InclusiveMaximum: 3,
-          InclusiveMinimum: 1
-        },
-        type: {
-          name: "Number"
-        }
-      },
-      keySize: {
-        serializedName: "properties.keySize",
-        defaultValue: 2048,
-        type: {
-          name: "Number"
-        }
-      },
-      productType: {
+      appServiceEnvironmentResourceName: {
         required: true,
-        serializedName: "properties.productType",
+        serializedName: "properties.name",
         type: {
-          name: "Enum",
-          allowedValues: [
-            "StandardDomainValidatedSsl",
-            "StandardDomainValidatedWildCardSsl"
-          ]
+          name: "String"
         }
       },
-      autoRenew: {
-        serializedName: "properties.autoRenew",
-        defaultValue: true,
+      appServiceEnvironmentResourceLocation: {
+        required: true,
+        serializedName: "properties.location",
         type: {
-          name: "Boolean"
+          name: "String"
         }
       },
       provisioningState: {
@@ -315,80 +745,254 @@ export const AppServiceCertificateOrder: msRest.CompositeMapper = {
         type: {
           name: "Enum",
           allowedValues: [
-            "Pendingissuance",
-            "Issued",
-            "Revoked",
-            "Canceled",
-            "Denied",
-            "Pendingrevocation",
-            "PendingRekey",
-            "Unused",
-            "Expired",
-            "NotSubmitted"
+            "Preparing",
+            "Ready",
+            "Scaling",
+            "Deleting"
           ]
         }
       },
-      signedCertificate: {
-        readOnly: true,
-        serializedName: "properties.signedCertificate",
-        type: {
-          name: "Composite",
-          className: "CertificateDetails"
-        }
-      },
-      csr: {
-        serializedName: "properties.csr",
+      vnetName: {
+        serializedName: "properties.vnetName",
         type: {
           name: "String"
         }
       },
-      intermediate: {
-        readOnly: true,
-        serializedName: "properties.intermediate",
-        type: {
-          name: "Composite",
-          className: "CertificateDetails"
-        }
-      },
-      root: {
-        readOnly: true,
-        serializedName: "properties.root",
-        type: {
-          name: "Composite",
-          className: "CertificateDetails"
-        }
-      },
-      serialNumber: {
-        readOnly: true,
-        serializedName: "properties.serialNumber",
+      vnetResourceGroupName: {
+        serializedName: "properties.vnetResourceGroupName",
         type: {
           name: "String"
         }
       },
-      lastCertificateIssuanceTime: {
-        readOnly: true,
-        serializedName: "properties.lastCertificateIssuanceTime",
+      vnetSubnetName: {
+        serializedName: "properties.vnetSubnetName",
         type: {
-          name: "DateTime"
+          name: "String"
         }
       },
-      expirationTime: {
-        readOnly: true,
-        serializedName: "properties.expirationTime",
+      virtualNetwork: {
+        required: true,
+        serializedName: "properties.virtualNetwork",
         type: {
-          name: "DateTime"
+          name: "Composite",
+          className: "VirtualNetworkProfile"
         }
       },
-      isPrivateKeyExternal: {
+      internalLoadBalancingMode: {
+        serializedName: "properties.internalLoadBalancingMode",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "None",
+            "Web",
+            "Publishing"
+          ]
+        }
+      },
+      multiSize: {
+        serializedName: "properties.multiSize",
+        type: {
+          name: "String"
+        }
+      },
+      multiRoleCount: {
+        serializedName: "properties.multiRoleCount",
+        type: {
+          name: "Number"
+        }
+      },
+      workerPools: {
+        required: true,
+        serializedName: "properties.workerPools",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "WorkerPool"
+            }
+          }
+        }
+      },
+      ipsslAddressCount: {
+        serializedName: "properties.ipsslAddressCount",
+        type: {
+          name: "Number"
+        }
+      },
+      databaseEdition: {
         readOnly: true,
-        serializedName: "properties.isPrivateKeyExternal",
+        serializedName: "properties.databaseEdition",
+        type: {
+          name: "String"
+        }
+      },
+      databaseServiceObjective: {
+        readOnly: true,
+        serializedName: "properties.databaseServiceObjective",
+        type: {
+          name: "String"
+        }
+      },
+      upgradeDomains: {
+        readOnly: true,
+        serializedName: "properties.upgradeDomains",
+        type: {
+          name: "Number"
+        }
+      },
+      subscriptionId: {
+        readOnly: true,
+        serializedName: "properties.subscriptionId",
+        type: {
+          name: "String"
+        }
+      },
+      dnsSuffix: {
+        serializedName: "properties.dnsSuffix",
+        type: {
+          name: "String"
+        }
+      },
+      lastAction: {
+        readOnly: true,
+        serializedName: "properties.lastAction",
+        type: {
+          name: "String"
+        }
+      },
+      lastActionResult: {
+        readOnly: true,
+        serializedName: "properties.lastActionResult",
+        type: {
+          name: "String"
+        }
+      },
+      allowedMultiSizes: {
+        readOnly: true,
+        serializedName: "properties.allowedMultiSizes",
+        type: {
+          name: "String"
+        }
+      },
+      allowedWorkerSizes: {
+        readOnly: true,
+        serializedName: "properties.allowedWorkerSizes",
+        type: {
+          name: "String"
+        }
+      },
+      maximumNumberOfMachines: {
+        readOnly: true,
+        serializedName: "properties.maximumNumberOfMachines",
+        type: {
+          name: "Number"
+        }
+      },
+      vipMappings: {
+        readOnly: true,
+        serializedName: "properties.vipMappings",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "VirtualIPMapping"
+            }
+          }
+        }
+      },
+      environmentCapacities: {
+        readOnly: true,
+        serializedName: "properties.environmentCapacities",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "StampCapacity"
+            }
+          }
+        }
+      },
+      networkAccessControlList: {
+        serializedName: "properties.networkAccessControlList",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "NetworkAccessControlEntry"
+            }
+          }
+        }
+      },
+      environmentIsHealthy: {
+        readOnly: true,
+        serializedName: "properties.environmentIsHealthy",
         type: {
           name: "Boolean"
         }
       },
-      appServiceCertificateNotRenewableReasons: {
+      environmentStatus: {
         readOnly: true,
-        serializedName: "properties.appServiceCertificateNotRenewableReasons",
+        serializedName: "properties.environmentStatus",
+        type: {
+          name: "String"
+        }
+      },
+      resourceGroup: {
+        readOnly: true,
+        serializedName: "properties.resourceGroup",
+        type: {
+          name: "String"
+        }
+      },
+      frontEndScaleFactor: {
+        serializedName: "properties.frontEndScaleFactor",
+        type: {
+          name: "Number"
+        }
+      },
+      defaultFrontEndScaleFactor: {
+        readOnly: true,
+        serializedName: "properties.defaultFrontEndScaleFactor",
+        type: {
+          name: "Number"
+        }
+      },
+      apiManagementAccountId: {
+        serializedName: "properties.apiManagementAccountId",
+        type: {
+          name: "String"
+        }
+      },
+      suspended: {
+        serializedName: "properties.suspended",
+        type: {
+          name: "Boolean"
+        }
+      },
+      dynamicCacheEnabled: {
+        serializedName: "properties.dynamicCacheEnabled",
+        type: {
+          name: "Boolean"
+        }
+      },
+      clusterSettings: {
+        serializedName: "properties.clusterSettings",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "NameValuePair"
+            }
+          }
+        }
+      },
+      userWhitelistedIpRanges: {
+        serializedName: "properties.userWhitelistedIpRanges",
         type: {
           name: "Sequence",
           element: {
@@ -398,11 +1002,22 @@ export const AppServiceCertificateOrder: msRest.CompositeMapper = {
           }
         }
       },
-      nextAutoRenewalTimeStamp: {
-        readOnly: true,
-        serializedName: "properties.nextAutoRenewalTimeStamp",
+      hasLinuxWorkers: {
+        serializedName: "properties.hasLinuxWorkers",
         type: {
-          name: "DateTime"
+          name: "Boolean"
+        }
+      },
+      sslCertKeyVaultId: {
+        serializedName: "properties.sslCertKeyVaultId",
+        type: {
+          name: "String"
+        }
+      },
+      sslCertKeyVaultSecretName: {
+        serializedName: "properties.sslCertKeyVaultSecretName",
+        type: {
+          name: "String"
         }
       }
     }
@@ -446,72 +1061,25 @@ export const ProxyOnlyResource: msRest.CompositeMapper = {
   }
 };
 
-export const AppServiceCertificateOrderPatchResource: msRest.CompositeMapper = {
-  serializedName: "AppServiceCertificateOrderPatchResource",
+export const AppServiceEnvironmentPatchResource: msRest.CompositeMapper = {
+  serializedName: "AppServiceEnvironmentPatchResource",
   type: {
     name: "Composite",
-    className: "AppServiceCertificateOrderPatchResource",
+    className: "AppServiceEnvironmentPatchResource",
     modelProperties: {
       ...ProxyOnlyResource.type.modelProperties,
-      certificates: {
-        serializedName: "properties.certificates",
-        type: {
-          name: "Dictionary",
-          value: {
-            type: {
-              name: "Composite",
-              className: "AppServiceCertificate"
-            }
-          }
-        }
-      },
-      distinguishedName: {
-        serializedName: "properties.distinguishedName",
-        type: {
-          name: "String"
-        }
-      },
-      domainVerificationToken: {
-        readOnly: true,
-        serializedName: "properties.domainVerificationToken",
-        type: {
-          name: "String"
-        }
-      },
-      validityInYears: {
-        serializedName: "properties.validityInYears",
-        defaultValue: 1,
-        constraints: {
-          InclusiveMaximum: 3,
-          InclusiveMinimum: 1
-        },
-        type: {
-          name: "Number"
-        }
-      },
-      keySize: {
-        serializedName: "properties.keySize",
-        defaultValue: 2048,
-        type: {
-          name: "Number"
-        }
-      },
-      productType: {
+      appServiceEnvironmentPatchResourceName: {
         required: true,
-        serializedName: "properties.productType",
+        serializedName: "properties.name",
         type: {
-          name: "Enum",
-          allowedValues: [
-            "StandardDomainValidatedSsl",
-            "StandardDomainValidatedWildCardSsl"
-          ]
+          name: "String"
         }
       },
-      autoRenew: {
-        serializedName: "properties.autoRenew",
-        defaultValue: true,
+      location: {
+        required: true,
+        serializedName: "properties.location",
         type: {
-          name: "Boolean"
+          name: "String"
         }
       },
       provisioningState: {
@@ -534,80 +1102,254 @@ export const AppServiceCertificateOrderPatchResource: msRest.CompositeMapper = {
         type: {
           name: "Enum",
           allowedValues: [
-            "Pendingissuance",
-            "Issued",
-            "Revoked",
-            "Canceled",
-            "Denied",
-            "Pendingrevocation",
-            "PendingRekey",
-            "Unused",
-            "Expired",
-            "NotSubmitted"
+            "Preparing",
+            "Ready",
+            "Scaling",
+            "Deleting"
           ]
         }
       },
-      signedCertificate: {
-        readOnly: true,
-        serializedName: "properties.signedCertificate",
-        type: {
-          name: "Composite",
-          className: "CertificateDetails"
-        }
-      },
-      csr: {
-        serializedName: "properties.csr",
+      vnetName: {
+        serializedName: "properties.vnetName",
         type: {
           name: "String"
         }
       },
-      intermediate: {
-        readOnly: true,
-        serializedName: "properties.intermediate",
-        type: {
-          name: "Composite",
-          className: "CertificateDetails"
-        }
-      },
-      root: {
-        readOnly: true,
-        serializedName: "properties.root",
-        type: {
-          name: "Composite",
-          className: "CertificateDetails"
-        }
-      },
-      serialNumber: {
-        readOnly: true,
-        serializedName: "properties.serialNumber",
+      vnetResourceGroupName: {
+        serializedName: "properties.vnetResourceGroupName",
         type: {
           name: "String"
         }
       },
-      lastCertificateIssuanceTime: {
-        readOnly: true,
-        serializedName: "properties.lastCertificateIssuanceTime",
+      vnetSubnetName: {
+        serializedName: "properties.vnetSubnetName",
         type: {
-          name: "DateTime"
+          name: "String"
         }
       },
-      expirationTime: {
-        readOnly: true,
-        serializedName: "properties.expirationTime",
+      virtualNetwork: {
+        required: true,
+        serializedName: "properties.virtualNetwork",
         type: {
-          name: "DateTime"
+          name: "Composite",
+          className: "VirtualNetworkProfile"
         }
       },
-      isPrivateKeyExternal: {
+      internalLoadBalancingMode: {
+        serializedName: "properties.internalLoadBalancingMode",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "None",
+            "Web",
+            "Publishing"
+          ]
+        }
+      },
+      multiSize: {
+        serializedName: "properties.multiSize",
+        type: {
+          name: "String"
+        }
+      },
+      multiRoleCount: {
+        serializedName: "properties.multiRoleCount",
+        type: {
+          name: "Number"
+        }
+      },
+      workerPools: {
+        required: true,
+        serializedName: "properties.workerPools",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "WorkerPool"
+            }
+          }
+        }
+      },
+      ipsslAddressCount: {
+        serializedName: "properties.ipsslAddressCount",
+        type: {
+          name: "Number"
+        }
+      },
+      databaseEdition: {
         readOnly: true,
-        serializedName: "properties.isPrivateKeyExternal",
+        serializedName: "properties.databaseEdition",
+        type: {
+          name: "String"
+        }
+      },
+      databaseServiceObjective: {
+        readOnly: true,
+        serializedName: "properties.databaseServiceObjective",
+        type: {
+          name: "String"
+        }
+      },
+      upgradeDomains: {
+        readOnly: true,
+        serializedName: "properties.upgradeDomains",
+        type: {
+          name: "Number"
+        }
+      },
+      subscriptionId: {
+        readOnly: true,
+        serializedName: "properties.subscriptionId",
+        type: {
+          name: "String"
+        }
+      },
+      dnsSuffix: {
+        serializedName: "properties.dnsSuffix",
+        type: {
+          name: "String"
+        }
+      },
+      lastAction: {
+        readOnly: true,
+        serializedName: "properties.lastAction",
+        type: {
+          name: "String"
+        }
+      },
+      lastActionResult: {
+        readOnly: true,
+        serializedName: "properties.lastActionResult",
+        type: {
+          name: "String"
+        }
+      },
+      allowedMultiSizes: {
+        readOnly: true,
+        serializedName: "properties.allowedMultiSizes",
+        type: {
+          name: "String"
+        }
+      },
+      allowedWorkerSizes: {
+        readOnly: true,
+        serializedName: "properties.allowedWorkerSizes",
+        type: {
+          name: "String"
+        }
+      },
+      maximumNumberOfMachines: {
+        readOnly: true,
+        serializedName: "properties.maximumNumberOfMachines",
+        type: {
+          name: "Number"
+        }
+      },
+      vipMappings: {
+        readOnly: true,
+        serializedName: "properties.vipMappings",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "VirtualIPMapping"
+            }
+          }
+        }
+      },
+      environmentCapacities: {
+        readOnly: true,
+        serializedName: "properties.environmentCapacities",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "StampCapacity"
+            }
+          }
+        }
+      },
+      networkAccessControlList: {
+        serializedName: "properties.networkAccessControlList",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "NetworkAccessControlEntry"
+            }
+          }
+        }
+      },
+      environmentIsHealthy: {
+        readOnly: true,
+        serializedName: "properties.environmentIsHealthy",
         type: {
           name: "Boolean"
         }
       },
-      appServiceCertificateNotRenewableReasons: {
+      environmentStatus: {
         readOnly: true,
-        serializedName: "properties.appServiceCertificateNotRenewableReasons",
+        serializedName: "properties.environmentStatus",
+        type: {
+          name: "String"
+        }
+      },
+      resourceGroup: {
+        readOnly: true,
+        serializedName: "properties.resourceGroup",
+        type: {
+          name: "String"
+        }
+      },
+      frontEndScaleFactor: {
+        serializedName: "properties.frontEndScaleFactor",
+        type: {
+          name: "Number"
+        }
+      },
+      defaultFrontEndScaleFactor: {
+        readOnly: true,
+        serializedName: "properties.defaultFrontEndScaleFactor",
+        type: {
+          name: "Number"
+        }
+      },
+      apiManagementAccountId: {
+        serializedName: "properties.apiManagementAccountId",
+        type: {
+          name: "String"
+        }
+      },
+      suspended: {
+        serializedName: "properties.suspended",
+        type: {
+          name: "Boolean"
+        }
+      },
+      dynamicCacheEnabled: {
+        serializedName: "properties.dynamicCacheEnabled",
+        type: {
+          name: "Boolean"
+        }
+      },
+      clusterSettings: {
+        serializedName: "properties.clusterSettings",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "NameValuePair"
+            }
+          }
+        }
+      },
+      userWhitelistedIpRanges: {
+        serializedName: "properties.userWhitelistedIpRanges",
         type: {
           name: "Sequence",
           element: {
@@ -617,221 +1359,404 @@ export const AppServiceCertificateOrderPatchResource: msRest.CompositeMapper = {
           }
         }
       },
-      nextAutoRenewalTimeStamp: {
-        readOnly: true,
-        serializedName: "properties.nextAutoRenewalTimeStamp",
+      hasLinuxWorkers: {
+        serializedName: "properties.hasLinuxWorkers",
         type: {
-          name: "DateTime"
+          name: "Boolean"
+        }
+      },
+      sslCertKeyVaultId: {
+        serializedName: "properties.sslCertKeyVaultId",
+        type: {
+          name: "String"
+        }
+      },
+      sslCertKeyVaultSecretName: {
+        serializedName: "properties.sslCertKeyVaultSecretName",
+        type: {
+          name: "String"
         }
       }
     }
   }
 };
 
-export const AppServiceCertificatePatchResource: msRest.CompositeMapper = {
-  serializedName: "AppServiceCertificatePatchResource",
+export const HostingEnvironmentDiagnostics: msRest.CompositeMapper = {
+  serializedName: "HostingEnvironmentDiagnostics",
   type: {
     name: "Composite",
-    className: "AppServiceCertificatePatchResource",
+    className: "HostingEnvironmentDiagnostics",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      diagnosicsOutput: {
+        serializedName: "diagnosicsOutput",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const MetricAvailabilily: msRest.CompositeMapper = {
+  serializedName: "MetricAvailabilily",
+  type: {
+    name: "Composite",
+    className: "MetricAvailabilily",
+    modelProperties: {
+      timeGrain: {
+        serializedName: "timeGrain",
+        type: {
+          name: "String"
+        }
+      },
+      retention: {
+        serializedName: "retention",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const MetricDefinition: msRest.CompositeMapper = {
+  serializedName: "MetricDefinition",
+  type: {
+    name: "Composite",
+    className: "MetricDefinition",
     modelProperties: {
       ...ProxyOnlyResource.type.modelProperties,
-      keyVaultId: {
-        serializedName: "properties.keyVaultId",
-        type: {
-          name: "String"
-        }
-      },
-      keyVaultSecretName: {
-        serializedName: "properties.keyVaultSecretName",
-        type: {
-          name: "String"
-        }
-      },
-      provisioningState: {
+      unit: {
         readOnly: true,
-        serializedName: "properties.provisioningState",
+        serializedName: "properties.unit",
+        type: {
+          name: "String"
+        }
+      },
+      primaryAggregationType: {
+        readOnly: true,
+        serializedName: "properties.primaryAggregationType",
+        type: {
+          name: "String"
+        }
+      },
+      metricAvailabilities: {
+        readOnly: true,
+        serializedName: "properties.metricAvailabilities",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "MetricAvailabilily"
+            }
+          }
+        }
+      },
+      displayName: {
+        readOnly: true,
+        serializedName: "properties.displayName",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const SkuCapacity: msRest.CompositeMapper = {
+  serializedName: "SkuCapacity",
+  type: {
+    name: "Composite",
+    className: "SkuCapacity",
+    modelProperties: {
+      minimum: {
+        serializedName: "minimum",
+        type: {
+          name: "Number"
+        }
+      },
+      maximum: {
+        serializedName: "maximum",
+        type: {
+          name: "Number"
+        }
+      },
+      default: {
+        serializedName: "default",
+        type: {
+          name: "Number"
+        }
+      },
+      scaleType: {
+        serializedName: "scaleType",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const Capability: msRest.CompositeMapper = {
+  serializedName: "Capability",
+  type: {
+    name: "Composite",
+    className: "Capability",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      value: {
+        serializedName: "value",
+        type: {
+          name: "String"
+        }
+      },
+      reason: {
+        serializedName: "reason",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const SkuDescription: msRest.CompositeMapper = {
+  serializedName: "SkuDescription",
+  type: {
+    name: "Composite",
+    className: "SkuDescription",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      tier: {
+        serializedName: "tier",
+        type: {
+          name: "String"
+        }
+      },
+      size: {
+        serializedName: "size",
+        type: {
+          name: "String"
+        }
+      },
+      family: {
+        serializedName: "family",
+        type: {
+          name: "String"
+        }
+      },
+      capacity: {
+        serializedName: "capacity",
+        type: {
+          name: "Number"
+        }
+      },
+      skuCapacity: {
+        serializedName: "skuCapacity",
+        type: {
+          name: "Composite",
+          className: "SkuCapacity"
+        }
+      },
+      locations: {
+        serializedName: "locations",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
+        }
+      },
+      capabilities: {
+        serializedName: "capabilities",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "Capability"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const SkuInfo: msRest.CompositeMapper = {
+  serializedName: "SkuInfo",
+  type: {
+    name: "Composite",
+    className: "SkuInfo",
+    modelProperties: {
+      resourceType: {
+        serializedName: "resourceType",
+        type: {
+          name: "String"
+        }
+      },
+      sku: {
+        serializedName: "sku",
+        type: {
+          name: "Composite",
+          className: "SkuDescription"
+        }
+      },
+      capacity: {
+        serializedName: "capacity",
+        type: {
+          name: "Composite",
+          className: "SkuCapacity"
+        }
+      }
+    }
+  }
+};
+
+export const Usage: msRest.CompositeMapper = {
+  serializedName: "Usage",
+  type: {
+    name: "Composite",
+    className: "Usage",
+    modelProperties: {
+      ...ProxyOnlyResource.type.modelProperties,
+      displayName: {
+        readOnly: true,
+        serializedName: "properties.displayName",
+        type: {
+          name: "String"
+        }
+      },
+      resourceName: {
+        readOnly: true,
+        serializedName: "properties.resourceName",
+        type: {
+          name: "String"
+        }
+      },
+      unit: {
+        readOnly: true,
+        serializedName: "properties.unit",
+        type: {
+          name: "String"
+        }
+      },
+      currentValue: {
+        readOnly: true,
+        serializedName: "properties.currentValue",
+        type: {
+          name: "Number"
+        }
+      },
+      limit: {
+        readOnly: true,
+        serializedName: "properties.limit",
+        type: {
+          name: "Number"
+        }
+      },
+      nextResetTime: {
+        readOnly: true,
+        serializedName: "properties.nextResetTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      computeMode: {
+        readOnly: true,
+        serializedName: "properties.computeMode",
         type: {
           name: "Enum",
           allowedValues: [
-            "Initialized",
-            "WaitingOnCertificateOrder",
-            "Succeeded",
-            "CertificateOrderFailed",
-            "OperationNotPermittedOnKeyVault",
-            "AzureServiceUnauthorizedToAccessKeyVault",
-            "KeyVaultDoesNotExist",
-            "KeyVaultSecretDoesNotExist",
-            "UnknownError",
-            "ExternalPrivateKey",
-            "Unknown"
+            "Shared",
+            "Dedicated",
+            "Dynamic"
           ]
         }
-      }
-    }
-  }
-};
-
-export const CertificateEmail: msRest.CompositeMapper = {
-  serializedName: "CertificateEmail",
-  type: {
-    name: "Composite",
-    className: "CertificateEmail",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      emailId: {
-        serializedName: "properties.emailId",
+      },
+      siteMode: {
+        readOnly: true,
+        serializedName: "properties.siteMode",
         type: {
           name: "String"
         }
-      },
-      timeStamp: {
-        serializedName: "properties.timeStamp",
-        type: {
-          name: "DateTime"
-        }
       }
     }
   }
 };
 
-export const CertificateOrderAction: msRest.CompositeMapper = {
-  serializedName: "CertificateOrderAction",
+export const WorkerPoolResource: msRest.CompositeMapper = {
+  serializedName: "WorkerPoolResource",
   type: {
     name: "Composite",
-    className: "CertificateOrderAction",
+    className: "WorkerPoolResource",
     modelProperties: {
       ...ProxyOnlyResource.type.modelProperties,
-      actionType: {
-        readOnly: true,
-        serializedName: "properties.actionType",
+      workerSizeId: {
+        serializedName: "properties.workerSizeId",
+        type: {
+          name: "Number"
+        }
+      },
+      computeMode: {
+        serializedName: "properties.computeMode",
         type: {
           name: "Enum",
           allowedValues: [
-            "CertificateIssued",
-            "CertificateOrderCanceled",
-            "CertificateOrderCreated",
-            "CertificateRevoked",
-            "DomainValidationComplete",
-            "FraudDetected",
-            "OrgNameChange",
-            "OrgValidationComplete",
-            "SanDrop",
-            "FraudCleared",
-            "CertificateExpired",
-            "CertificateExpirationWarning",
-            "FraudDocumentationRequired",
-            "Unknown"
+            "Shared",
+            "Dedicated",
+            "Dynamic"
           ]
         }
       },
-      createdAt: {
+      workerSize: {
+        serializedName: "properties.workerSize",
+        type: {
+          name: "String"
+        }
+      },
+      workerCount: {
+        serializedName: "properties.workerCount",
+        type: {
+          name: "Number"
+        }
+      },
+      instanceNames: {
         readOnly: true,
-        serializedName: "properties.createdAt",
+        serializedName: "properties.instanceNames",
         type: {
-          name: "DateTime"
-        }
-      }
-    }
-  }
-};
-
-export const ReissueCertificateOrderRequest: msRest.CompositeMapper = {
-  serializedName: "ReissueCertificateOrderRequest",
-  type: {
-    name: "Composite",
-    className: "ReissueCertificateOrderRequest",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      keySize: {
-        serializedName: "properties.keySize",
-        type: {
-          name: "Number"
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
         }
       },
-      delayExistingRevokeInHours: {
-        serializedName: "properties.delayExistingRevokeInHours",
+      sku: {
+        serializedName: "sku",
         type: {
-          name: "Number"
-        }
-      },
-      csr: {
-        serializedName: "properties.csr",
-        type: {
-          name: "String"
-        }
-      },
-      isPrivateKeyExternal: {
-        serializedName: "properties.isPrivateKeyExternal",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const RenewCertificateOrderRequest: msRest.CompositeMapper = {
-  serializedName: "RenewCertificateOrderRequest",
-  type: {
-    name: "Composite",
-    className: "RenewCertificateOrderRequest",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      keySize: {
-        serializedName: "properties.keySize",
-        type: {
-          name: "Number"
-        }
-      },
-      csr: {
-        serializedName: "properties.csr",
-        type: {
-          name: "String"
-        }
-      },
-      isPrivateKeyExternal: {
-        serializedName: "properties.isPrivateKeyExternal",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const SiteSeal: msRest.CompositeMapper = {
-  serializedName: "SiteSeal",
-  type: {
-    name: "Composite",
-    className: "SiteSeal",
-    modelProperties: {
-      html: {
-        required: true,
-        serializedName: "html",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const SiteSealRequest: msRest.CompositeMapper = {
-  serializedName: "SiteSealRequest",
-  type: {
-    name: "Composite",
-    className: "SiteSealRequest",
-    modelProperties: {
-      lightTheme: {
-        serializedName: "lightTheme",
-        type: {
-          name: "Boolean"
-        }
-      },
-      locale: {
-        serializedName: "locale",
-        type: {
-          name: "String"
+          name: "Composite",
+          className: "SkuDescription"
         }
       }
     }
@@ -2098,28 +3023,6 @@ export const AzureStorageInfoValue: msRest.CompositeMapper = {
   }
 };
 
-export const NameValuePair: msRest.CompositeMapper = {
-  serializedName: "NameValuePair",
-  type: {
-    name: "Composite",
-    className: "NameValuePair",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      value: {
-        serializedName: "value",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
 export const SiteConfig: msRest.CompositeMapper = {
   serializedName: "SiteConfig",
   type: {
@@ -2829,138 +3732,6 @@ export const Site: msRest.CompositeMapper = {
   }
 };
 
-export const Capability: msRest.CompositeMapper = {
-  serializedName: "Capability",
-  type: {
-    name: "Composite",
-    className: "Capability",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      value: {
-        serializedName: "value",
-        type: {
-          name: "String"
-        }
-      },
-      reason: {
-        serializedName: "reason",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const SkuCapacity: msRest.CompositeMapper = {
-  serializedName: "SkuCapacity",
-  type: {
-    name: "Composite",
-    className: "SkuCapacity",
-    modelProperties: {
-      minimum: {
-        serializedName: "minimum",
-        type: {
-          name: "Number"
-        }
-      },
-      maximum: {
-        serializedName: "maximum",
-        type: {
-          name: "Number"
-        }
-      },
-      default: {
-        serializedName: "default",
-        type: {
-          name: "Number"
-        }
-      },
-      scaleType: {
-        serializedName: "scaleType",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const SkuDescription: msRest.CompositeMapper = {
-  serializedName: "SkuDescription",
-  type: {
-    name: "Composite",
-    className: "SkuDescription",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      tier: {
-        serializedName: "tier",
-        type: {
-          name: "String"
-        }
-      },
-      size: {
-        serializedName: "size",
-        type: {
-          name: "String"
-        }
-      },
-      family: {
-        serializedName: "family",
-        type: {
-          name: "String"
-        }
-      },
-      capacity: {
-        serializedName: "capacity",
-        type: {
-          name: "Number"
-        }
-      },
-      skuCapacity: {
-        serializedName: "skuCapacity",
-        type: {
-          name: "Composite",
-          className: "SkuCapacity"
-        }
-      },
-      locations: {
-        serializedName: "locations",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      capabilities: {
-        serializedName: "capabilities",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Capability"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
 export const AppServicePlan: msRest.CompositeMapper = {
   serializedName: "AppServicePlan",
   type: {
@@ -3222,14 +3993,20 @@ export const DefaultErrorResponse: msRest.CompositeMapper = {
   }
 };
 
-export const NameIdentifier: msRest.CompositeMapper = {
-  serializedName: "NameIdentifier",
+export const ResourceMetricProperty: msRest.CompositeMapper = {
+  serializedName: "ResourceMetricProperty",
   type: {
     name: "Composite",
-    className: "NameIdentifier",
+    className: "ResourceMetricProperty",
     modelProperties: {
-      name: {
-        serializedName: "name",
+      key: {
+        serializedName: "key",
+        type: {
+          name: "String"
+        }
+      },
+      value: {
+        serializedName: "value",
         type: {
           name: "String"
         }
@@ -3238,26 +4015,87 @@ export const NameIdentifier: msRest.CompositeMapper = {
   }
 };
 
-export const LogSpecification: msRest.CompositeMapper = {
-  serializedName: "LogSpecification",
+export const ResourceMetricValue: msRest.CompositeMapper = {
+  serializedName: "ResourceMetricValue",
   type: {
     name: "Composite",
-    className: "LogSpecification",
+    className: "ResourceMetricValue",
     modelProperties: {
-      name: {
-        serializedName: "name",
+      timestamp: {
+        readOnly: true,
+        serializedName: "timestamp",
         type: {
           name: "String"
         }
       },
-      displayName: {
-        serializedName: "displayName",
+      average: {
+        readOnly: true,
+        serializedName: "average",
+        type: {
+          name: "Number"
+        }
+      },
+      minimum: {
+        readOnly: true,
+        serializedName: "minimum",
+        type: {
+          name: "Number"
+        }
+      },
+      maximum: {
+        readOnly: true,
+        serializedName: "maximum",
+        type: {
+          name: "Number"
+        }
+      },
+      total: {
+        readOnly: true,
+        serializedName: "total",
+        type: {
+          name: "Number"
+        }
+      },
+      count: {
+        readOnly: true,
+        serializedName: "count",
+        type: {
+          name: "Number"
+        }
+      },
+      properties: {
+        readOnly: true,
+        serializedName: "properties",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "ResourceMetricProperty"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const ResourceMetricName: msRest.CompositeMapper = {
+  serializedName: "ResourceMetricName",
+  type: {
+    name: "Composite",
+    className: "ResourceMetricName",
+    modelProperties: {
+      value: {
+        readOnly: true,
+        serializedName: "value",
         type: {
           name: "String"
         }
       },
-      blobDuration: {
-        serializedName: "blobDuration",
+      localizedValue: {
+        readOnly: true,
+        serializedName: "localizedValue",
         type: {
           name: "String"
         }
@@ -3266,20 +4104,106 @@ export const LogSpecification: msRest.CompositeMapper = {
   }
 };
 
-export const MetricAvailability: msRest.CompositeMapper = {
-  serializedName: "MetricAvailability",
+export const ResourceMetric: msRest.CompositeMapper = {
+  serializedName: "ResourceMetric",
   type: {
     name: "Composite",
-    className: "MetricAvailability",
+    className: "ResourceMetric",
     modelProperties: {
+      name: {
+        readOnly: true,
+        serializedName: "name",
+        type: {
+          name: "Composite",
+          className: "ResourceMetricName"
+        }
+      },
+      unit: {
+        readOnly: true,
+        serializedName: "unit",
+        type: {
+          name: "String"
+        }
+      },
       timeGrain: {
+        readOnly: true,
         serializedName: "timeGrain",
         type: {
           name: "String"
         }
       },
-      blobDuration: {
-        serializedName: "blobDuration",
+      startTime: {
+        readOnly: true,
+        serializedName: "startTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      endTime: {
+        readOnly: true,
+        serializedName: "endTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      resourceId: {
+        readOnly: true,
+        serializedName: "resourceId",
+        type: {
+          name: "String"
+        }
+      },
+      id: {
+        readOnly: true,
+        serializedName: "id",
+        type: {
+          name: "String"
+        }
+      },
+      metricValues: {
+        readOnly: true,
+        serializedName: "metricValues",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "ResourceMetricValue"
+            }
+          }
+        }
+      },
+      properties: {
+        readOnly: true,
+        serializedName: "properties",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "ResourceMetricProperty"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const LocalizableString: msRest.CompositeMapper = {
+  serializedName: "LocalizableString",
+  type: {
+    name: "Composite",
+    className: "LocalizableString",
+    modelProperties: {
+      value: {
+        serializedName: "value",
+        type: {
+          name: "String"
+        }
+      },
+      localizedValue: {
+        serializedName: "localizedValue",
         type: {
           name: "String"
         }
@@ -3288,1030 +4212,96 @@ export const MetricAvailability: msRest.CompositeMapper = {
   }
 };
 
-export const Dimension: msRest.CompositeMapper = {
-  serializedName: "Dimension",
+export const CsmUsageQuota: msRest.CompositeMapper = {
+  serializedName: "CsmUsageQuota",
   type: {
     name: "Composite",
-    className: "Dimension",
+    className: "CsmUsageQuota",
     modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      displayName: {
-        serializedName: "displayName",
-        type: {
-          name: "String"
-        }
-      },
-      internalName: {
-        serializedName: "internalName",
-        type: {
-          name: "String"
-        }
-      },
-      toBeExportedForShoebox: {
-        serializedName: "toBeExportedForShoebox",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const MetricSpecification: msRest.CompositeMapper = {
-  serializedName: "MetricSpecification",
-  type: {
-    name: "Composite",
-    className: "MetricSpecification",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      displayName: {
-        serializedName: "displayName",
-        type: {
-          name: "String"
-        }
-      },
-      displayDescription: {
-        serializedName: "displayDescription",
-        type: {
-          name: "String"
-        }
-      },
       unit: {
         serializedName: "unit",
         type: {
           name: "String"
         }
       },
-      aggregationType: {
-        serializedName: "aggregationType",
-        type: {
-          name: "String"
-        }
-      },
-      supportsInstanceLevelAggregation: {
-        serializedName: "supportsInstanceLevelAggregation",
-        type: {
-          name: "Boolean"
-        }
-      },
-      enableRegionalMdmAccount: {
-        serializedName: "enableRegionalMdmAccount",
-        type: {
-          name: "Boolean"
-        }
-      },
-      sourceMdmAccount: {
-        serializedName: "sourceMdmAccount",
-        type: {
-          name: "String"
-        }
-      },
-      sourceMdmNamespace: {
-        serializedName: "sourceMdmNamespace",
-        type: {
-          name: "String"
-        }
-      },
-      metricFilterPattern: {
-        serializedName: "metricFilterPattern",
-        type: {
-          name: "String"
-        }
-      },
-      fillGapWithZero: {
-        serializedName: "fillGapWithZero",
-        type: {
-          name: "Boolean"
-        }
-      },
-      isInternal: {
-        serializedName: "isInternal",
-        type: {
-          name: "Boolean"
-        }
-      },
-      dimensions: {
-        serializedName: "dimensions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Dimension"
-            }
-          }
-        }
-      },
-      category: {
-        serializedName: "category",
-        type: {
-          name: "String"
-        }
-      },
-      availabilities: {
-        serializedName: "availabilities",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "MetricAvailability"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
-export const ServiceSpecification: msRest.CompositeMapper = {
-  serializedName: "ServiceSpecification",
-  type: {
-    name: "Composite",
-    className: "ServiceSpecification",
-    modelProperties: {
-      metricSpecifications: {
-        serializedName: "metricSpecifications",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "MetricSpecification"
-            }
-          }
-        }
-      },
-      logSpecifications: {
-        serializedName: "logSpecifications",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "LogSpecification"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
-export const CsmOperationDescriptionProperties: msRest.CompositeMapper = {
-  serializedName: "CsmOperationDescriptionProperties",
-  type: {
-    name: "Composite",
-    className: "CsmOperationDescriptionProperties",
-    modelProperties: {
-      serviceSpecification: {
-        serializedName: "serviceSpecification",
-        type: {
-          name: "Composite",
-          className: "ServiceSpecification"
-        }
-      }
-    }
-  }
-};
-
-export const CsmOperationDisplay: msRest.CompositeMapper = {
-  serializedName: "CsmOperationDisplay",
-  type: {
-    name: "Composite",
-    className: "CsmOperationDisplay",
-    modelProperties: {
-      provider: {
-        serializedName: "provider",
-        type: {
-          name: "String"
-        }
-      },
-      resource: {
-        serializedName: "resource",
-        type: {
-          name: "String"
-        }
-      },
-      operation: {
-        serializedName: "operation",
-        type: {
-          name: "String"
-        }
-      },
-      description: {
-        serializedName: "description",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const CsmOperationDescription: msRest.CompositeMapper = {
-  serializedName: "CsmOperationDescription",
-  type: {
-    name: "Composite",
-    className: "CsmOperationDescription",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      display: {
-        serializedName: "display",
-        type: {
-          name: "Composite",
-          className: "CsmOperationDisplay"
-        }
-      },
-      origin: {
-        serializedName: "origin",
-        type: {
-          name: "String"
-        }
-      },
-      properties: {
-        serializedName: "properties",
-        type: {
-          name: "Composite",
-          className: "CsmOperationDescriptionProperties"
-        }
-      }
-    }
-  }
-};
-
-export const Address: msRest.CompositeMapper = {
-  serializedName: "Address",
-  type: {
-    name: "Composite",
-    className: "Address",
-    modelProperties: {
-      address1: {
-        required: true,
-        serializedName: "address1",
-        type: {
-          name: "String"
-        }
-      },
-      address2: {
-        serializedName: "address2",
-        type: {
-          name: "String"
-        }
-      },
-      city: {
-        required: true,
-        serializedName: "city",
-        type: {
-          name: "String"
-        }
-      },
-      country: {
-        required: true,
-        serializedName: "country",
-        type: {
-          name: "String"
-        }
-      },
-      postalCode: {
-        required: true,
-        serializedName: "postalCode",
-        type: {
-          name: "String"
-        }
-      },
-      state: {
-        required: true,
-        serializedName: "state",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const Contact: msRest.CompositeMapper = {
-  serializedName: "Contact",
-  type: {
-    name: "Composite",
-    className: "Contact",
-    modelProperties: {
-      addressMailing: {
-        serializedName: "addressMailing",
-        type: {
-          name: "Composite",
-          className: "Address"
-        }
-      },
-      email: {
-        required: true,
-        serializedName: "email",
-        type: {
-          name: "String"
-        }
-      },
-      fax: {
-        serializedName: "fax",
-        type: {
-          name: "String"
-        }
-      },
-      jobTitle: {
-        serializedName: "jobTitle",
-        type: {
-          name: "String"
-        }
-      },
-      nameFirst: {
-        required: true,
-        serializedName: "nameFirst",
-        type: {
-          name: "String"
-        }
-      },
-      nameLast: {
-        required: true,
-        serializedName: "nameLast",
-        type: {
-          name: "String"
-        }
-      },
-      nameMiddle: {
-        serializedName: "nameMiddle",
-        type: {
-          name: "String"
-        }
-      },
-      organization: {
-        serializedName: "organization",
-        type: {
-          name: "String"
-        }
-      },
-      phone: {
-        required: true,
-        serializedName: "phone",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const HostName: msRest.CompositeMapper = {
-  serializedName: "HostName",
-  type: {
-    name: "Composite",
-    className: "HostName",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      siteNames: {
-        serializedName: "siteNames",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      azureResourceName: {
-        serializedName: "azureResourceName",
-        type: {
-          name: "String"
-        }
-      },
-      azureResourceType: {
-        serializedName: "azureResourceType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Website",
-            "TrafficManager"
-          ]
-        }
-      },
-      customHostNameDnsRecordType: {
-        serializedName: "customHostNameDnsRecordType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "CName",
-            "A"
-          ]
-        }
-      },
-      hostNameType: {
-        serializedName: "hostNameType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Verified",
-            "Managed"
-          ]
-        }
-      }
-    }
-  }
-};
-
-export const DomainPurchaseConsent: msRest.CompositeMapper = {
-  serializedName: "DomainPurchaseConsent",
-  type: {
-    name: "Composite",
-    className: "DomainPurchaseConsent",
-    modelProperties: {
-      agreementKeys: {
-        serializedName: "agreementKeys",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      agreedBy: {
-        serializedName: "agreedBy",
-        type: {
-          name: "String"
-        }
-      },
-      agreedAt: {
-        serializedName: "agreedAt",
-        type: {
-          name: "DateTime"
-        }
-      }
-    }
-  }
-};
-
-export const Domain: msRest.CompositeMapper = {
-  serializedName: "Domain",
-  type: {
-    name: "Composite",
-    className: "Domain",
-    modelProperties: {
-      ...Resource.type.modelProperties,
-      contactAdmin: {
-        required: true,
-        serializedName: "properties.contactAdmin",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      contactBilling: {
-        required: true,
-        serializedName: "properties.contactBilling",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      contactRegistrant: {
-        required: true,
-        serializedName: "properties.contactRegistrant",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      contactTech: {
-        required: true,
-        serializedName: "properties.contactTech",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      registrationStatus: {
-        readOnly: true,
-        serializedName: "properties.registrationStatus",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Active",
-            "Awaiting",
-            "Cancelled",
-            "Confiscated",
-            "Disabled",
-            "Excluded",
-            "Expired",
-            "Failed",
-            "Held",
-            "Locked",
-            "Parked",
-            "Pending",
-            "Reserved",
-            "Reverted",
-            "Suspended",
-            "Transferred",
-            "Unknown",
-            "Unlocked",
-            "Unparked",
-            "Updated",
-            "JsonConverterFailed"
-          ]
-        }
-      },
-      provisioningState: {
-        readOnly: true,
-        serializedName: "properties.provisioningState",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Succeeded",
-            "Failed",
-            "Canceled",
-            "InProgress",
-            "Deleting"
-          ]
-        }
-      },
-      nameServers: {
-        readOnly: true,
-        serializedName: "properties.nameServers",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      privacy: {
-        serializedName: "properties.privacy",
-        type: {
-          name: "Boolean"
-        }
-      },
-      createdTime: {
-        readOnly: true,
-        serializedName: "properties.createdTime",
+      nextResetTime: {
+        serializedName: "nextResetTime",
         type: {
           name: "DateTime"
         }
       },
-      expirationTime: {
-        readOnly: true,
-        serializedName: "properties.expirationTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      lastRenewedTime: {
-        readOnly: true,
-        serializedName: "properties.lastRenewedTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      autoRenew: {
-        serializedName: "properties.autoRenew",
-        defaultValue: true,
-        type: {
-          name: "Boolean"
-        }
-      },
-      readyForDnsRecordManagement: {
-        readOnly: true,
-        serializedName: "properties.readyForDnsRecordManagement",
-        type: {
-          name: "Boolean"
-        }
-      },
-      managedHostNames: {
-        readOnly: true,
-        serializedName: "properties.managedHostNames",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "HostName"
-            }
-          }
-        }
-      },
-      consent: {
-        required: true,
-        serializedName: "properties.consent",
-        type: {
-          name: "Composite",
-          className: "DomainPurchaseConsent"
-        }
-      },
-      domainNotRenewableReasons: {
-        readOnly: true,
-        serializedName: "properties.domainNotRenewableReasons",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      dnsType: {
-        serializedName: "properties.dnsType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "AzureDns",
-            "DefaultDomainRegistrarDns"
-          ]
-        }
-      },
-      dnsZoneId: {
-        serializedName: "properties.dnsZoneId",
-        type: {
-          name: "String"
-        }
-      },
-      targetDnsType: {
-        serializedName: "properties.targetDnsType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "AzureDns",
-            "DefaultDomainRegistrarDns"
-          ]
-        }
-      },
-      authCode: {
-        serializedName: "properties.authCode",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DomainAvailablilityCheckResult: msRest.CompositeMapper = {
-  serializedName: "DomainAvailablilityCheckResult",
-  type: {
-    name: "Composite",
-    className: "DomainAvailablilityCheckResult",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      available: {
-        serializedName: "available",
-        type: {
-          name: "Boolean"
-        }
-      },
-      domainType: {
-        serializedName: "domainType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Regular",
-            "SoftDeleted"
-          ]
-        }
-      }
-    }
-  }
-};
-
-export const DomainControlCenterSsoRequest: msRest.CompositeMapper = {
-  serializedName: "DomainControlCenterSsoRequest",
-  type: {
-    name: "Composite",
-    className: "DomainControlCenterSsoRequest",
-    modelProperties: {
-      url: {
-        readOnly: true,
-        serializedName: "url",
-        type: {
-          name: "String"
-        }
-      },
-      postParameterKey: {
-        readOnly: true,
-        serializedName: "postParameterKey",
-        type: {
-          name: "String"
-        }
-      },
-      postParameterValue: {
-        readOnly: true,
-        serializedName: "postParameterValue",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DomainOwnershipIdentifier: msRest.CompositeMapper = {
-  serializedName: "DomainOwnershipIdentifier",
-  type: {
-    name: "Composite",
-    className: "DomainOwnershipIdentifier",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      ownershipId: {
-        serializedName: "properties.ownershipId",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DomainPatchResource: msRest.CompositeMapper = {
-  serializedName: "DomainPatchResource",
-  type: {
-    name: "Composite",
-    className: "DomainPatchResource",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      contactAdmin: {
-        required: true,
-        serializedName: "properties.contactAdmin",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      contactBilling: {
-        required: true,
-        serializedName: "properties.contactBilling",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      contactRegistrant: {
-        required: true,
-        serializedName: "properties.contactRegistrant",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      contactTech: {
-        required: true,
-        serializedName: "properties.contactTech",
-        type: {
-          name: "Composite",
-          className: "Contact"
-        }
-      },
-      registrationStatus: {
-        readOnly: true,
-        serializedName: "properties.registrationStatus",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Active",
-            "Awaiting",
-            "Cancelled",
-            "Confiscated",
-            "Disabled",
-            "Excluded",
-            "Expired",
-            "Failed",
-            "Held",
-            "Locked",
-            "Parked",
-            "Pending",
-            "Reserved",
-            "Reverted",
-            "Suspended",
-            "Transferred",
-            "Unknown",
-            "Unlocked",
-            "Unparked",
-            "Updated",
-            "JsonConverterFailed"
-          ]
-        }
-      },
-      provisioningState: {
-        readOnly: true,
-        serializedName: "properties.provisioningState",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Succeeded",
-            "Failed",
-            "Canceled",
-            "InProgress",
-            "Deleting"
-          ]
-        }
-      },
-      nameServers: {
-        readOnly: true,
-        serializedName: "properties.nameServers",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      privacy: {
-        serializedName: "properties.privacy",
-        type: {
-          name: "Boolean"
-        }
-      },
-      createdTime: {
-        readOnly: true,
-        serializedName: "properties.createdTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      expirationTime: {
-        readOnly: true,
-        serializedName: "properties.expirationTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      lastRenewedTime: {
-        readOnly: true,
-        serializedName: "properties.lastRenewedTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      autoRenew: {
-        serializedName: "properties.autoRenew",
-        defaultValue: true,
-        type: {
-          name: "Boolean"
-        }
-      },
-      readyForDnsRecordManagement: {
-        readOnly: true,
-        serializedName: "properties.readyForDnsRecordManagement",
-        type: {
-          name: "Boolean"
-        }
-      },
-      managedHostNames: {
-        readOnly: true,
-        serializedName: "properties.managedHostNames",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "HostName"
-            }
-          }
-        }
-      },
-      consent: {
-        required: true,
-        serializedName: "properties.consent",
-        type: {
-          name: "Composite",
-          className: "DomainPurchaseConsent"
-        }
-      },
-      domainNotRenewableReasons: {
-        readOnly: true,
-        serializedName: "properties.domainNotRenewableReasons",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      dnsType: {
-        serializedName: "properties.dnsType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "AzureDns",
-            "DefaultDomainRegistrarDns"
-          ]
-        }
-      },
-      dnsZoneId: {
-        serializedName: "properties.dnsZoneId",
-        type: {
-          name: "String"
-        }
-      },
-      targetDnsType: {
-        serializedName: "properties.targetDnsType",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "AzureDns",
-            "DefaultDomainRegistrarDns"
-          ]
-        }
-      },
-      authCode: {
-        serializedName: "properties.authCode",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DomainRecommendationSearchParameters: msRest.CompositeMapper = {
-  serializedName: "DomainRecommendationSearchParameters",
-  type: {
-    name: "Composite",
-    className: "DomainRecommendationSearchParameters",
-    modelProperties: {
-      keywords: {
-        serializedName: "keywords",
-        type: {
-          name: "String"
-        }
-      },
-      maxDomainRecommendations: {
-        serializedName: "maxDomainRecommendations",
+      currentValue: {
+        serializedName: "currentValue",
         type: {
           name: "Number"
         }
+      },
+      limit: {
+        serializedName: "limit",
+        type: {
+          name: "Number"
+        }
+      },
+      name: {
+        serializedName: "name",
+        type: {
+          name: "Composite",
+          className: "LocalizableString"
+        }
       }
     }
   }
 };
 
-export const TldLegalAgreement: msRest.CompositeMapper = {
-  serializedName: "TldLegalAgreement",
+export const ErrorEntity: msRest.CompositeMapper = {
+  serializedName: "ErrorEntity",
   type: {
     name: "Composite",
-    className: "TldLegalAgreement",
+    className: "ErrorEntity",
     modelProperties: {
-      agreementKey: {
-        required: true,
-        serializedName: "agreementKey",
+      extendedCode: {
+        serializedName: "extendedCode",
         type: {
           name: "String"
         }
       },
-      title: {
-        required: true,
-        serializedName: "title",
+      messageTemplate: {
+        serializedName: "messageTemplate",
         type: {
           name: "String"
         }
       },
-      content: {
-        required: true,
-        serializedName: "content",
+      parameters: {
+        serializedName: "parameters",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
+        }
+      },
+      innerErrors: {
+        serializedName: "innerErrors",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "ErrorEntity"
+            }
+          }
+        }
+      },
+      code: {
+        serializedName: "code",
         type: {
           name: "String"
         }
       },
-      url: {
-        serializedName: "url",
+      message: {
+        serializedName: "message",
         type: {
           name: "String"
         }
@@ -4320,39 +4310,251 @@ export const TldLegalAgreement: msRest.CompositeMapper = {
   }
 };
 
-export const TopLevelDomain: msRest.CompositeMapper = {
-  serializedName: "TopLevelDomain",
+export const Operation: msRest.CompositeMapper = {
+  serializedName: "Operation",
   type: {
     name: "Composite",
-    className: "TopLevelDomain",
+    className: "Operation",
+    modelProperties: {
+      id: {
+        serializedName: "id",
+        type: {
+          name: "String"
+        }
+      },
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      status: {
+        serializedName: "status",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "InProgress",
+            "Failed",
+            "Succeeded",
+            "TimedOut",
+            "Created"
+          ]
+        }
+      },
+      errors: {
+        serializedName: "errors",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "ErrorEntity"
+            }
+          }
+        }
+      },
+      createdTime: {
+        serializedName: "createdTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      modifiedTime: {
+        serializedName: "modifiedTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      expirationTime: {
+        serializedName: "expirationTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      geoMasterOperationId: {
+        serializedName: "geoMasterOperationId",
+        type: {
+          name: "Uuid"
+        }
+      }
+    }
+  }
+};
+
+export const AppServicePlanPatchResource: msRest.CompositeMapper = {
+  serializedName: "AppServicePlanPatchResource",
+  type: {
+    name: "Composite",
+    className: "AppServicePlanPatchResource",
     modelProperties: {
       ...ProxyOnlyResource.type.modelProperties,
-      privacy: {
-        serializedName: "properties.privacy",
+      workerTierName: {
+        serializedName: "properties.workerTierName",
+        type: {
+          name: "String"
+        }
+      },
+      status: {
+        readOnly: true,
+        serializedName: "properties.status",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "Ready",
+            "Pending",
+            "Creating"
+          ]
+        }
+      },
+      subscription: {
+        readOnly: true,
+        serializedName: "properties.subscription",
+        type: {
+          name: "String"
+        }
+      },
+      adminSiteName: {
+        serializedName: "properties.adminSiteName",
+        type: {
+          name: "String"
+        }
+      },
+      hostingEnvironmentProfile: {
+        serializedName: "properties.hostingEnvironmentProfile",
+        type: {
+          name: "Composite",
+          className: "HostingEnvironmentProfile"
+        }
+      },
+      maximumNumberOfWorkers: {
+        readOnly: true,
+        serializedName: "properties.maximumNumberOfWorkers",
+        type: {
+          name: "Number"
+        }
+      },
+      geoRegion: {
+        readOnly: true,
+        serializedName: "properties.geoRegion",
+        type: {
+          name: "String"
+        }
+      },
+      perSiteScaling: {
+        serializedName: "properties.perSiteScaling",
+        defaultValue: false,
         type: {
           name: "Boolean"
+        }
+      },
+      maximumElasticWorkerCount: {
+        serializedName: "properties.maximumElasticWorkerCount",
+        type: {
+          name: "Number"
+        }
+      },
+      numberOfSites: {
+        readOnly: true,
+        serializedName: "properties.numberOfSites",
+        type: {
+          name: "Number"
+        }
+      },
+      isSpot: {
+        serializedName: "properties.isSpot",
+        type: {
+          name: "Boolean"
+        }
+      },
+      spotExpirationTime: {
+        serializedName: "properties.spotExpirationTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      freeOfferExpirationTime: {
+        serializedName: "properties.freeOfferExpirationTime",
+        type: {
+          name: "DateTime"
+        }
+      },
+      resourceGroup: {
+        readOnly: true,
+        serializedName: "properties.resourceGroup",
+        type: {
+          name: "String"
+        }
+      },
+      reserved: {
+        serializedName: "properties.reserved",
+        defaultValue: false,
+        type: {
+          name: "Boolean"
+        }
+      },
+      isXenon: {
+        serializedName: "properties.isXenon",
+        defaultValue: false,
+        type: {
+          name: "Boolean"
+        }
+      },
+      hyperV: {
+        serializedName: "properties.hyperV",
+        defaultValue: false,
+        type: {
+          name: "Boolean"
+        }
+      },
+      targetWorkerCount: {
+        serializedName: "properties.targetWorkerCount",
+        type: {
+          name: "Number"
+        }
+      },
+      targetWorkerSizeId: {
+        serializedName: "properties.targetWorkerSizeId",
+        type: {
+          name: "Number"
+        }
+      },
+      provisioningState: {
+        readOnly: true,
+        serializedName: "properties.provisioningState",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "Succeeded",
+            "Failed",
+            "Canceled",
+            "InProgress",
+            "Deleting"
+          ]
         }
       }
     }
   }
 };
 
-export const TopLevelDomainAgreementOption: msRest.CompositeMapper = {
-  serializedName: "TopLevelDomainAgreementOption",
+export const HybridConnectionLimits: msRest.CompositeMapper = {
+  serializedName: "HybridConnectionLimits",
   type: {
     name: "Composite",
-    className: "TopLevelDomainAgreementOption",
+    className: "HybridConnectionLimits",
     modelProperties: {
-      includePrivacy: {
-        serializedName: "includePrivacy",
+      ...ProxyOnlyResource.type.modelProperties,
+      current: {
+        readOnly: true,
+        serializedName: "properties.current",
         type: {
-          name: "Boolean"
+          name: "Number"
         }
       },
-      forTransfer: {
-        serializedName: "forTransfer",
+      maximum: {
+        readOnly: true,
+        serializedName: "properties.maximum",
         type: {
-          name: "Boolean"
+          name: "Number"
         }
       }
     }
@@ -4675,231 +4877,28 @@ export const CertificatePatchResource: msRest.CompositeMapper = {
   }
 };
 
-export const VirtualNetworkProfile: msRest.CompositeMapper = {
-  serializedName: "VirtualNetworkProfile",
+export const CsmOperationDisplay: msRest.CompositeMapper = {
+  serializedName: "CsmOperationDisplay",
   type: {
     name: "Composite",
-    className: "VirtualNetworkProfile",
+    className: "CsmOperationDisplay",
     modelProperties: {
-      id: {
-        serializedName: "id",
+      provider: {
+        serializedName: "provider",
         type: {
           name: "String"
         }
       },
-      name: {
-        readOnly: true,
-        serializedName: "name",
+      resource: {
+        serializedName: "resource",
         type: {
           name: "String"
         }
       },
-      type: {
-        readOnly: true,
-        serializedName: "type",
+      operation: {
+        serializedName: "operation",
         type: {
           name: "String"
-        }
-      },
-      subnet: {
-        serializedName: "subnet",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const WorkerPool: msRest.CompositeMapper = {
-  serializedName: "WorkerPool",
-  type: {
-    name: "Composite",
-    className: "WorkerPool",
-    modelProperties: {
-      workerSizeId: {
-        serializedName: "workerSizeId",
-        type: {
-          name: "Number"
-        }
-      },
-      computeMode: {
-        serializedName: "computeMode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Shared",
-            "Dedicated",
-            "Dynamic"
-          ]
-        }
-      },
-      workerSize: {
-        serializedName: "workerSize",
-        type: {
-          name: "String"
-        }
-      },
-      workerCount: {
-        serializedName: "workerCount",
-        type: {
-          name: "Number"
-        }
-      },
-      instanceNames: {
-        readOnly: true,
-        serializedName: "instanceNames",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
-export const VirtualIPMapping: msRest.CompositeMapper = {
-  serializedName: "VirtualIPMapping",
-  type: {
-    name: "Composite",
-    className: "VirtualIPMapping",
-    modelProperties: {
-      virtualIP: {
-        serializedName: "virtualIP",
-        type: {
-          name: "String"
-        }
-      },
-      internalHttpPort: {
-        serializedName: "internalHttpPort",
-        type: {
-          name: "Number"
-        }
-      },
-      internalHttpsPort: {
-        serializedName: "internalHttpsPort",
-        type: {
-          name: "Number"
-        }
-      },
-      inUse: {
-        serializedName: "inUse",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const StampCapacity: msRest.CompositeMapper = {
-  serializedName: "StampCapacity",
-  type: {
-    name: "Composite",
-    className: "StampCapacity",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      availableCapacity: {
-        serializedName: "availableCapacity",
-        type: {
-          name: "Number"
-        }
-      },
-      totalCapacity: {
-        serializedName: "totalCapacity",
-        type: {
-          name: "Number"
-        }
-      },
-      unit: {
-        serializedName: "unit",
-        type: {
-          name: "String"
-        }
-      },
-      computeMode: {
-        serializedName: "computeMode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Shared",
-            "Dedicated",
-            "Dynamic"
-          ]
-        }
-      },
-      workerSize: {
-        serializedName: "workerSize",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Small",
-            "Medium",
-            "Large",
-            "D1",
-            "D2",
-            "D3",
-            "Default"
-          ]
-        }
-      },
-      workerSizeId: {
-        serializedName: "workerSizeId",
-        type: {
-          name: "Number"
-        }
-      },
-      excludeFromCapacityAllocation: {
-        serializedName: "excludeFromCapacityAllocation",
-        type: {
-          name: "Boolean"
-        }
-      },
-      isApplicableForAllComputeModes: {
-        serializedName: "isApplicableForAllComputeModes",
-        type: {
-          name: "Boolean"
-        }
-      },
-      siteMode: {
-        serializedName: "siteMode",
-        type: {
-          name: "String"
-        }
-      },
-      isLinux: {
-        serializedName: "isLinux",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const NetworkAccessControlEntry: msRest.CompositeMapper = {
-  serializedName: "NetworkAccessControlEntry",
-  type: {
-    name: "Composite",
-    className: "NetworkAccessControlEntry",
-    modelProperties: {
-      action: {
-        serializedName: "action",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Permit",
-            "Deny"
-          ]
         }
       },
       description: {
@@ -4907,724 +4906,304 @@ export const NetworkAccessControlEntry: msRest.CompositeMapper = {
         type: {
           name: "String"
         }
-      },
-      order: {
-        serializedName: "order",
-        type: {
-          name: "Number"
-        }
-      },
-      remoteSubnet: {
-        serializedName: "remoteSubnet",
-        type: {
-          name: "String"
-        }
       }
     }
   }
 };
 
-export const AppServiceEnvironment: msRest.CompositeMapper = {
-  serializedName: "AppServiceEnvironment",
+export const Dimension: msRest.CompositeMapper = {
+  serializedName: "Dimension",
   type: {
     name: "Composite",
-    className: "AppServiceEnvironment",
+    className: "Dimension",
     modelProperties: {
-      name: {
-        required: true,
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      location: {
-        required: true,
-        serializedName: "location",
-        type: {
-          name: "String"
-        }
-      },
-      provisioningState: {
-        readOnly: true,
-        serializedName: "provisioningState",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Succeeded",
-            "Failed",
-            "Canceled",
-            "InProgress",
-            "Deleting"
-          ]
-        }
-      },
-      status: {
-        readOnly: true,
-        serializedName: "status",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Preparing",
-            "Ready",
-            "Scaling",
-            "Deleting"
-          ]
-        }
-      },
-      vnetName: {
-        serializedName: "vnetName",
-        type: {
-          name: "String"
-        }
-      },
-      vnetResourceGroupName: {
-        serializedName: "vnetResourceGroupName",
-        type: {
-          name: "String"
-        }
-      },
-      vnetSubnetName: {
-        serializedName: "vnetSubnetName",
-        type: {
-          name: "String"
-        }
-      },
-      virtualNetwork: {
-        required: true,
-        serializedName: "virtualNetwork",
-        type: {
-          name: "Composite",
-          className: "VirtualNetworkProfile"
-        }
-      },
-      internalLoadBalancingMode: {
-        serializedName: "internalLoadBalancingMode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "None",
-            "Web",
-            "Publishing"
-          ]
-        }
-      },
-      multiSize: {
-        serializedName: "multiSize",
-        type: {
-          name: "String"
-        }
-      },
-      multiRoleCount: {
-        serializedName: "multiRoleCount",
-        type: {
-          name: "Number"
-        }
-      },
-      workerPools: {
-        required: true,
-        serializedName: "workerPools",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "WorkerPool"
-            }
-          }
-        }
-      },
-      ipsslAddressCount: {
-        serializedName: "ipsslAddressCount",
-        type: {
-          name: "Number"
-        }
-      },
-      databaseEdition: {
-        readOnly: true,
-        serializedName: "databaseEdition",
-        type: {
-          name: "String"
-        }
-      },
-      databaseServiceObjective: {
-        readOnly: true,
-        serializedName: "databaseServiceObjective",
-        type: {
-          name: "String"
-        }
-      },
-      upgradeDomains: {
-        readOnly: true,
-        serializedName: "upgradeDomains",
-        type: {
-          name: "Number"
-        }
-      },
-      subscriptionId: {
-        readOnly: true,
-        serializedName: "subscriptionId",
-        type: {
-          name: "String"
-        }
-      },
-      dnsSuffix: {
-        serializedName: "dnsSuffix",
-        type: {
-          name: "String"
-        }
-      },
-      lastAction: {
-        readOnly: true,
-        serializedName: "lastAction",
-        type: {
-          name: "String"
-        }
-      },
-      lastActionResult: {
-        readOnly: true,
-        serializedName: "lastActionResult",
-        type: {
-          name: "String"
-        }
-      },
-      allowedMultiSizes: {
-        readOnly: true,
-        serializedName: "allowedMultiSizes",
-        type: {
-          name: "String"
-        }
-      },
-      allowedWorkerSizes: {
-        readOnly: true,
-        serializedName: "allowedWorkerSizes",
-        type: {
-          name: "String"
-        }
-      },
-      maximumNumberOfMachines: {
-        readOnly: true,
-        serializedName: "maximumNumberOfMachines",
-        type: {
-          name: "Number"
-        }
-      },
-      vipMappings: {
-        readOnly: true,
-        serializedName: "vipMappings",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "VirtualIPMapping"
-            }
-          }
-        }
-      },
-      environmentCapacities: {
-        readOnly: true,
-        serializedName: "environmentCapacities",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "StampCapacity"
-            }
-          }
-        }
-      },
-      networkAccessControlList: {
-        serializedName: "networkAccessControlList",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "NetworkAccessControlEntry"
-            }
-          }
-        }
-      },
-      environmentIsHealthy: {
-        readOnly: true,
-        serializedName: "environmentIsHealthy",
-        type: {
-          name: "Boolean"
-        }
-      },
-      environmentStatus: {
-        readOnly: true,
-        serializedName: "environmentStatus",
-        type: {
-          name: "String"
-        }
-      },
-      resourceGroup: {
-        readOnly: true,
-        serializedName: "resourceGroup",
-        type: {
-          name: "String"
-        }
-      },
-      frontEndScaleFactor: {
-        serializedName: "frontEndScaleFactor",
-        type: {
-          name: "Number"
-        }
-      },
-      defaultFrontEndScaleFactor: {
-        readOnly: true,
-        serializedName: "defaultFrontEndScaleFactor",
-        type: {
-          name: "Number"
-        }
-      },
-      apiManagementAccountId: {
-        serializedName: "apiManagementAccountId",
-        type: {
-          name: "String"
-        }
-      },
-      suspended: {
-        serializedName: "suspended",
-        type: {
-          name: "Boolean"
-        }
-      },
-      dynamicCacheEnabled: {
-        serializedName: "dynamicCacheEnabled",
-        type: {
-          name: "Boolean"
-        }
-      },
-      clusterSettings: {
-        serializedName: "clusterSettings",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "NameValuePair"
-            }
-          }
-        }
-      },
-      userWhitelistedIpRanges: {
-        serializedName: "userWhitelistedIpRanges",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      hasLinuxWorkers: {
-        serializedName: "hasLinuxWorkers",
-        type: {
-          name: "Boolean"
-        }
-      },
-      sslCertKeyVaultId: {
-        serializedName: "sslCertKeyVaultId",
-        type: {
-          name: "String"
-        }
-      },
-      sslCertKeyVaultSecretName: {
-        serializedName: "sslCertKeyVaultSecretName",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const LocalizableString: msRest.CompositeMapper = {
-  serializedName: "LocalizableString",
-  type: {
-    name: "Composite",
-    className: "LocalizableString",
-    modelProperties: {
-      value: {
-        serializedName: "value",
-        type: {
-          name: "String"
-        }
-      },
-      localizedValue: {
-        serializedName: "localizedValue",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const CsmUsageQuota: msRest.CompositeMapper = {
-  serializedName: "CsmUsageQuota",
-  type: {
-    name: "Composite",
-    className: "CsmUsageQuota",
-    modelProperties: {
-      unit: {
-        serializedName: "unit",
-        type: {
-          name: "String"
-        }
-      },
-      nextResetTime: {
-        serializedName: "nextResetTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      currentValue: {
-        serializedName: "currentValue",
-        type: {
-          name: "Number"
-        }
-      },
-      limit: {
-        serializedName: "limit",
-        type: {
-          name: "Number"
-        }
-      },
-      name: {
-        serializedName: "name",
-        type: {
-          name: "Composite",
-          className: "LocalizableString"
-        }
-      }
-    }
-  }
-};
-
-export const ErrorEntity: msRest.CompositeMapper = {
-  serializedName: "ErrorEntity",
-  type: {
-    name: "Composite",
-    className: "ErrorEntity",
-    modelProperties: {
-      extendedCode: {
-        serializedName: "extendedCode",
-        type: {
-          name: "String"
-        }
-      },
-      messageTemplate: {
-        serializedName: "messageTemplate",
-        type: {
-          name: "String"
-        }
-      },
-      parameters: {
-        serializedName: "parameters",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      innerErrors: {
-        serializedName: "innerErrors",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "ErrorEntity"
-            }
-          }
-        }
-      },
-      code: {
-        serializedName: "code",
-        type: {
-          name: "String"
-        }
-      },
-      message: {
-        serializedName: "message",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const Operation: msRest.CompositeMapper = {
-  serializedName: "Operation",
-  type: {
-    name: "Composite",
-    className: "Operation",
-    modelProperties: {
-      id: {
-        serializedName: "id",
-        type: {
-          name: "String"
-        }
-      },
       name: {
         serializedName: "name",
         type: {
           name: "String"
         }
       },
-      status: {
-        serializedName: "status",
+      displayName: {
+        serializedName: "displayName",
         type: {
-          name: "Enum",
-          allowedValues: [
-            "InProgress",
-            "Failed",
-            "Succeeded",
-            "TimedOut",
-            "Created"
-          ]
+          name: "String"
         }
       },
-      errors: {
-        serializedName: "errors",
+      internalName: {
+        serializedName: "internalName",
         type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "ErrorEntity"
-            }
-          }
+          name: "String"
         }
       },
-      createdTime: {
-        serializedName: "createdTime",
+      toBeExportedForShoebox: {
+        serializedName: "toBeExportedForShoebox",
         type: {
-          name: "DateTime"
-        }
-      },
-      modifiedTime: {
-        serializedName: "modifiedTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      expirationTime: {
-        serializedName: "expirationTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      geoMasterOperationId: {
-        serializedName: "geoMasterOperationId",
-        type: {
-          name: "Uuid"
+          name: "Boolean"
         }
       }
     }
   }
 };
 
-export const ResourceMetricName: msRest.CompositeMapper = {
-  serializedName: "ResourceMetricName",
+export const MetricAvailability: msRest.CompositeMapper = {
+  serializedName: "MetricAvailability",
   type: {
     name: "Composite",
-    className: "ResourceMetricName",
+    className: "MetricAvailability",
     modelProperties: {
-      value: {
-        readOnly: true,
-        serializedName: "value",
-        type: {
-          name: "String"
-        }
-      },
-      localizedValue: {
-        readOnly: true,
-        serializedName: "localizedValue",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const ResourceMetricProperty: msRest.CompositeMapper = {
-  serializedName: "ResourceMetricProperty",
-  type: {
-    name: "Composite",
-    className: "ResourceMetricProperty",
-    modelProperties: {
-      key: {
-        serializedName: "key",
-        type: {
-          name: "String"
-        }
-      },
-      value: {
-        serializedName: "value",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const ResourceMetricValue: msRest.CompositeMapper = {
-  serializedName: "ResourceMetricValue",
-  type: {
-    name: "Composite",
-    className: "ResourceMetricValue",
-    modelProperties: {
-      timestamp: {
-        readOnly: true,
-        serializedName: "timestamp",
-        type: {
-          name: "String"
-        }
-      },
-      average: {
-        readOnly: true,
-        serializedName: "average",
-        type: {
-          name: "Number"
-        }
-      },
-      minimum: {
-        readOnly: true,
-        serializedName: "minimum",
-        type: {
-          name: "Number"
-        }
-      },
-      maximum: {
-        readOnly: true,
-        serializedName: "maximum",
-        type: {
-          name: "Number"
-        }
-      },
-      total: {
-        readOnly: true,
-        serializedName: "total",
-        type: {
-          name: "Number"
-        }
-      },
-      count: {
-        readOnly: true,
-        serializedName: "count",
-        type: {
-          name: "Number"
-        }
-      },
-      properties: {
-        readOnly: true,
-        serializedName: "properties",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "ResourceMetricProperty"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
-export const ResourceMetric: msRest.CompositeMapper = {
-  serializedName: "ResourceMetric",
-  type: {
-    name: "Composite",
-    className: "ResourceMetric",
-    modelProperties: {
-      name: {
-        readOnly: true,
-        serializedName: "name",
-        type: {
-          name: "Composite",
-          className: "ResourceMetricName"
-        }
-      },
-      unit: {
-        readOnly: true,
-        serializedName: "unit",
-        type: {
-          name: "String"
-        }
-      },
       timeGrain: {
-        readOnly: true,
         serializedName: "timeGrain",
         type: {
           name: "String"
         }
       },
-      startTime: {
-        readOnly: true,
-        serializedName: "startTime",
+      blobDuration: {
+        serializedName: "blobDuration",
         type: {
-          name: "DateTime"
+          name: "String"
         }
-      },
-      endTime: {
-        readOnly: true,
-        serializedName: "endTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      resourceId: {
-        readOnly: true,
-        serializedName: "resourceId",
+      }
+    }
+  }
+};
+
+export const MetricSpecification: msRest.CompositeMapper = {
+  serializedName: "MetricSpecification",
+  type: {
+    name: "Composite",
+    className: "MetricSpecification",
+    modelProperties: {
+      name: {
+        serializedName: "name",
         type: {
           name: "String"
         }
       },
-      id: {
-        readOnly: true,
-        serializedName: "id",
+      displayName: {
+        serializedName: "displayName",
         type: {
           name: "String"
         }
       },
-      metricValues: {
-        readOnly: true,
-        serializedName: "metricValues",
+      displayDescription: {
+        serializedName: "displayDescription",
+        type: {
+          name: "String"
+        }
+      },
+      unit: {
+        serializedName: "unit",
+        type: {
+          name: "String"
+        }
+      },
+      aggregationType: {
+        serializedName: "aggregationType",
+        type: {
+          name: "String"
+        }
+      },
+      supportsInstanceLevelAggregation: {
+        serializedName: "supportsInstanceLevelAggregation",
+        type: {
+          name: "Boolean"
+        }
+      },
+      enableRegionalMdmAccount: {
+        serializedName: "enableRegionalMdmAccount",
+        type: {
+          name: "Boolean"
+        }
+      },
+      sourceMdmAccount: {
+        serializedName: "sourceMdmAccount",
+        type: {
+          name: "String"
+        }
+      },
+      sourceMdmNamespace: {
+        serializedName: "sourceMdmNamespace",
+        type: {
+          name: "String"
+        }
+      },
+      metricFilterPattern: {
+        serializedName: "metricFilterPattern",
+        type: {
+          name: "String"
+        }
+      },
+      fillGapWithZero: {
+        serializedName: "fillGapWithZero",
+        type: {
+          name: "Boolean"
+        }
+      },
+      isInternal: {
+        serializedName: "isInternal",
+        type: {
+          name: "Boolean"
+        }
+      },
+      dimensions: {
+        serializedName: "dimensions",
         type: {
           name: "Sequence",
           element: {
             type: {
               name: "Composite",
-              className: "ResourceMetricValue"
+              className: "Dimension"
             }
           }
+        }
+      },
+      category: {
+        serializedName: "category",
+        type: {
+          name: "String"
+        }
+      },
+      availabilities: {
+        serializedName: "availabilities",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "MetricAvailability"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const LogSpecification: msRest.CompositeMapper = {
+  serializedName: "LogSpecification",
+  type: {
+    name: "Composite",
+    className: "LogSpecification",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      displayName: {
+        serializedName: "displayName",
+        type: {
+          name: "String"
+        }
+      },
+      blobDuration: {
+        serializedName: "blobDuration",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const ServiceSpecification: msRest.CompositeMapper = {
+  serializedName: "ServiceSpecification",
+  type: {
+    name: "Composite",
+    className: "ServiceSpecification",
+    modelProperties: {
+      metricSpecifications: {
+        serializedName: "metricSpecifications",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "MetricSpecification"
+            }
+          }
+        }
+      },
+      logSpecifications: {
+        serializedName: "logSpecifications",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "LogSpecification"
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
+export const CsmOperationDescriptionProperties: msRest.CompositeMapper = {
+  serializedName: "CsmOperationDescriptionProperties",
+  type: {
+    name: "Composite",
+    className: "CsmOperationDescriptionProperties",
+    modelProperties: {
+      serviceSpecification: {
+        serializedName: "serviceSpecification",
+        type: {
+          name: "Composite",
+          className: "ServiceSpecification"
+        }
+      }
+    }
+  }
+};
+
+export const CsmOperationDescription: msRest.CompositeMapper = {
+  serializedName: "CsmOperationDescription",
+  type: {
+    name: "Composite",
+    className: "CsmOperationDescription",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
+        }
+      },
+      display: {
+        serializedName: "display",
+        type: {
+          name: "Composite",
+          className: "CsmOperationDisplay"
+        }
+      },
+      origin: {
+        serializedName: "origin",
+        type: {
+          name: "String"
         }
       },
       properties: {
-        readOnly: true,
         serializedName: "properties",
         type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "ResourceMetricProperty"
-            }
-          }
+          name: "Composite",
+          className: "CsmOperationDescriptionProperties"
+        }
+      }
+    }
+  }
+};
+
+export const NameIdentifier: msRest.CompositeMapper = {
+  serializedName: "NameIdentifier",
+  type: {
+    name: "Composite",
+    className: "NameIdentifier",
+    modelProperties: {
+      name: {
+        serializedName: "name",
+        type: {
+          name: "String"
         }
       }
     }
@@ -6859,6 +6438,29 @@ export const RecommendationRule: msRest.CompositeMapper = {
         serializedName: "properties.forwardLink",
         type: {
           name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const ResourceHealthMetadata: msRest.CompositeMapper = {
+  serializedName: "ResourceHealthMetadata",
+  type: {
+    name: "Composite",
+    className: "ResourceHealthMetadata",
+    modelProperties: {
+      ...ProxyOnlyResource.type.modelProperties,
+      category: {
+        serializedName: "properties.category",
+        type: {
+          name: "String"
+        }
+      },
+      signalAvailability: {
+        serializedName: "properties.signalAvailability",
+        type: {
+          name: "Boolean"
         }
       }
     }
@@ -11533,252 +11135,45 @@ export const WebJob: msRest.CompositeMapper = {
   }
 };
 
-export const AddressResponse: msRest.CompositeMapper = {
-  serializedName: "AddressResponse",
+export const AppServiceEnvironmentCollection: msRest.CompositeMapper = {
+  serializedName: "AppServiceEnvironmentCollection",
   type: {
     name: "Composite",
-    className: "AddressResponse",
+    className: "AppServiceEnvironmentCollection",
     modelProperties: {
-      serviceIpAddress: {
-        serializedName: "serviceIpAddress",
-        type: {
-          name: "String"
-        }
-      },
-      internalIpAddress: {
-        serializedName: "internalIpAddress",
-        type: {
-          name: "String"
-        }
-      },
-      outboundIpAddresses: {
-        serializedName: "outboundIpAddresses",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      vipMappings: {
-        serializedName: "vipMappings",
+      value: {
+        required: true,
+        serializedName: "",
         type: {
           name: "Sequence",
           element: {
             type: {
               name: "Composite",
-              className: "VirtualIPMapping"
+              className: "AppServiceEnvironmentResource"
             }
           }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
         }
       }
     }
   }
 };
 
-export const AppServiceEnvironmentResource: msRest.CompositeMapper = {
-  serializedName: "AppServiceEnvironmentResource",
+export const StampCapacityCollection: msRest.CompositeMapper = {
+  serializedName: "StampCapacityCollection",
   type: {
     name: "Composite",
-    className: "AppServiceEnvironmentResource",
+    className: "StampCapacityCollection",
     modelProperties: {
-      ...Resource.type.modelProperties,
-      appServiceEnvironmentResourceName: {
+      value: {
         required: true,
-        serializedName: "properties.name",
-        type: {
-          name: "String"
-        }
-      },
-      appServiceEnvironmentResourceLocation: {
-        required: true,
-        serializedName: "properties.location",
-        type: {
-          name: "String"
-        }
-      },
-      provisioningState: {
-        readOnly: true,
-        serializedName: "properties.provisioningState",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Succeeded",
-            "Failed",
-            "Canceled",
-            "InProgress",
-            "Deleting"
-          ]
-        }
-      },
-      status: {
-        readOnly: true,
-        serializedName: "properties.status",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Preparing",
-            "Ready",
-            "Scaling",
-            "Deleting"
-          ]
-        }
-      },
-      vnetName: {
-        serializedName: "properties.vnetName",
-        type: {
-          name: "String"
-        }
-      },
-      vnetResourceGroupName: {
-        serializedName: "properties.vnetResourceGroupName",
-        type: {
-          name: "String"
-        }
-      },
-      vnetSubnetName: {
-        serializedName: "properties.vnetSubnetName",
-        type: {
-          name: "String"
-        }
-      },
-      virtualNetwork: {
-        required: true,
-        serializedName: "properties.virtualNetwork",
-        type: {
-          name: "Composite",
-          className: "VirtualNetworkProfile"
-        }
-      },
-      internalLoadBalancingMode: {
-        serializedName: "properties.internalLoadBalancingMode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "None",
-            "Web",
-            "Publishing"
-          ]
-        }
-      },
-      multiSize: {
-        serializedName: "properties.multiSize",
-        type: {
-          name: "String"
-        }
-      },
-      multiRoleCount: {
-        serializedName: "properties.multiRoleCount",
-        type: {
-          name: "Number"
-        }
-      },
-      workerPools: {
-        required: true,
-        serializedName: "properties.workerPools",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "WorkerPool"
-            }
-          }
-        }
-      },
-      ipsslAddressCount: {
-        serializedName: "properties.ipsslAddressCount",
-        type: {
-          name: "Number"
-        }
-      },
-      databaseEdition: {
-        readOnly: true,
-        serializedName: "properties.databaseEdition",
-        type: {
-          name: "String"
-        }
-      },
-      databaseServiceObjective: {
-        readOnly: true,
-        serializedName: "properties.databaseServiceObjective",
-        type: {
-          name: "String"
-        }
-      },
-      upgradeDomains: {
-        readOnly: true,
-        serializedName: "properties.upgradeDomains",
-        type: {
-          name: "Number"
-        }
-      },
-      subscriptionId: {
-        readOnly: true,
-        serializedName: "properties.subscriptionId",
-        type: {
-          name: "String"
-        }
-      },
-      dnsSuffix: {
-        serializedName: "properties.dnsSuffix",
-        type: {
-          name: "String"
-        }
-      },
-      lastAction: {
-        readOnly: true,
-        serializedName: "properties.lastAction",
-        type: {
-          name: "String"
-        }
-      },
-      lastActionResult: {
-        readOnly: true,
-        serializedName: "properties.lastActionResult",
-        type: {
-          name: "String"
-        }
-      },
-      allowedMultiSizes: {
-        readOnly: true,
-        serializedName: "properties.allowedMultiSizes",
-        type: {
-          name: "String"
-        }
-      },
-      allowedWorkerSizes: {
-        readOnly: true,
-        serializedName: "properties.allowedWorkerSizes",
-        type: {
-          name: "String"
-        }
-      },
-      maximumNumberOfMachines: {
-        readOnly: true,
-        serializedName: "properties.maximumNumberOfMachines",
-        type: {
-          name: "Number"
-        }
-      },
-      vipMappings: {
-        readOnly: true,
-        serializedName: "properties.vipMappings",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "VirtualIPMapping"
-            }
-          }
-        }
-      },
-      environmentCapacities: {
-        readOnly: true,
-        serializedName: "properties.environmentCapacities",
+        serializedName: "",
         type: {
           name: "Sequence",
           element: {
@@ -11789,84 +11184,266 @@ export const AppServiceEnvironmentResource: msRest.CompositeMapper = {
           }
         }
       },
-      networkAccessControlList: {
-        serializedName: "properties.networkAccessControlList",
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const WebAppCollection: msRest.CompositeMapper = {
+  serializedName: "WebAppCollection",
+  type: {
+    name: "Composite",
+    className: "WebAppCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
         type: {
           name: "Sequence",
           element: {
             type: {
               name: "Composite",
-              className: "NetworkAccessControlEntry"
+              className: "Site"
             }
           }
         }
       },
-      environmentIsHealthy: {
+      nextLink: {
         readOnly: true,
-        serializedName: "properties.environmentIsHealthy",
-        type: {
-          name: "Boolean"
-        }
-      },
-      environmentStatus: {
-        readOnly: true,
-        serializedName: "properties.environmentStatus",
+        serializedName: "nextLink",
         type: {
           name: "String"
         }
-      },
-      resourceGroup: {
-        readOnly: true,
-        serializedName: "properties.resourceGroup",
-        type: {
-          name: "String"
-        }
-      },
-      frontEndScaleFactor: {
-        serializedName: "properties.frontEndScaleFactor",
-        type: {
-          name: "Number"
-        }
-      },
-      defaultFrontEndScaleFactor: {
-        readOnly: true,
-        serializedName: "properties.defaultFrontEndScaleFactor",
-        type: {
-          name: "Number"
-        }
-      },
-      apiManagementAccountId: {
-        serializedName: "properties.apiManagementAccountId",
-        type: {
-          name: "String"
-        }
-      },
-      suspended: {
-        serializedName: "properties.suspended",
-        type: {
-          name: "Boolean"
-        }
-      },
-      dynamicCacheEnabled: {
-        serializedName: "properties.dynamicCacheEnabled",
-        type: {
-          name: "Boolean"
-        }
-      },
-      clusterSettings: {
-        serializedName: "properties.clusterSettings",
+      }
+    }
+  }
+};
+
+export const ResourceMetricCollection: msRest.CompositeMapper = {
+  serializedName: "ResourceMetricCollection",
+  type: {
+    name: "Composite",
+    className: "ResourceMetricCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
         type: {
           name: "Sequence",
           element: {
             type: {
               name: "Composite",
-              className: "NameValuePair"
+              className: "ResourceMetric"
             }
           }
         }
       },
-      userWhitelistedIpRanges: {
-        serializedName: "properties.userWhitelistedIpRanges",
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const WorkerPoolCollection: msRest.CompositeMapper = {
+  serializedName: "WorkerPoolCollection",
+  type: {
+    name: "Composite",
+    className: "WorkerPoolCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "WorkerPoolResource"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const ResourceMetricDefinitionCollection: msRest.CompositeMapper = {
+  serializedName: "ResourceMetricDefinitionCollection",
+  type: {
+    name: "Composite",
+    className: "ResourceMetricDefinitionCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "ResourceMetricDefinition"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const SkuInfoCollection: msRest.CompositeMapper = {
+  serializedName: "SkuInfoCollection",
+  type: {
+    name: "Composite",
+    className: "SkuInfoCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "SkuInfo"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const UsageCollection: msRest.CompositeMapper = {
+  serializedName: "UsageCollection",
+  type: {
+    name: "Composite",
+    className: "UsageCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "Usage"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const AppServicePlanCollection: msRest.CompositeMapper = {
+  serializedName: "AppServicePlanCollection",
+  type: {
+    name: "Composite",
+    className: "AppServicePlanCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "AppServicePlan"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const CsmUsageQuotaCollection: msRest.CompositeMapper = {
+  serializedName: "CsmUsageQuotaCollection",
+  type: {
+    name: "Composite",
+    className: "CsmUsageQuotaCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "CsmUsageQuota"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const ResourceCollection: msRest.CompositeMapper = {
+  serializedName: "ResourceCollection",
+  type: {
+    name: "Composite",
+    className: "ResourceCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
         type: {
           name: "Sequence",
           element: {
@@ -11876,820 +11453,6 @@ export const AppServiceEnvironmentResource: msRest.CompositeMapper = {
           }
         }
       },
-      hasLinuxWorkers: {
-        serializedName: "properties.hasLinuxWorkers",
-        type: {
-          name: "Boolean"
-        }
-      },
-      sslCertKeyVaultId: {
-        serializedName: "properties.sslCertKeyVaultId",
-        type: {
-          name: "String"
-        }
-      },
-      sslCertKeyVaultSecretName: {
-        serializedName: "properties.sslCertKeyVaultSecretName",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const AppServiceEnvironmentPatchResource: msRest.CompositeMapper = {
-  serializedName: "AppServiceEnvironmentPatchResource",
-  type: {
-    name: "Composite",
-    className: "AppServiceEnvironmentPatchResource",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      appServiceEnvironmentPatchResourceName: {
-        required: true,
-        serializedName: "properties.name",
-        type: {
-          name: "String"
-        }
-      },
-      location: {
-        required: true,
-        serializedName: "properties.location",
-        type: {
-          name: "String"
-        }
-      },
-      provisioningState: {
-        readOnly: true,
-        serializedName: "properties.provisioningState",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Succeeded",
-            "Failed",
-            "Canceled",
-            "InProgress",
-            "Deleting"
-          ]
-        }
-      },
-      status: {
-        readOnly: true,
-        serializedName: "properties.status",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Preparing",
-            "Ready",
-            "Scaling",
-            "Deleting"
-          ]
-        }
-      },
-      vnetName: {
-        serializedName: "properties.vnetName",
-        type: {
-          name: "String"
-        }
-      },
-      vnetResourceGroupName: {
-        serializedName: "properties.vnetResourceGroupName",
-        type: {
-          name: "String"
-        }
-      },
-      vnetSubnetName: {
-        serializedName: "properties.vnetSubnetName",
-        type: {
-          name: "String"
-        }
-      },
-      virtualNetwork: {
-        required: true,
-        serializedName: "properties.virtualNetwork",
-        type: {
-          name: "Composite",
-          className: "VirtualNetworkProfile"
-        }
-      },
-      internalLoadBalancingMode: {
-        serializedName: "properties.internalLoadBalancingMode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "None",
-            "Web",
-            "Publishing"
-          ]
-        }
-      },
-      multiSize: {
-        serializedName: "properties.multiSize",
-        type: {
-          name: "String"
-        }
-      },
-      multiRoleCount: {
-        serializedName: "properties.multiRoleCount",
-        type: {
-          name: "Number"
-        }
-      },
-      workerPools: {
-        required: true,
-        serializedName: "properties.workerPools",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "WorkerPool"
-            }
-          }
-        }
-      },
-      ipsslAddressCount: {
-        serializedName: "properties.ipsslAddressCount",
-        type: {
-          name: "Number"
-        }
-      },
-      databaseEdition: {
-        readOnly: true,
-        serializedName: "properties.databaseEdition",
-        type: {
-          name: "String"
-        }
-      },
-      databaseServiceObjective: {
-        readOnly: true,
-        serializedName: "properties.databaseServiceObjective",
-        type: {
-          name: "String"
-        }
-      },
-      upgradeDomains: {
-        readOnly: true,
-        serializedName: "properties.upgradeDomains",
-        type: {
-          name: "Number"
-        }
-      },
-      subscriptionId: {
-        readOnly: true,
-        serializedName: "properties.subscriptionId",
-        type: {
-          name: "String"
-        }
-      },
-      dnsSuffix: {
-        serializedName: "properties.dnsSuffix",
-        type: {
-          name: "String"
-        }
-      },
-      lastAction: {
-        readOnly: true,
-        serializedName: "properties.lastAction",
-        type: {
-          name: "String"
-        }
-      },
-      lastActionResult: {
-        readOnly: true,
-        serializedName: "properties.lastActionResult",
-        type: {
-          name: "String"
-        }
-      },
-      allowedMultiSizes: {
-        readOnly: true,
-        serializedName: "properties.allowedMultiSizes",
-        type: {
-          name: "String"
-        }
-      },
-      allowedWorkerSizes: {
-        readOnly: true,
-        serializedName: "properties.allowedWorkerSizes",
-        type: {
-          name: "String"
-        }
-      },
-      maximumNumberOfMachines: {
-        readOnly: true,
-        serializedName: "properties.maximumNumberOfMachines",
-        type: {
-          name: "Number"
-        }
-      },
-      vipMappings: {
-        readOnly: true,
-        serializedName: "properties.vipMappings",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "VirtualIPMapping"
-            }
-          }
-        }
-      },
-      environmentCapacities: {
-        readOnly: true,
-        serializedName: "properties.environmentCapacities",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "StampCapacity"
-            }
-          }
-        }
-      },
-      networkAccessControlList: {
-        serializedName: "properties.networkAccessControlList",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "NetworkAccessControlEntry"
-            }
-          }
-        }
-      },
-      environmentIsHealthy: {
-        readOnly: true,
-        serializedName: "properties.environmentIsHealthy",
-        type: {
-          name: "Boolean"
-        }
-      },
-      environmentStatus: {
-        readOnly: true,
-        serializedName: "properties.environmentStatus",
-        type: {
-          name: "String"
-        }
-      },
-      resourceGroup: {
-        readOnly: true,
-        serializedName: "properties.resourceGroup",
-        type: {
-          name: "String"
-        }
-      },
-      frontEndScaleFactor: {
-        serializedName: "properties.frontEndScaleFactor",
-        type: {
-          name: "Number"
-        }
-      },
-      defaultFrontEndScaleFactor: {
-        readOnly: true,
-        serializedName: "properties.defaultFrontEndScaleFactor",
-        type: {
-          name: "Number"
-        }
-      },
-      apiManagementAccountId: {
-        serializedName: "properties.apiManagementAccountId",
-        type: {
-          name: "String"
-        }
-      },
-      suspended: {
-        serializedName: "properties.suspended",
-        type: {
-          name: "Boolean"
-        }
-      },
-      dynamicCacheEnabled: {
-        serializedName: "properties.dynamicCacheEnabled",
-        type: {
-          name: "Boolean"
-        }
-      },
-      clusterSettings: {
-        serializedName: "properties.clusterSettings",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "NameValuePair"
-            }
-          }
-        }
-      },
-      userWhitelistedIpRanges: {
-        serializedName: "properties.userWhitelistedIpRanges",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      hasLinuxWorkers: {
-        serializedName: "properties.hasLinuxWorkers",
-        type: {
-          name: "Boolean"
-        }
-      },
-      sslCertKeyVaultId: {
-        serializedName: "properties.sslCertKeyVaultId",
-        type: {
-          name: "String"
-        }
-      },
-      sslCertKeyVaultSecretName: {
-        serializedName: "properties.sslCertKeyVaultSecretName",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const HostingEnvironmentDiagnostics: msRest.CompositeMapper = {
-  serializedName: "HostingEnvironmentDiagnostics",
-  type: {
-    name: "Composite",
-    className: "HostingEnvironmentDiagnostics",
-    modelProperties: {
-      name: {
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      diagnosicsOutput: {
-        serializedName: "diagnosicsOutput",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const MetricAvailabilily: msRest.CompositeMapper = {
-  serializedName: "MetricAvailabilily",
-  type: {
-    name: "Composite",
-    className: "MetricAvailabilily",
-    modelProperties: {
-      timeGrain: {
-        serializedName: "timeGrain",
-        type: {
-          name: "String"
-        }
-      },
-      retention: {
-        serializedName: "retention",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const MetricDefinition: msRest.CompositeMapper = {
-  serializedName: "MetricDefinition",
-  type: {
-    name: "Composite",
-    className: "MetricDefinition",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      unit: {
-        readOnly: true,
-        serializedName: "properties.unit",
-        type: {
-          name: "String"
-        }
-      },
-      primaryAggregationType: {
-        readOnly: true,
-        serializedName: "properties.primaryAggregationType",
-        type: {
-          name: "String"
-        }
-      },
-      metricAvailabilities: {
-        readOnly: true,
-        serializedName: "properties.metricAvailabilities",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "MetricAvailabilily"
-            }
-          }
-        }
-      },
-      displayName: {
-        readOnly: true,
-        serializedName: "properties.displayName",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const SkuInfo: msRest.CompositeMapper = {
-  serializedName: "SkuInfo",
-  type: {
-    name: "Composite",
-    className: "SkuInfo",
-    modelProperties: {
-      resourceType: {
-        serializedName: "resourceType",
-        type: {
-          name: "String"
-        }
-      },
-      sku: {
-        serializedName: "sku",
-        type: {
-          name: "Composite",
-          className: "SkuDescription"
-        }
-      },
-      capacity: {
-        serializedName: "capacity",
-        type: {
-          name: "Composite",
-          className: "SkuCapacity"
-        }
-      }
-    }
-  }
-};
-
-export const Usage: msRest.CompositeMapper = {
-  serializedName: "Usage",
-  type: {
-    name: "Composite",
-    className: "Usage",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      displayName: {
-        readOnly: true,
-        serializedName: "properties.displayName",
-        type: {
-          name: "String"
-        }
-      },
-      resourceName: {
-        readOnly: true,
-        serializedName: "properties.resourceName",
-        type: {
-          name: "String"
-        }
-      },
-      unit: {
-        readOnly: true,
-        serializedName: "properties.unit",
-        type: {
-          name: "String"
-        }
-      },
-      currentValue: {
-        readOnly: true,
-        serializedName: "properties.currentValue",
-        type: {
-          name: "Number"
-        }
-      },
-      limit: {
-        readOnly: true,
-        serializedName: "properties.limit",
-        type: {
-          name: "Number"
-        }
-      },
-      nextResetTime: {
-        readOnly: true,
-        serializedName: "properties.nextResetTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      computeMode: {
-        readOnly: true,
-        serializedName: "properties.computeMode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Shared",
-            "Dedicated",
-            "Dynamic"
-          ]
-        }
-      },
-      siteMode: {
-        readOnly: true,
-        serializedName: "properties.siteMode",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const WorkerPoolResource: msRest.CompositeMapper = {
-  serializedName: "WorkerPoolResource",
-  type: {
-    name: "Composite",
-    className: "WorkerPoolResource",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      workerSizeId: {
-        serializedName: "properties.workerSizeId",
-        type: {
-          name: "Number"
-        }
-      },
-      computeMode: {
-        serializedName: "properties.computeMode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Shared",
-            "Dedicated",
-            "Dynamic"
-          ]
-        }
-      },
-      workerSize: {
-        serializedName: "properties.workerSize",
-        type: {
-          name: "String"
-        }
-      },
-      workerCount: {
-        serializedName: "properties.workerCount",
-        type: {
-          name: "Number"
-        }
-      },
-      instanceNames: {
-        readOnly: true,
-        serializedName: "properties.instanceNames",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      sku: {
-        serializedName: "sku",
-        type: {
-          name: "Composite",
-          className: "SkuDescription"
-        }
-      }
-    }
-  }
-};
-
-export const AppServicePlanPatchResource: msRest.CompositeMapper = {
-  serializedName: "AppServicePlanPatchResource",
-  type: {
-    name: "Composite",
-    className: "AppServicePlanPatchResource",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      workerTierName: {
-        serializedName: "properties.workerTierName",
-        type: {
-          name: "String"
-        }
-      },
-      status: {
-        readOnly: true,
-        serializedName: "properties.status",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Ready",
-            "Pending",
-            "Creating"
-          ]
-        }
-      },
-      subscription: {
-        readOnly: true,
-        serializedName: "properties.subscription",
-        type: {
-          name: "String"
-        }
-      },
-      adminSiteName: {
-        serializedName: "properties.adminSiteName",
-        type: {
-          name: "String"
-        }
-      },
-      hostingEnvironmentProfile: {
-        serializedName: "properties.hostingEnvironmentProfile",
-        type: {
-          name: "Composite",
-          className: "HostingEnvironmentProfile"
-        }
-      },
-      maximumNumberOfWorkers: {
-        readOnly: true,
-        serializedName: "properties.maximumNumberOfWorkers",
-        type: {
-          name: "Number"
-        }
-      },
-      geoRegion: {
-        readOnly: true,
-        serializedName: "properties.geoRegion",
-        type: {
-          name: "String"
-        }
-      },
-      perSiteScaling: {
-        serializedName: "properties.perSiteScaling",
-        defaultValue: false,
-        type: {
-          name: "Boolean"
-        }
-      },
-      maximumElasticWorkerCount: {
-        serializedName: "properties.maximumElasticWorkerCount",
-        type: {
-          name: "Number"
-        }
-      },
-      numberOfSites: {
-        readOnly: true,
-        serializedName: "properties.numberOfSites",
-        type: {
-          name: "Number"
-        }
-      },
-      isSpot: {
-        serializedName: "properties.isSpot",
-        type: {
-          name: "Boolean"
-        }
-      },
-      spotExpirationTime: {
-        serializedName: "properties.spotExpirationTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      freeOfferExpirationTime: {
-        serializedName: "properties.freeOfferExpirationTime",
-        type: {
-          name: "DateTime"
-        }
-      },
-      resourceGroup: {
-        readOnly: true,
-        serializedName: "properties.resourceGroup",
-        type: {
-          name: "String"
-        }
-      },
-      reserved: {
-        serializedName: "properties.reserved",
-        defaultValue: false,
-        type: {
-          name: "Boolean"
-        }
-      },
-      isXenon: {
-        serializedName: "properties.isXenon",
-        defaultValue: false,
-        type: {
-          name: "Boolean"
-        }
-      },
-      hyperV: {
-        serializedName: "properties.hyperV",
-        defaultValue: false,
-        type: {
-          name: "Boolean"
-        }
-      },
-      targetWorkerCount: {
-        serializedName: "properties.targetWorkerCount",
-        type: {
-          name: "Number"
-        }
-      },
-      targetWorkerSizeId: {
-        serializedName: "properties.targetWorkerSizeId",
-        type: {
-          name: "Number"
-        }
-      },
-      provisioningState: {
-        readOnly: true,
-        serializedName: "properties.provisioningState",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Succeeded",
-            "Failed",
-            "Canceled",
-            "InProgress",
-            "Deleting"
-          ]
-        }
-      }
-    }
-  }
-};
-
-export const HybridConnectionLimits: msRest.CompositeMapper = {
-  serializedName: "HybridConnectionLimits",
-  type: {
-    name: "Composite",
-    className: "HybridConnectionLimits",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      current: {
-        readOnly: true,
-        serializedName: "properties.current",
-        type: {
-          name: "Number"
-        }
-      },
-      maximum: {
-        readOnly: true,
-        serializedName: "properties.maximum",
-        type: {
-          name: "Number"
-        }
-      }
-    }
-  }
-};
-
-export const ResourceHealthMetadata: msRest.CompositeMapper = {
-  serializedName: "ResourceHealthMetadata",
-  type: {
-    name: "Composite",
-    className: "ResourceHealthMetadata",
-    modelProperties: {
-      ...ProxyOnlyResource.type.modelProperties,
-      category: {
-        serializedName: "properties.category",
-        type: {
-          name: "String"
-        }
-      },
-      signalAvailability: {
-        serializedName: "properties.signalAvailability",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const AppServiceCertificateOrderCollection: msRest.CompositeMapper = {
-  serializedName: "AppServiceCertificateOrderCollection",
-  type: {
-    name: "Composite",
-    className: "AppServiceCertificateOrderCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "AppServiceCertificateOrder"
-            }
-          }
-        }
-      },
       nextLink: {
         readOnly: true,
         serializedName: "nextLink",
@@ -12701,11 +11464,11 @@ export const AppServiceCertificateOrderCollection: msRest.CompositeMapper = {
   }
 };
 
-export const AppServiceCertificateCollection: msRest.CompositeMapper = {
-  serializedName: "AppServiceCertificateCollection",
+export const HybridConnectionCollection: msRest.CompositeMapper = {
+  serializedName: "HybridConnectionCollection",
   type: {
     name: "Composite",
-    className: "AppServiceCertificateCollection",
+    className: "HybridConnectionCollection",
     modelProperties: {
       value: {
         required: true,
@@ -12715,187 +11478,7 @@ export const AppServiceCertificateCollection: msRest.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "AppServiceCertificateResource"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const CsmOperationCollection: msRest.CompositeMapper = {
-  serializedName: "CsmOperationCollection",
-  type: {
-    name: "Composite",
-    className: "CsmOperationCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "CsmOperationDescription"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DomainCollection: msRest.CompositeMapper = {
-  serializedName: "DomainCollection",
-  type: {
-    name: "Composite",
-    className: "DomainCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Domain"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const NameIdentifierCollection: msRest.CompositeMapper = {
-  serializedName: "NameIdentifierCollection",
-  type: {
-    name: "Composite",
-    className: "NameIdentifierCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "NameIdentifier"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DomainOwnershipIdentifierCollection: msRest.CompositeMapper = {
-  serializedName: "DomainOwnershipIdentifierCollection",
-  type: {
-    name: "Composite",
-    className: "DomainOwnershipIdentifierCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "DomainOwnershipIdentifier"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const TopLevelDomainCollection: msRest.CompositeMapper = {
-  serializedName: "TopLevelDomainCollection",
-  type: {
-    name: "Composite",
-    className: "TopLevelDomainCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "TopLevelDomain"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const TldLegalAgreementCollection: msRest.CompositeMapper = {
-  serializedName: "TldLegalAgreementCollection",
-  type: {
-    name: "Composite",
-    className: "TldLegalAgreementCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "TldLegalAgreement"
+              className: "HybridConnection"
             }
           }
         }
@@ -13121,6 +11704,36 @@ export const ApplicationStackCollection: msRest.CompositeMapper = {
   }
 };
 
+export const CsmOperationCollection: msRest.CompositeMapper = {
+  serializedName: "CsmOperationCollection",
+  type: {
+    name: "Composite",
+    className: "CsmOperationCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "CsmOperationDescription"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
 export const RecommendationCollection: msRest.CompositeMapper = {
   serializedName: "RecommendationCollection",
   type: {
@@ -13136,6 +11749,36 @@ export const RecommendationCollection: msRest.CompositeMapper = {
             type: {
               name: "Composite",
               className: "Recommendation"
+            }
+          }
+        }
+      },
+      nextLink: {
+        readOnly: true,
+        serializedName: "nextLink",
+        type: {
+          name: "String"
+        }
+      }
+    }
+  }
+};
+
+export const ResourceHealthMetadataCollection: msRest.CompositeMapper = {
+  serializedName: "ResourceHealthMetadataCollection",
+  type: {
+    name: "Composite",
+    className: "ResourceHealthMetadataCollection",
+    modelProperties: {
+      value: {
+        required: true,
+        serializedName: "",
+        type: {
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Composite",
+              className: "ResourceHealthMetadata"
             }
           }
         }
@@ -13286,36 +11929,6 @@ export const PremierAddOnOfferCollection: msRest.CompositeMapper = {
             type: {
               name: "Composite",
               className: "PremierAddOnOffer"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const WebAppCollection: msRest.CompositeMapper = {
-  serializedName: "WebAppCollection",
-  type: {
-    name: "Composite",
-    className: "WebAppCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Site"
             }
           }
         }
@@ -13661,66 +12274,6 @@ export const ProcessThreadInfoCollection: msRest.CompositeMapper = {
   }
 };
 
-export const ResourceMetricDefinitionCollection: msRest.CompositeMapper = {
-  serializedName: "ResourceMetricDefinitionCollection",
-  type: {
-    name: "Composite",
-    className: "ResourceMetricDefinitionCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "ResourceMetricDefinition"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const ResourceMetricCollection: msRest.CompositeMapper = {
-  serializedName: "ResourceMetricCollection",
-  type: {
-    name: "Composite",
-    className: "ResourceMetricCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "ResourceMetric"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
 export const PerfMonCounterCollection: msRest.CompositeMapper = {
   serializedName: "PerfMonCounterCollection",
   type: {
@@ -13931,36 +12484,6 @@ export const TriggeredJobHistoryCollection: msRest.CompositeMapper = {
   }
 };
 
-export const CsmUsageQuotaCollection: msRest.CompositeMapper = {
-  serializedName: "CsmUsageQuotaCollection",
-  type: {
-    name: "Composite",
-    className: "CsmUsageQuotaCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "CsmUsageQuota"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
 export const WebJobCollection: msRest.CompositeMapper = {
   serializedName: "WebJobCollection",
   type: {
@@ -13976,275 +12499,6 @@ export const WebJobCollection: msRest.CompositeMapper = {
             type: {
               name: "Composite",
               className: "WebJob"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const AppServiceEnvironmentCollection: msRest.CompositeMapper = {
-  serializedName: "AppServiceEnvironmentCollection",
-  type: {
-    name: "Composite",
-    className: "AppServiceEnvironmentCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "AppServiceEnvironmentResource"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const StampCapacityCollection: msRest.CompositeMapper = {
-  serializedName: "StampCapacityCollection",
-  type: {
-    name: "Composite",
-    className: "StampCapacityCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "StampCapacity"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const WorkerPoolCollection: msRest.CompositeMapper = {
-  serializedName: "WorkerPoolCollection",
-  type: {
-    name: "Composite",
-    className: "WorkerPoolCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "WorkerPoolResource"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const SkuInfoCollection: msRest.CompositeMapper = {
-  serializedName: "SkuInfoCollection",
-  type: {
-    name: "Composite",
-    className: "SkuInfoCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "SkuInfo"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const UsageCollection: msRest.CompositeMapper = {
-  serializedName: "UsageCollection",
-  type: {
-    name: "Composite",
-    className: "UsageCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Usage"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const AppServicePlanCollection: msRest.CompositeMapper = {
-  serializedName: "AppServicePlanCollection",
-  type: {
-    name: "Composite",
-    className: "AppServicePlanCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "AppServicePlan"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const ResourceCollection: msRest.CompositeMapper = {
-  serializedName: "ResourceCollection",
-  type: {
-    name: "Composite",
-    className: "ResourceCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const HybridConnectionCollection: msRest.CompositeMapper = {
-  serializedName: "HybridConnectionCollection",
-  type: {
-    name: "Composite",
-    className: "HybridConnectionCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "HybridConnection"
-            }
-          }
-        }
-      },
-      nextLink: {
-        readOnly: true,
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const ResourceHealthMetadataCollection: msRest.CompositeMapper = {
-  serializedName: "ResourceHealthMetadataCollection",
-  type: {
-    name: "Composite",
-    className: "ResourceHealthMetadataCollection",
-    modelProperties: {
-      value: {
-        required: true,
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "ResourceHealthMetadata"
             }
           }
         }

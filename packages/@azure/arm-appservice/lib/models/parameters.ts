@@ -72,16 +72,6 @@ export const billingLocation: msRest.OperationQueryParameter = {
     }
   }
 };
-export const certificateOrderName: msRest.OperationURLParameter = {
-  parameterPath: "certificateOrderName",
-  mapper: {
-    required: true,
-    serializedName: "certificateOrderName",
-    type: {
-      name: "String"
-    }
-  }
-};
 export const deleteEmptyServerFarm: msRest.OperationQueryParameter = {
   parameterPath: [
     "options",
@@ -160,29 +150,6 @@ export const diagnosticsName: msRest.OperationURLParameter = {
     }
   }
 };
-export const domainName0: msRest.OperationURLParameter = {
-  parameterPath: "domainName",
-  mapper: {
-    required: true,
-    serializedName: "domainName",
-    type: {
-      name: "String"
-    }
-  }
-};
-export const domainName1: msRest.OperationURLParameter = {
-  parameterPath: "domainName",
-  mapper: {
-    required: true,
-    serializedName: "domainName",
-    constraints: {
-      Pattern: /[a-zA-Z0-9][a-zA-Z0-9\.-]+/
-    },
-    type: {
-      name: "String"
-    }
-  }
-};
 export const domainOwnershipIdentifierName: msRest.OperationURLParameter = {
   parameterPath: "domainOwnershipIdentifierName",
   mapper: {
@@ -213,7 +180,7 @@ export const endTime0: msRest.OperationQueryParameter = {
   mapper: {
     serializedName: "endTime",
     type: {
-      name: "DateTime"
+      name: "String"
     }
   }
 };
@@ -225,7 +192,7 @@ export const endTime1: msRest.OperationQueryParameter = {
   mapper: {
     serializedName: "endTime",
     type: {
-      name: "String"
+      name: "DateTime"
     }
   }
 };
@@ -283,18 +250,6 @@ export const forceDelete: msRest.OperationQueryParameter = {
   ],
   mapper: {
     serializedName: "forceDelete",
-    type: {
-      name: "Boolean"
-    }
-  }
-};
-export const forceHardDeleteDomain: msRest.OperationQueryParameter = {
-  parameterPath: [
-    "options",
-    "forceHardDeleteDomain"
-  ],
-  mapper: {
-    serializedName: "forceHardDeleteDomain",
     type: {
       name: "Boolean"
     }
@@ -680,7 +635,7 @@ export const startTime0: msRest.OperationQueryParameter = {
   mapper: {
     serializedName: "startTime",
     type: {
-      name: "DateTime"
+      name: "String"
     }
   }
 };
@@ -692,7 +647,7 @@ export const startTime1: msRest.OperationQueryParameter = {
   mapper: {
     serializedName: "startTime",
     type: {
-      name: "String"
+      name: "DateTime"
     }
   }
 };
@@ -745,9 +700,6 @@ export const timeGrain0: msRest.OperationQueryParameter = {
   ],
   mapper: {
     serializedName: "timeGrain",
-    constraints: {
-      Pattern: /PT[1-9][0-9]+[SMH]/
-    },
     type: {
       name: "String"
     }
@@ -760,6 +712,9 @@ export const timeGrain1: msRest.OperationQueryParameter = {
   ],
   mapper: {
     serializedName: "timeGrain",
+    constraints: {
+      Pattern: /PT[1-9][0-9]+[SMH]/
+    },
     type: {
       name: "String"
     }
