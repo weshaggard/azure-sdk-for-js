@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "./models";
 import * as Mappers from "./models/mappers";
 import * as operations from "./operations";
@@ -17,12 +17,9 @@ import { AuthorizationManagementClientContext } from "./authorizationManagementC
 
 class AuthorizationManagementClient extends AuthorizationManagementClientContext {
   // Operation groups
-  classicAdministrators: operations.ClassicAdministrators;
-  providerOperationsMetadata: operations.ProviderOperationsMetadataOperations;
-  roleAssignments: operations.RoleAssignments;
   permissions: operations.Permissions;
+  providerOperationsMetadata: operations.ProviderOperationsMetadataOperations;
   roleDefinitions: operations.RoleDefinitions;
-  denyAssignments: operations.DenyAssignments;
 
   /**
    * Initializes a new instance of the AuthorizationManagementClient class.
@@ -32,12 +29,9 @@ class AuthorizationManagementClient extends AuthorizationManagementClientContext
    */
   constructor(credentials: msRest.ServiceClientCredentials, subscriptionId: string, options?: Models.AuthorizationManagementClientOptions) {
     super(credentials, subscriptionId, options);
-    this.classicAdministrators = new operations.ClassicAdministrators(this);
-    this.providerOperationsMetadata = new operations.ProviderOperationsMetadataOperations(this);
-    this.roleAssignments = new operations.RoleAssignments(this);
     this.permissions = new operations.Permissions(this);
+    this.providerOperationsMetadata = new operations.ProviderOperationsMetadataOperations(this);
     this.roleDefinitions = new operations.RoleDefinitions(this);
-    this.denyAssignments = new operations.DenyAssignments(this);
   }
 }
 
