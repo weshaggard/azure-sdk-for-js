@@ -8,46 +8,54 @@
  * regenerated.
  */
 
-import { CloudErrorMapper, BaseResourceMapper } from "@azure/ms-rest-azure-js";
-import * as msRest from "@azure/ms-rest-js";
+import { CloudErrorMapper, BaseResourceMapper } from "ms-rest-azure-js";
+import * as msRest from "ms-rest-js";
 
 export const CloudError = CloudErrorMapper;
 export const BaseResource = BaseResourceMapper;
 
-export const ClassicAdministrator: msRest.CompositeMapper = {
-  serializedName: "ClassicAdministrator",
+export const RoleDefinitionFilter: msRest.CompositeMapper = {
+  serializedName: "RoleDefinitionFilter",
   type: {
     name: "Composite",
-    className: "ClassicAdministrator",
+    className: "RoleDefinitionFilter",
     modelProperties: {
-      id: {
-        serializedName: "id",
+      roleName: {
+        serializedName: "roleName",
         type: {
           name: "String"
         }
-      },
-      name: {
-        serializedName: "name",
+      }
+    }
+  }
+};
+
+export const Permission: msRest.CompositeMapper = {
+  serializedName: "Permission",
+  type: {
+    name: "Composite",
+    className: "Permission",
+    modelProperties: {
+      actions: {
+        serializedName: "actions",
         type: {
-          name: "String"
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
         }
       },
-      type: {
-        serializedName: "type",
+      notActions: {
+        serializedName: "notActions",
         type: {
-          name: "String"
-        }
-      },
-      emailAddress: {
-        serializedName: "properties.emailAddress",
-        type: {
-          name: "String"
-        }
-      },
-      role: {
-        serializedName: "properties.role",
-        type: {
-          name: "String"
+          name: "Sequence",
+          element: {
+            type: {
+              name: "String"
+            }
+          }
         }
       }
     }
@@ -88,12 +96,6 @@ export const ProviderOperation: msRest.CompositeMapper = {
         serializedName: "properties",
         type: {
           name: "Object"
-        }
-      },
-      isDataAction: {
-        serializedName: "isDataAction",
-        type: {
-          name: "Boolean"
         }
       }
     }
@@ -192,195 +194,6 @@ export const ProviderOperationsMetadata: msRest.CompositeMapper = {
   }
 };
 
-export const RoleAssignmentFilter: msRest.CompositeMapper = {
-  serializedName: "RoleAssignmentFilter",
-  type: {
-    name: "Composite",
-    className: "RoleAssignmentFilter",
-    modelProperties: {
-      principalId: {
-        serializedName: "principalId",
-        type: {
-          name: "String"
-        }
-      },
-      canDelegate: {
-        serializedName: "canDelegate",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const RoleAssignment: msRest.CompositeMapper = {
-  serializedName: "RoleAssignment",
-  type: {
-    name: "Composite",
-    className: "RoleAssignment",
-    modelProperties: {
-      id: {
-        readOnly: true,
-        serializedName: "id",
-        type: {
-          name: "String"
-        }
-      },
-      name: {
-        readOnly: true,
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      type: {
-        readOnly: true,
-        serializedName: "type",
-        type: {
-          name: "String"
-        }
-      },
-      scope: {
-        serializedName: "properties.scope",
-        type: {
-          name: "String"
-        }
-      },
-      roleDefinitionId: {
-        serializedName: "properties.roleDefinitionId",
-        type: {
-          name: "String"
-        }
-      },
-      principalId: {
-        serializedName: "properties.principalId",
-        type: {
-          name: "String"
-        }
-      },
-      canDelegate: {
-        serializedName: "properties.canDelegate",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const RoleAssignmentCreateParameters: msRest.CompositeMapper = {
-  serializedName: "RoleAssignmentCreateParameters",
-  type: {
-    name: "Composite",
-    className: "RoleAssignmentCreateParameters",
-    modelProperties: {
-      roleDefinitionId: {
-        required: true,
-        serializedName: "properties.roleDefinitionId",
-        type: {
-          name: "String"
-        }
-      },
-      principalId: {
-        required: true,
-        serializedName: "properties.principalId",
-        type: {
-          name: "String"
-        }
-      },
-      principalType: {
-        serializedName: "properties.principalType",
-        type: {
-          name: "String"
-        }
-      },
-      canDelegate: {
-        serializedName: "properties.canDelegate",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const RoleDefinitionFilter: msRest.CompositeMapper = {
-  serializedName: "RoleDefinitionFilter",
-  type: {
-    name: "Composite",
-    className: "RoleDefinitionFilter",
-    modelProperties: {
-      roleName: {
-        serializedName: "roleName",
-        type: {
-          name: "String"
-        }
-      },
-      type: {
-        serializedName: "type",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const Permission: msRest.CompositeMapper = {
-  serializedName: "Permission",
-  type: {
-    name: "Composite",
-    className: "Permission",
-    modelProperties: {
-      actions: {
-        serializedName: "actions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      notActions: {
-        serializedName: "notActions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      dataActions: {
-        serializedName: "dataActions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      notDataActions: {
-        serializedName: "notDataActions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
 export const RoleDefinition: msRest.CompositeMapper = {
   serializedName: "RoleDefinition",
   type: {
@@ -453,214 +266,11 @@ export const RoleDefinition: msRest.CompositeMapper = {
   }
 };
 
-export const DenyAssignmentFilter: msRest.CompositeMapper = {
-  serializedName: "DenyAssignmentFilter",
+export const PermissionGetResult: msRest.CompositeMapper = {
+  serializedName: "PermissionGetResult",
   type: {
     name: "Composite",
-    className: "DenyAssignmentFilter",
-    modelProperties: {
-      denyAssignmentName: {
-        serializedName: "denyAssignmentName",
-        type: {
-          name: "String"
-        }
-      },
-      principalId: {
-        serializedName: "principalId",
-        type: {
-          name: "String"
-        }
-      },
-      gdprExportPrincipalId: {
-        serializedName: "gdprExportPrincipalId",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DenyAssignmentPermission: msRest.CompositeMapper = {
-  serializedName: "DenyAssignmentPermission",
-  type: {
-    name: "Composite",
-    className: "DenyAssignmentPermission",
-    modelProperties: {
-      actions: {
-        serializedName: "actions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      notActions: {
-        serializedName: "notActions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      dataActions: {
-        serializedName: "dataActions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      },
-      notDataActions: {
-        serializedName: "notDataActions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
-export const Principal: msRest.CompositeMapper = {
-  serializedName: "Principal",
-  type: {
-    name: "Composite",
-    className: "Principal",
-    modelProperties: {
-      id: {
-        readOnly: true,
-        serializedName: "id",
-        type: {
-          name: "String"
-        }
-      },
-      type: {
-        readOnly: true,
-        serializedName: "type",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DenyAssignment: msRest.CompositeMapper = {
-  serializedName: "DenyAssignment",
-  type: {
-    name: "Composite",
-    className: "DenyAssignment",
-    modelProperties: {
-      id: {
-        readOnly: true,
-        serializedName: "id",
-        type: {
-          name: "String"
-        }
-      },
-      name: {
-        readOnly: true,
-        serializedName: "name",
-        type: {
-          name: "String"
-        }
-      },
-      type: {
-        readOnly: true,
-        serializedName: "type",
-        type: {
-          name: "String"
-        }
-      },
-      denyAssignmentName: {
-        serializedName: "properties.denyAssignmentName",
-        type: {
-          name: "String"
-        }
-      },
-      description: {
-        serializedName: "properties.description",
-        type: {
-          name: "String"
-        }
-      },
-      permissions: {
-        serializedName: "properties.permissions",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "DenyAssignmentPermission"
-            }
-          }
-        }
-      },
-      scope: {
-        serializedName: "properties.scope",
-        type: {
-          name: "String"
-        }
-      },
-      doNotApplyToChildScopes: {
-        serializedName: "properties.doNotApplyToChildScopes",
-        type: {
-          name: "Boolean"
-        }
-      },
-      principals: {
-        serializedName: "properties.principals",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Principal"
-            }
-          }
-        }
-      },
-      excludePrincipals: {
-        serializedName: "properties.excludePrincipals",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Principal"
-            }
-          }
-        }
-      },
-      isSystemProtected: {
-        serializedName: "properties.isSystemProtected",
-        type: {
-          name: "Boolean"
-        }
-      }
-    }
-  }
-};
-
-export const ClassicAdministratorListResult: msRest.CompositeMapper = {
-  serializedName: "ClassicAdministratorListResult",
-  type: {
-    name: "Composite",
-    className: "ClassicAdministratorListResult",
+    className: "PermissionGetResult",
     modelProperties: {
       value: {
         serializedName: "",
@@ -669,7 +279,7 @@ export const ClassicAdministratorListResult: msRest.CompositeMapper = {
           element: {
             type: {
               name: "Composite",
-              className: "ClassicAdministrator"
+              className: "Permission"
             }
           }
         }
@@ -712,62 +322,6 @@ export const ProviderOperationsMetadataListResult: msRest.CompositeMapper = {
   }
 };
 
-export const RoleAssignmentListResult: msRest.CompositeMapper = {
-  serializedName: "RoleAssignmentListResult",
-  type: {
-    name: "Composite",
-    className: "RoleAssignmentListResult",
-    modelProperties: {
-      value: {
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "RoleAssignment"
-            }
-          }
-        }
-      },
-      nextLink: {
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const PermissionGetResult: msRest.CompositeMapper = {
-  serializedName: "PermissionGetResult",
-  type: {
-    name: "Composite",
-    className: "PermissionGetResult",
-    modelProperties: {
-      value: {
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "Permission"
-            }
-          }
-        }
-      },
-      nextLink: {
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
 export const RoleDefinitionListResult: msRest.CompositeMapper = {
   serializedName: "RoleDefinitionListResult",
   type: {
@@ -782,34 +336,6 @@ export const RoleDefinitionListResult: msRest.CompositeMapper = {
             type: {
               name: "Composite",
               className: "RoleDefinition"
-            }
-          }
-        }
-      },
-      nextLink: {
-        serializedName: "nextLink",
-        type: {
-          name: "String"
-        }
-      }
-    }
-  }
-};
-
-export const DenyAssignmentListResult: msRest.CompositeMapper = {
-  serializedName: "DenyAssignmentListResult",
-  type: {
-    name: "Composite",
-    className: "DenyAssignmentListResult",
-    modelProperties: {
-      value: {
-        serializedName: "",
-        type: {
-          name: "Sequence",
-          element: {
-            type: {
-              name: "Composite",
-              className: "DenyAssignment"
             }
           }
         }

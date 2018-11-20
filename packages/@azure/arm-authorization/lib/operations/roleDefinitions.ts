@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "../models";
 import * as Mappers from "../models/roleDefinitionsMappers";
 import * as Parameters from "../models/parameters";
@@ -127,6 +127,46 @@ export class RoleDefinitions {
   }
 
   /**
+   * Gets a role definition by ID.
+   * @param roleDefinitionId The fully qualified role definition ID. Use the format,
+   * /subscriptions/{guid}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for
+   * subscription level role definitions, or
+   * /providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for tenant level role
+   * definitions.
+   * @param [options] The optional parameters
+   * @returns Promise<Models.RoleDefinitionsGetByIdResponse>
+   */
+  getById(roleDefinitionId: string, options?: msRest.RequestOptionsBase): Promise<Models.RoleDefinitionsGetByIdResponse>;
+  /**
+   * @param roleDefinitionId The fully qualified role definition ID. Use the format,
+   * /subscriptions/{guid}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for
+   * subscription level role definitions, or
+   * /providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for tenant level role
+   * definitions.
+   * @param callback The callback
+   */
+  getById(roleDefinitionId: string, callback: msRest.ServiceCallback<Models.RoleDefinition>): void;
+  /**
+   * @param roleDefinitionId The fully qualified role definition ID. Use the format,
+   * /subscriptions/{guid}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for
+   * subscription level role definitions, or
+   * /providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for tenant level role
+   * definitions.
+   * @param options The optional parameters
+   * @param callback The callback
+   */
+  getById(roleDefinitionId: string, options: msRest.RequestOptionsBase, callback: msRest.ServiceCallback<Models.RoleDefinition>): void;
+  getById(roleDefinitionId: string, options?: msRest.RequestOptionsBase | msRest.ServiceCallback<Models.RoleDefinition>, callback?: msRest.ServiceCallback<Models.RoleDefinition>): Promise<Models.RoleDefinitionsGetByIdResponse> {
+    return this.client.sendOperationRequest(
+      {
+        roleDefinitionId,
+        options
+      },
+      getByIdOperationSpec,
+      callback) as Promise<Models.RoleDefinitionsGetByIdResponse>;
+  }
+
+  /**
    * Get all role definitions that are applicable at scope and above.
    * @param scope The scope of the role definition.
    * @param [options] The optional parameters
@@ -152,46 +192,6 @@ export class RoleDefinitions {
       },
       listOperationSpec,
       callback) as Promise<Models.RoleDefinitionsListResponse>;
-  }
-
-  /**
-   * Gets a role definition by ID.
-   * @param roleId The fully qualified role definition ID. Use the format,
-   * /subscriptions/{guid}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for
-   * subscription level role definitions, or
-   * /providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for tenant level role
-   * definitions.
-   * @param [options] The optional parameters
-   * @returns Promise<Models.RoleDefinitionsGetByIdResponse>
-   */
-  getById(roleId: string, options?: msRest.RequestOptionsBase): Promise<Models.RoleDefinitionsGetByIdResponse>;
-  /**
-   * @param roleId The fully qualified role definition ID. Use the format,
-   * /subscriptions/{guid}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for
-   * subscription level role definitions, or
-   * /providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for tenant level role
-   * definitions.
-   * @param callback The callback
-   */
-  getById(roleId: string, callback: msRest.ServiceCallback<Models.RoleDefinition>): void;
-  /**
-   * @param roleId The fully qualified role definition ID. Use the format,
-   * /subscriptions/{guid}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for
-   * subscription level role definitions, or
-   * /providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId} for tenant level role
-   * definitions.
-   * @param options The optional parameters
-   * @param callback The callback
-   */
-  getById(roleId: string, options: msRest.RequestOptionsBase, callback: msRest.ServiceCallback<Models.RoleDefinition>): void;
-  getById(roleId: string, options?: msRest.RequestOptionsBase | msRest.ServiceCallback<Models.RoleDefinition>, callback?: msRest.ServiceCallback<Models.RoleDefinition>): Promise<Models.RoleDefinitionsGetByIdResponse> {
-    return this.client.sendOperationRequest(
-      {
-        roleId,
-        options
-      },
-      getByIdOperationSpec,
-      callback) as Promise<Models.RoleDefinitionsGetByIdResponse>;
   }
 
   /**
@@ -230,10 +230,10 @@ const deleteMethodOperationSpec: msRest.OperationSpec = {
   path: "{scope}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId}",
   urlParameters: [
     Parameters.scope,
-    Parameters.roleDefinitionId
+    Parameters.roleDefinitionId0
   ],
   queryParameters: [
-    Parameters.apiVersion1
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -254,10 +254,10 @@ const getOperationSpec: msRest.OperationSpec = {
   path: "{scope}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId}",
   urlParameters: [
     Parameters.scope,
-    Parameters.roleDefinitionId
+    Parameters.roleDefinitionId0
   ],
   queryParameters: [
-    Parameters.apiVersion1
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -278,10 +278,10 @@ const createOrUpdateOperationSpec: msRest.OperationSpec = {
   path: "{scope}/providers/Microsoft.Authorization/roleDefinitions/{roleDefinitionId}",
   urlParameters: [
     Parameters.scope,
-    Parameters.roleDefinitionId
+    Parameters.roleDefinitionId0
   ],
   queryParameters: [
-    Parameters.apiVersion1
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -304,22 +304,21 @@ const createOrUpdateOperationSpec: msRest.OperationSpec = {
   serializer
 };
 
-const listOperationSpec: msRest.OperationSpec = {
+const getByIdOperationSpec: msRest.OperationSpec = {
   httpMethod: "GET",
-  path: "{scope}/providers/Microsoft.Authorization/roleDefinitions",
+  path: "{roleDefinitionId}",
   urlParameters: [
-    Parameters.scope
+    Parameters.roleDefinitionId1
   ],
   queryParameters: [
-    Parameters.filter,
-    Parameters.apiVersion1
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
   ],
   responses: {
     200: {
-      bodyMapper: Mappers.RoleDefinitionListResult
+      bodyMapper: Mappers.RoleDefinition
     },
     default: {
       bodyMapper: Mappers.CloudError
@@ -328,21 +327,22 @@ const listOperationSpec: msRest.OperationSpec = {
   serializer
 };
 
-const getByIdOperationSpec: msRest.OperationSpec = {
+const listOperationSpec: msRest.OperationSpec = {
   httpMethod: "GET",
-  path: "{roleId}",
+  path: "{scope}/providers/Microsoft.Authorization/roleDefinitions",
   urlParameters: [
-    Parameters.roleId
+    Parameters.scope
   ],
   queryParameters: [
-    Parameters.apiVersion1
+    Parameters.filter,
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
   ],
   responses: {
     200: {
-      bodyMapper: Mappers.RoleDefinition
+      bodyMapper: Mappers.RoleDefinitionListResult
     },
     default: {
       bodyMapper: Mappers.CloudError

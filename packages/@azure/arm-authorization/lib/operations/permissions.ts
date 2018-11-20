@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "../models";
 import * as Mappers from "../models/permissionsMappers";
 import * as Parameters from "../models/parameters";
@@ -28,18 +28,21 @@ export class Permissions {
 
   /**
    * Gets all permissions the caller has for a resource group.
-   * @param resourceGroupName The name of the resource group.
+   * @param resourceGroupName The name of the resource group to get the permissions for. The name is
+   * case insensitive.
    * @param [options] The optional parameters
    * @returns Promise<Models.PermissionsListForResourceGroupResponse>
    */
   listForResourceGroup(resourceGroupName: string, options?: msRest.RequestOptionsBase): Promise<Models.PermissionsListForResourceGroupResponse>;
   /**
-   * @param resourceGroupName The name of the resource group.
+   * @param resourceGroupName The name of the resource group to get the permissions for. The name is
+   * case insensitive.
    * @param callback The callback
    */
   listForResourceGroup(resourceGroupName: string, callback: msRest.ServiceCallback<Models.PermissionGetResult>): void;
   /**
-   * @param resourceGroupName The name of the resource group.
+   * @param resourceGroupName The name of the resource group to get the permissions for. The name is
+   * case insensitive.
    * @param options The optional parameters
    * @param callback The callback
    */
@@ -56,7 +59,8 @@ export class Permissions {
 
   /**
    * Gets all permissions the caller has for a resource.
-   * @param resourceGroupName The name of the resource group.
+   * @param resourceGroupName The name of the resource group containing the resource. The name is
+   * case insensitive.
    * @param resourceProviderNamespace The namespace of the resource provider.
    * @param parentResourcePath The parent resource identity.
    * @param resourceType The resource type of the resource.
@@ -66,7 +70,8 @@ export class Permissions {
    */
   listForResource(resourceGroupName: string, resourceProviderNamespace: string, parentResourcePath: string, resourceType: string, resourceName: string, options?: msRest.RequestOptionsBase): Promise<Models.PermissionsListForResourceResponse>;
   /**
-   * @param resourceGroupName The name of the resource group.
+   * @param resourceGroupName The name of the resource group containing the resource. The name is
+   * case insensitive.
    * @param resourceProviderNamespace The namespace of the resource provider.
    * @param parentResourcePath The parent resource identity.
    * @param resourceType The resource type of the resource.
@@ -75,7 +80,8 @@ export class Permissions {
    */
   listForResource(resourceGroupName: string, resourceProviderNamespace: string, parentResourcePath: string, resourceType: string, resourceName: string, callback: msRest.ServiceCallback<Models.PermissionGetResult>): void;
   /**
-   * @param resourceGroupName The name of the resource group.
+   * @param resourceGroupName The name of the resource group containing the resource. The name is
+   * case insensitive.
    * @param resourceProviderNamespace The namespace of the resource provider.
    * @param parentResourcePath The parent resource identity.
    * @param resourceType The resource type of the resource.
@@ -165,7 +171,7 @@ const listForResourceGroupOperationSpec: msRest.OperationSpec = {
     Parameters.subscriptionId
   ],
   queryParameters: [
-    Parameters.apiVersion1
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -193,7 +199,7 @@ const listForResourceOperationSpec: msRest.OperationSpec = {
     Parameters.subscriptionId
   ],
   queryParameters: [
-    Parameters.apiVersion1
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage

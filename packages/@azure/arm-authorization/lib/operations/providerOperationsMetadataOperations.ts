@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "../models";
 import * as Mappers from "../models/providerOperationsMetadataOperationsMappers";
 import * as Parameters from "../models/parameters";
@@ -29,25 +29,29 @@ export class ProviderOperationsMetadataOperations {
   /**
    * Gets provider operations metadata for the specified resource provider.
    * @param resourceProviderNamespace The namespace of the resource provider.
+   * @param apiVersion The API version to use for the operation.
    * @param [options] The optional parameters
    * @returns Promise<Models.ProviderOperationsMetadataGetResponse>
    */
-  get(resourceProviderNamespace: string, options?: Models.ProviderOperationsMetadataGetOptionalParams): Promise<Models.ProviderOperationsMetadataGetResponse>;
+  get(resourceProviderNamespace: string, apiVersion: string, options?: Models.ProviderOperationsMetadataGetOptionalParams): Promise<Models.ProviderOperationsMetadataGetResponse>;
   /**
    * @param resourceProviderNamespace The namespace of the resource provider.
+   * @param apiVersion The API version to use for the operation.
    * @param callback The callback
    */
-  get(resourceProviderNamespace: string, callback: msRest.ServiceCallback<Models.ProviderOperationsMetadata>): void;
+  get(resourceProviderNamespace: string, apiVersion: string, callback: msRest.ServiceCallback<Models.ProviderOperationsMetadata>): void;
   /**
    * @param resourceProviderNamespace The namespace of the resource provider.
+   * @param apiVersion The API version to use for the operation.
    * @param options The optional parameters
    * @param callback The callback
    */
-  get(resourceProviderNamespace: string, options: Models.ProviderOperationsMetadataGetOptionalParams, callback: msRest.ServiceCallback<Models.ProviderOperationsMetadata>): void;
-  get(resourceProviderNamespace: string, options?: Models.ProviderOperationsMetadataGetOptionalParams | msRest.ServiceCallback<Models.ProviderOperationsMetadata>, callback?: msRest.ServiceCallback<Models.ProviderOperationsMetadata>): Promise<Models.ProviderOperationsMetadataGetResponse> {
+  get(resourceProviderNamespace: string, apiVersion: string, options: Models.ProviderOperationsMetadataGetOptionalParams, callback: msRest.ServiceCallback<Models.ProviderOperationsMetadata>): void;
+  get(resourceProviderNamespace: string, apiVersion: string, options?: Models.ProviderOperationsMetadataGetOptionalParams | msRest.ServiceCallback<Models.ProviderOperationsMetadata>, callback?: msRest.ServiceCallback<Models.ProviderOperationsMetadata>): Promise<Models.ProviderOperationsMetadataGetResponse> {
     return this.client.sendOperationRequest(
       {
         resourceProviderNamespace,
+        apiVersion,
         options
       },
       getOperationSpec,
@@ -56,22 +60,26 @@ export class ProviderOperationsMetadataOperations {
 
   /**
    * Gets provider operations metadata for all resource providers.
+   * @param apiVersion The API version to use for this operation.
    * @param [options] The optional parameters
    * @returns Promise<Models.ProviderOperationsMetadataListResponse>
    */
-  list(options?: Models.ProviderOperationsMetadataListOptionalParams): Promise<Models.ProviderOperationsMetadataListResponse>;
+  list(apiVersion: string, options?: Models.ProviderOperationsMetadataListOptionalParams): Promise<Models.ProviderOperationsMetadataListResponse>;
   /**
+   * @param apiVersion The API version to use for this operation.
    * @param callback The callback
    */
-  list(callback: msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>): void;
+  list(apiVersion: string, callback: msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>): void;
   /**
+   * @param apiVersion The API version to use for this operation.
    * @param options The optional parameters
    * @param callback The callback
    */
-  list(options: Models.ProviderOperationsMetadataListOptionalParams, callback: msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>): void;
-  list(options?: Models.ProviderOperationsMetadataListOptionalParams | msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>, callback?: msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>): Promise<Models.ProviderOperationsMetadataListResponse> {
+  list(apiVersion: string, options: Models.ProviderOperationsMetadataListOptionalParams, callback: msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>): void;
+  list(apiVersion: string, options?: Models.ProviderOperationsMetadataListOptionalParams | msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>, callback?: msRest.ServiceCallback<Models.ProviderOperationsMetadataListResult>): Promise<Models.ProviderOperationsMetadataListResponse> {
     return this.client.sendOperationRequest(
       {
+        apiVersion,
         options
       },
       listOperationSpec,
@@ -116,7 +124,7 @@ const getOperationSpec: msRest.OperationSpec = {
     Parameters.resourceProviderNamespace
   ],
   queryParameters: [
-    Parameters.apiVersion1,
+    Parameters.apiVersion,
     Parameters.expand
   ],
   headerParameters: [
@@ -137,7 +145,7 @@ const listOperationSpec: msRest.OperationSpec = {
   httpMethod: "GET",
   path: "providers/Microsoft.Authorization/providerOperations",
   queryParameters: [
-    Parameters.apiVersion1,
+    Parameters.apiVersion,
     Parameters.expand
   ],
   headerParameters: [
