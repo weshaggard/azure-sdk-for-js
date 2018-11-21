@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "../models";
 import * as Mappers from "../models/notificationChannelsMappers";
 import * as Parameters from "../models/parameters";
@@ -39,15 +39,15 @@ export class NotificationChannels {
    * @param labName The name of the lab.
    * @param callback The callback
    */
-  list(resourceGroupName: string, labName: string, callback: msRest.ServiceCallback<Models.NotificationChannelList>): void;
+  list(resourceGroupName: string, labName: string, callback: msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>): void;
   /**
    * @param resourceGroupName The name of the resource group.
    * @param labName The name of the lab.
    * @param options The optional parameters
    * @param callback The callback
    */
-  list(resourceGroupName: string, labName: string, options: Models.NotificationChannelsListOptionalParams, callback: msRest.ServiceCallback<Models.NotificationChannelList>): void;
-  list(resourceGroupName: string, labName: string, options?: Models.NotificationChannelsListOptionalParams | msRest.ServiceCallback<Models.NotificationChannelList>, callback?: msRest.ServiceCallback<Models.NotificationChannelList>): Promise<Models.NotificationChannelsListResponse> {
+  list(resourceGroupName: string, labName: string, options: Models.NotificationChannelsListOptionalParams, callback: msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>): void;
+  list(resourceGroupName: string, labName: string, options?: Models.NotificationChannelsListOptionalParams | msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>, callback?: msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>): Promise<Models.NotificationChannelsListResponse> {
     return this.client.sendOperationRequest(
       {
         resourceGroupName,
@@ -261,14 +261,14 @@ export class NotificationChannels {
    * @param nextPageLink The NextLink from the previous successful call to List operation.
    * @param callback The callback
    */
-  listNext(nextPageLink: string, callback: msRest.ServiceCallback<Models.NotificationChannelList>): void;
+  listNext(nextPageLink: string, callback: msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>): void;
   /**
    * @param nextPageLink The NextLink from the previous successful call to List operation.
    * @param options The optional parameters
    * @param callback The callback
    */
-  listNext(nextPageLink: string, options: msRest.RequestOptionsBase, callback: msRest.ServiceCallback<Models.NotificationChannelList>): void;
-  listNext(nextPageLink: string, options?: msRest.RequestOptionsBase | msRest.ServiceCallback<Models.NotificationChannelList>, callback?: msRest.ServiceCallback<Models.NotificationChannelList>): Promise<Models.NotificationChannelsListNextResponse> {
+  listNext(nextPageLink: string, options: msRest.RequestOptionsBase, callback: msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>): void;
+  listNext(nextPageLink: string, options?: msRest.RequestOptionsBase | msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>, callback?: msRest.ServiceCallback<Models.ResponseWithContinuationNotificationChannel>): Promise<Models.NotificationChannelsListNextResponse> {
     return this.client.sendOperationRequest(
       {
         nextPageLink,
@@ -301,7 +301,7 @@ const listOperationSpec: msRest.OperationSpec = {
   ],
   responses: {
     200: {
-      bodyMapper: Mappers.NotificationChannelList
+      bodyMapper: Mappers.ResponseWithContinuationNotificationChannel
     },
     default: {
       bodyMapper: Mappers.CloudError
@@ -474,7 +474,7 @@ const listNextOperationSpec: msRest.OperationSpec = {
   ],
   responses: {
     200: {
-      bodyMapper: Mappers.NotificationChannelList
+      bodyMapper: Mappers.ResponseWithContinuationNotificationChannel
     },
     default: {
       bodyMapper: Mappers.CloudError
