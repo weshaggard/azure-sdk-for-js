@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 
 export const acceptLanguage: msRest.OperationParameter = {
   parameterPath: "acceptLanguage",
@@ -26,8 +26,8 @@ export const accountName: msRest.OperationURLParameter = {
     required: true,
     serializedName: "accountName",
     constraints: {
-      MaxLength: 64,
-      MinLength: 2,
+      MaxLength: 24,
+      MinLength: 3,
       Pattern: /^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/
     },
     type: {
@@ -44,39 +44,6 @@ export const apiVersion: msRest.OperationQueryParameter = {
       name: "String"
     }
   }
-};
-export const filter: msRest.OperationQueryParameter = {
-  parameterPath: [
-    "options",
-    "filter"
-  ],
-  mapper: {
-    serializedName: "$filter",
-    type: {
-      name: "String"
-    }
-  }
-};
-export const location: msRest.OperationURLParameter = {
-  parameterPath: "location",
-  mapper: {
-    required: true,
-    serializedName: "location",
-    type: {
-      name: "String"
-    }
-  }
-};
-export const nextPageLink: msRest.OperationURLParameter = {
-  parameterPath: "nextPageLink",
-  mapper: {
-    required: true,
-    serializedName: "nextLink",
-    type: {
-      name: "String"
-    }
-  },
-  skipEncoding: true
 };
 export const resourceGroupName: msRest.OperationURLParameter = {
   parameterPath: "resourceGroupName",

@@ -9,8 +9,8 @@
  */
 
 import * as Models from "./models";
-import * as msRest from "@azure/ms-rest-js";
-import * as msRestAzure from "@azure/ms-rest-azure-js";
+import * as msRest from "ms-rest-js";
+import * as msRestAzure from "ms-rest-azure-js";
 
 const packageName = "@azure/arm-cognitiveservices";
 const packageVersion = "0.1.0";
@@ -44,7 +44,7 @@ export class CognitiveServicesManagementClientContext extends msRestAzure.AzureS
 
     super(credentials, options);
 
-    this.apiVersion = '2017-04-18';
+    this.apiVersion = '2020-03-01';
     this.acceptLanguage = 'en-US';
     this.longRunningOperationRetryTimeout = 30;
     this.baseUri = options.baseUri || this.baseUri || "https://management.azure.com";
