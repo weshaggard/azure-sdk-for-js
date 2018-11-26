@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "./models";
 import * as Mappers from "./models/mappers";
 import * as operations from "./operations";
@@ -17,10 +17,7 @@ import { CognitiveServicesManagementClientContext } from "./cognitiveServicesMan
 
 class CognitiveServicesManagementClient extends CognitiveServicesManagementClientContext {
   // Operation groups
-  accounts: operations.Accounts;
-  resourceSkus: operations.ResourceSkus;
-  operations: operations.Operations;
-  checkSkuAvailability: operations.CheckSkuAvailability;
+  cognitiveServicesAccounts: operations.CognitiveServicesAccounts;
 
   /**
    * Initializes a new instance of the CognitiveServicesManagementClient class.
@@ -30,10 +27,7 @@ class CognitiveServicesManagementClient extends CognitiveServicesManagementClien
    */
   constructor(credentials: msRest.ServiceClientCredentials, subscriptionId: string, options?: Models.CognitiveServicesManagementClientOptions) {
     super(credentials, subscriptionId, options);
-    this.accounts = new operations.Accounts(this);
-    this.resourceSkus = new operations.ResourceSkus(this);
-    this.operations = new operations.Operations(this);
-    this.checkSkuAvailability = new operations.CheckSkuAvailability(this);
+    this.cognitiveServicesAccounts = new operations.CognitiveServicesAccounts(this);
   }
 }
 

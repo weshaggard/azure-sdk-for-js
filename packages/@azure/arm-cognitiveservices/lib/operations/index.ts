@@ -8,7 +8,4 @@
  * regenerated.
  */
 
-export * from "./accounts";
-export * from "./resourceSkus";
-export * from "./operations";
-export * from "./checkSkuAvailability";
+export * from "./cognitiveServicesAccounts";

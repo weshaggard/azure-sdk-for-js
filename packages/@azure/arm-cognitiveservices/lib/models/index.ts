@@ -8,8 +8,8 @@
  * regenerated.
  */
 
-import { BaseResource, CloudError, AzureServiceClientOptions } from "@azure/ms-rest-azure-js";
-import * as msRest from "@azure/ms-rest-js";
+import { BaseResource, CloudError, AzureServiceClientOptions } from "ms-rest-azure-js";
+import * as msRest from "ms-rest-js";
 
 export { BaseResource, CloudError };
 
@@ -44,16 +44,15 @@ export interface Sku {
  */
 export interface CognitiveServicesAccountCreateParameters {
   /**
-   * @member {Sku} sku Required. Gets or sets the SKU of the resource.
+   * @member {Sku} sku
    */
   sku: Sku;
   /**
-   * @member {Kind} kind Required. Gets or sets the Kind of the resource.
-   * Possible values include: 'Bing.Autosuggest.v7', 'Bing.CustomSearch',
-   * 'Bing.Search.v7', 'Bing.Speech', 'Bing.SpellCheck.v7', 'ComputerVision',
-   * 'ContentModerator', 'CustomSpeech', 'CustomVision.Prediction',
-   * 'CustomVision.Training', 'Emotion', 'Face', 'LUIS', 'QnAMaker',
-   * 'SpeakerRecognition', 'SpeechTranslation', 'TextAnalytics',
+   * @member {Kind} kind Required. Indicates the type of cognitive service
+   * account. Possible values include: 'Academic', 'Bing.Autosuggest',
+   * 'Bing.Search', 'Bing.Speech', 'Bing.SpellCheck', 'ComputerVision',
+   * 'ContentModerator', 'Emotion', 'Face', 'LUIS', 'Recommendations',
+   * 'SpeakerRecognition', 'Speech', 'SpeechTranslation', 'TextAnalytics',
    * 'TextTranslation', 'WebLM'
    */
   kind: Kind;
@@ -74,8 +73,7 @@ export interface CognitiveServicesAccountCreateParameters {
    */
   tags?: { [propertyName: string]: string };
   /**
-   * @member {any} properties Must exist in the request. Must be an empty
-   * object. Must not be null.
+   * @member {any} properties Must exist in the request. Must not be null.
    */
   properties: any;
 }
@@ -88,7 +86,7 @@ export interface CognitiveServicesAccountCreateParameters {
  */
 export interface CognitiveServicesAccountUpdateParameters {
   /**
-   * @member {Sku} [sku] Gets or sets the SKU of the resource.
+   * @member {Sku} [sku]
    */
   sku?: Sku;
   /**
@@ -116,10 +114,8 @@ export interface CognitiveServicesAccount extends BaseResource {
   etag?: string;
   /**
    * @member {string} [id] The id of the created account
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
    */
-  readonly id?: string;
+  id?: string;
   /**
    * @member {string} [kind] Type of cognitive service account.
    */
@@ -130,29 +126,22 @@ export interface CognitiveServicesAccount extends BaseResource {
   location?: string;
   /**
    * @member {string} [name] The name of the created account
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
    */
-  readonly name?: string;
+  name?: string;
   /**
    * @member {ProvisioningState} [provisioningState] Gets the status of the
    * cognitive services account at the time the operation was called. Possible
-   * values include: 'Creating', 'ResolvingDNS', 'Moving', 'Deleting',
-   * 'Succeeded', 'Failed'
+   * values include: 'Creating', 'ResolvingDNS', 'Succeeded', 'Failed'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
   readonly provisioningState?: ProvisioningState;
   /**
-   * @member {string} [endpoint] Endpoint of the created account.
+   * @member {string} [endpoint] Endpoint of the created account
    */
   endpoint?: string;
   /**
-   * @member {string} [internalId] The internal identifier.
-   */
-  internalId?: string;
-  /**
-   * @member {Sku} [sku] The SKU of Cognitive Services account.
+   * @member {Sku} [sku]
    */
   sku?: Sku;
   /**
@@ -165,10 +154,8 @@ export interface CognitiveServicesAccount extends BaseResource {
   tags?: { [propertyName: string]: string };
   /**
    * @member {string} [type] Resource type
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
    */
-  readonly type?: string;
+  type?: string;
 }
 
 /**
@@ -196,17 +183,15 @@ export interface CognitiveServicesAccountKeys {
  */
 export interface RegenerateKeyParameters {
   /**
-   * @member {KeyName} keyName key name to generate (Key1|Key2). Possible
+   * @member {KeyName} [keyName] key name to generate (Key1|Key2). Possible
    * values include: 'Key1', 'Key2'
    */
-  keyName: KeyName;
+  keyName?: KeyName;
 }
 
 /**
  * @interface
  * An interface representing CognitiveServicesResourceAndSku.
- * Cognitive Services resource type and SKU.
- *
  */
 export interface CognitiveServicesResourceAndSku {
   /**
@@ -214,7 +199,7 @@ export interface CognitiveServicesResourceAndSku {
    */
   resourceType?: string;
   /**
-   * @member {Sku} [sku] The SKU of Cognitive Services account.
+   * @member {Sku} [sku]
    */
   sku?: Sku;
 }
@@ -237,98 +222,7 @@ export interface CognitiveServicesAccountEnumerateSkusResult {
 
 /**
  * @interface
- * An interface representing MetricName.
- * A metric name.
- *
- */
-export interface MetricName {
-  /**
-   * @member {string} [value] The name of the metric.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly value?: string;
-  /**
-   * @member {string} [localizedValue] The friendly name of the metric.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly localizedValue?: string;
-}
-
-/**
- * @interface
- * An interface representing Usage.
- * The usage data for a usage request.
- *
- */
-export interface Usage {
-  /**
-   * @member {UnitType} [unit] The unit of the metric. Possible values include:
-   * 'Count', 'Bytes', 'Seconds', 'Percent', 'CountPerSecond',
-   * 'BytesPerSecond', 'Milliseconds'
-   */
-  unit?: UnitType;
-  /**
-   * @member {MetricName} [name] The name information for the metric.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly name?: MetricName;
-  /**
-   * @member {string} [quotaPeriod] The quota period used to summarize the
-   * usage values.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly quotaPeriod?: string;
-  /**
-   * @member {number} [limit] Maximum value for this metric.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly limit?: number;
-  /**
-   * @member {number} [currentValue] Current value for this metric.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly currentValue?: number;
-  /**
-   * @member {string} [nextResetTime] Next reset time for current quota.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly nextResetTime?: string;
-  /**
-   * @member {QuotaUsageStatus} [status] Cognitive Services account quota usage
-   * status. Possible values include: 'Included', 'Blocked', 'InOverage',
-   * 'Unknown'
-   */
-  status?: QuotaUsageStatus;
-}
-
-/**
- * @interface
- * An interface representing UsagesResult.
- * The response to a list usage request.
- *
- */
-export interface UsagesResult {
-  /**
-   * @member {Usage[]} [value] The list of usages for Cognitive Service
-   * account.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly value?: Usage[];
-}
-
-/**
- * @interface
  * An interface representing ErrorBody.
- * Cognitive Services error body.
- *
  */
 export interface ErrorBody {
   /**
@@ -344,268 +238,24 @@ export interface ErrorBody {
 /**
  * @interface
  * An interface representing ErrorModel.
- * Cognitive Services error object.
- *
  */
 export interface ErrorModel {
   /**
-   * @member {ErrorBody} [error] The error body.
+   * @member {ErrorBody} [error]
    */
   error?: ErrorBody;
 }
 
 /**
  * @interface
- * An interface representing OperationDisplayInfo.
- * The operation supported by Cognitive Services.
- *
- */
-export interface OperationDisplayInfo {
-  /**
-   * @member {string} [description] The description of the operation.
-   */
-  description?: string;
-  /**
-   * @member {string} [operation] The action that users can perform, based on
-   * their permission level.
-   */
-  operation?: string;
-  /**
-   * @member {string} [provider] Service provider: Microsoft Cognitive
-   * Services.
-   */
-  provider?: string;
-  /**
-   * @member {string} [resource] Resource on which the operation is performed.
-   */
-  resource?: string;
-}
-
-/**
- * @interface
- * An interface representing OperationEntity.
- * The operation supported by Cognitive Services.
- *
- */
-export interface OperationEntity {
-  /**
-   * @member {string} [name] Operation name: {provider}/{resource}/{operation}.
-   */
-  name?: string;
-  /**
-   * @member {OperationDisplayInfo} [display] The operation supported by
-   * Cognitive Services.
-   */
-  display?: OperationDisplayInfo;
-  /**
-   * @member {string} [origin] The origin of the operation.
-   */
-  origin?: string;
-  /**
-   * @member {any} [properties] Additional properties.
-   */
-  properties?: any;
-}
-
-/**
- * @interface
- * An interface representing CheckSkuAvailabilityParameter.
- * Check SKU availability parameter.
- *
- */
-export interface CheckSkuAvailabilityParameter {
-  /**
-   * @member {SkuName[]} skus The SKU of the resource.
-   */
-  skus: SkuName[];
-  /**
-   * @member {Kind} kind The Kind of the resource. Possible values include:
-   * 'Bing.Autosuggest.v7', 'Bing.CustomSearch', 'Bing.Search.v7',
-   * 'Bing.Speech', 'Bing.SpellCheck.v7', 'ComputerVision', 'ContentModerator',
-   * 'CustomSpeech', 'CustomVision.Prediction', 'CustomVision.Training',
-   * 'Emotion', 'Face', 'LUIS', 'QnAMaker', 'SpeakerRecognition',
-   * 'SpeechTranslation', 'TextAnalytics', 'TextTranslation', 'WebLM'
-   */
-  kind: Kind;
-  /**
-   * @member {string} type The Type of the resource.
-   */
-  type: string;
-}
-
-/**
- * @interface
- * An interface representing CheckSkuAvailabilityResult.
- * Check SKU availability result.
- *
- */
-export interface CheckSkuAvailabilityResult {
-  /**
-   * @member {Kind} [kind] The Kind of the resource. Possible values include:
-   * 'Bing.Autosuggest.v7', 'Bing.CustomSearch', 'Bing.Search.v7',
-   * 'Bing.Speech', 'Bing.SpellCheck.v7', 'ComputerVision', 'ContentModerator',
-   * 'CustomSpeech', 'CustomVision.Prediction', 'CustomVision.Training',
-   * 'Emotion', 'Face', 'LUIS', 'QnAMaker', 'SpeakerRecognition',
-   * 'SpeechTranslation', 'TextAnalytics', 'TextTranslation', 'WebLM'
-   */
-  kind?: Kind;
-  /**
-   * @member {string} [type] The Type of the resource.
-   */
-  type?: string;
-  /**
-   * @member {SkuName} [skuName] The SKU of Cognitive Services account.
-   * Possible values include: 'F0', 'P0', 'P1', 'P2', 'S0', 'S1', 'S2', 'S3',
-   * 'S4', 'S5', 'S6'
-   */
-  skuName?: SkuName;
-  /**
-   * @member {boolean} [skuAvailable] Indicates the given SKU is available or
-   * not.
-   */
-  skuAvailable?: boolean;
-  /**
-   * @member {string} [reason] Reason why the SKU is not available.
-   */
-  reason?: string;
-  /**
-   * @member {string} [message] Additional error message.
-   */
-  message?: string;
-}
-
-/**
- * @interface
- * An interface representing CheckSkuAvailabilityResultList.
- * Check SKU availability result list.
- *
- */
-export interface CheckSkuAvailabilityResultList {
-  /**
-   * @member {CheckSkuAvailabilityResult[]} [value] Check SKU availability
-   * result list.
-   */
-  value?: CheckSkuAvailabilityResult[];
-}
-
-/**
- * @interface
- * An interface representing ResourceSkuRestrictionInfo.
- */
-export interface ResourceSkuRestrictionInfo {
-  /**
-   * @member {string[]} [locations] Locations where the SKU is restricted
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly locations?: string[];
-  /**
-   * @member {string[]} [zones] List of availability zones where the SKU is
-   * restricted.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly zones?: string[];
-}
-
-/**
- * @interface
- * An interface representing ResourceSkuRestrictions.
- * Describes restrictions of a SKU.
- *
- */
-export interface ResourceSkuRestrictions {
-  /**
-   * @member {ResourceSkuRestrictionsType} [type] The type of restrictions.
-   * Possible values include: 'Location', 'Zone'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly type?: ResourceSkuRestrictionsType;
-  /**
-   * @member {string[]} [values] The value of restrictions. If the restriction
-   * type is set to location. This would be different locations where the SKU
-   * is restricted.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly values?: string[];
-  /**
-   * @member {ResourceSkuRestrictionInfo} [restrictionInfo] The information
-   * about the restriction where the SKU cannot be used.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly restrictionInfo?: ResourceSkuRestrictionInfo;
-  /**
-   * @member {ResourceSkuRestrictionsReasonCode} [reasonCode] The reason for
-   * restriction. Possible values include: 'QuotaId',
-   * 'NotAvailableForSubscription'
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly reasonCode?: ResourceSkuRestrictionsReasonCode;
-}
-
-/**
- * @interface
- * An interface representing ResourceSku.
- * Describes an available Cognitive Services SKU.
- *
- */
-export interface ResourceSku {
-  /**
-   * @member {string} [resourceType] The type of resource the SKU applies to.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly resourceType?: string;
-  /**
-   * @member {string} [name] The name of SKU.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly name?: string;
-  /**
-   * @member {string} [tier] Specifies the tier of Cognitive Services account.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly tier?: string;
-  /**
-   * @member {string} [kind] The Kind of resources that are supported in this
-   * SKU.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly kind?: string;
-  /**
-   * @member {string[]} [locations] The set of locations that the SKU is
-   * available.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly locations?: string[];
-  /**
-   * @member {ResourceSkuRestrictions[]} [restrictions] The restrictions
-   * because of which SKU cannot be used. This is empty if there are no
-   * restrictions.
-   * **NOTE: This property will not be serialized. It can only be populated by
-   * the server.**
-   */
-  readonly restrictions?: ResourceSkuRestrictions[];
-}
-
-/**
- * @interface
- * An interface representing AccountsUpdateOptionalParams.
+ * An interface representing CognitiveServicesAccountsUpdateOptionalParams.
  * Optional Parameters.
  *
  * @extends RequestOptionsBase
  */
-export interface AccountsUpdateOptionalParams extends msRest.RequestOptionsBase {
+export interface CognitiveServicesAccountsUpdateOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {Sku} [sku] Gets or sets the SKU of the resource.
+   * @member {Sku} [sku]
    */
   sku?: Sku;
   /**
@@ -620,18 +270,17 @@ export interface AccountsUpdateOptionalParams extends msRest.RequestOptionsBase 
 
 /**
  * @interface
- * An interface representing AccountsGetUsagesOptionalParams.
+ * An interface representing CognitiveServicesAccountsRegenerateKeyOptionalParams.
  * Optional Parameters.
  *
  * @extends RequestOptionsBase
  */
-export interface AccountsGetUsagesOptionalParams extends msRest.RequestOptionsBase {
+export interface CognitiveServicesAccountsRegenerateKeyOptionalParams extends msRest.RequestOptionsBase {
   /**
-   * @member {string} [filter] An OData filter expression that describes a
-   * subset of usages to return. The supported parameter is name.value (name of
-   * the metric, can have an or of multiple names).
+   * @member {KeyName} [keyName] key name to generate (Key1|Key2). Possible
+   * values include: 'Key1', 'Key2'
    */
-  filter?: string;
+  keyName?: KeyName;
 }
 
 /**
@@ -655,40 +304,6 @@ export interface CognitiveServicesManagementClientOptions extends AzureServiceCl
  * @extends Array<CognitiveServicesAccount>
  */
 export interface CognitiveServicesAccountListResult extends Array<CognitiveServicesAccount> {
-  /**
-   * @member {string} [nextLink] The link used to get the next page of
-   * accounts.
-   */
-  nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the ResourceSkusResult.
- * The Get Skus operation response.
- *
- * @extends Array<ResourceSku>
- */
-export interface ResourceSkusResult extends Array<ResourceSku> {
-  /**
-   * @member {string} [nextLink] The uri to fetch the next page of Skus.
-   */
-  nextLink?: string;
-}
-
-/**
- * @interface
- * An interface representing the OperationEntityListResult.
- * The list of cognitive services accounts operation response.
- *
- * @extends Array<OperationEntity>
- */
-export interface OperationEntityListResult extends Array<OperationEntity> {
-  /**
-   * @member {string} [nextLink] The link used to get the next page of
-   * operations.
-   */
-  nextLink?: string;
 }
 
 /**
@@ -709,22 +324,22 @@ export type SkuTier = 'Free' | 'Standard' | 'Premium';
 
 /**
  * Defines values for Kind.
- * Possible values include: 'Bing.Autosuggest.v7', 'Bing.CustomSearch', 'Bing.Search.v7',
- * 'Bing.Speech', 'Bing.SpellCheck.v7', 'ComputerVision', 'ContentModerator', 'CustomSpeech',
- * 'CustomVision.Prediction', 'CustomVision.Training', 'Emotion', 'Face', 'LUIS', 'QnAMaker',
- * 'SpeakerRecognition', 'SpeechTranslation', 'TextAnalytics', 'TextTranslation', 'WebLM'
+ * Possible values include: 'Academic', 'Bing.Autosuggest', 'Bing.Search', 'Bing.Speech',
+ * 'Bing.SpellCheck', 'ComputerVision', 'ContentModerator', 'Emotion', 'Face', 'LUIS',
+ * 'Recommendations', 'SpeakerRecognition', 'Speech', 'SpeechTranslation', 'TextAnalytics',
+ * 'TextTranslation', 'WebLM'
  * @readonly
  * @enum {string}
  */
-export type Kind = 'Bing.Autosuggest.v7' | 'Bing.CustomSearch' | 'Bing.Search.v7' | 'Bing.Speech' | 'Bing.SpellCheck.v7' | 'ComputerVision' | 'ContentModerator' | 'CustomSpeech' | 'CustomVision.Prediction' | 'CustomVision.Training' | 'Emotion' | 'Face' | 'LUIS' | 'QnAMaker' | 'SpeakerRecognition' | 'SpeechTranslation' | 'TextAnalytics' | 'TextTranslation' | 'WebLM';
+export type Kind = 'Academic' | 'Bing.Autosuggest' | 'Bing.Search' | 'Bing.Speech' | 'Bing.SpellCheck' | 'ComputerVision' | 'ContentModerator' | 'Emotion' | 'Face' | 'LUIS' | 'Recommendations' | 'SpeakerRecognition' | 'Speech' | 'SpeechTranslation' | 'TextAnalytics' | 'TextTranslation' | 'WebLM';
 
 /**
  * Defines values for ProvisioningState.
- * Possible values include: 'Creating', 'ResolvingDNS', 'Moving', 'Deleting', 'Succeeded', 'Failed'
+ * Possible values include: 'Creating', 'ResolvingDNS', 'Succeeded', 'Failed'
  * @readonly
  * @enum {string}
  */
-export type ProvisioningState = 'Creating' | 'ResolvingDNS' | 'Moving' | 'Deleting' | 'Succeeded' | 'Failed';
+export type ProvisioningState = 'Creating' | 'ResolvingDNS' | 'Succeeded' | 'Failed';
 
 /**
  * Defines values for KeyName.
@@ -735,42 +350,9 @@ export type ProvisioningState = 'Creating' | 'ResolvingDNS' | 'Moving' | 'Deleti
 export type KeyName = 'Key1' | 'Key2';
 
 /**
- * Defines values for UnitType.
- * Possible values include: 'Count', 'Bytes', 'Seconds', 'Percent', 'CountPerSecond',
- * 'BytesPerSecond', 'Milliseconds'
- * @readonly
- * @enum {string}
- */
-export type UnitType = 'Count' | 'Bytes' | 'Seconds' | 'Percent' | 'CountPerSecond' | 'BytesPerSecond' | 'Milliseconds';
-
-/**
- * Defines values for QuotaUsageStatus.
- * Possible values include: 'Included', 'Blocked', 'InOverage', 'Unknown'
- * @readonly
- * @enum {string}
- */
-export type QuotaUsageStatus = 'Included' | 'Blocked' | 'InOverage' | 'Unknown';
-
-/**
- * Defines values for ResourceSkuRestrictionsType.
- * Possible values include: 'Location', 'Zone'
- * @readonly
- * @enum {string}
- */
-export type ResourceSkuRestrictionsType = 'Location' | 'Zone';
-
-/**
- * Defines values for ResourceSkuRestrictionsReasonCode.
- * Possible values include: 'QuotaId', 'NotAvailableForSubscription'
- * @readonly
- * @enum {string}
- */
-export type ResourceSkuRestrictionsReasonCode = 'QuotaId' | 'NotAvailableForSubscription';
-
-/**
  * Contains response data for the create operation.
  */
-export type AccountsCreateResponse = CognitiveServicesAccount & {
+export type CognitiveServicesAccountsCreateResponse = CognitiveServicesAccount & {
   /**
    * The underlying HTTP response.
    */
@@ -789,7 +371,7 @@ export type AccountsCreateResponse = CognitiveServicesAccount & {
 /**
  * Contains response data for the update operation.
  */
-export type AccountsUpdateResponse = CognitiveServicesAccount & {
+export type CognitiveServicesAccountsUpdateResponse = CognitiveServicesAccount & {
   /**
    * The underlying HTTP response.
    */
@@ -808,7 +390,7 @@ export type AccountsUpdateResponse = CognitiveServicesAccount & {
 /**
  * Contains response data for the getProperties operation.
  */
-export type AccountsGetPropertiesResponse = CognitiveServicesAccount & {
+export type CognitiveServicesAccountsGetPropertiesResponse = CognitiveServicesAccount & {
   /**
    * The underlying HTTP response.
    */
@@ -827,7 +409,7 @@ export type AccountsGetPropertiesResponse = CognitiveServicesAccount & {
 /**
  * Contains response data for the listByResourceGroup operation.
  */
-export type AccountsListByResourceGroupResponse = CognitiveServicesAccountListResult & {
+export type CognitiveServicesAccountsListByResourceGroupResponse = CognitiveServicesAccountListResult & {
   /**
    * The underlying HTTP response.
    */
@@ -846,7 +428,7 @@ export type AccountsListByResourceGroupResponse = CognitiveServicesAccountListRe
 /**
  * Contains response data for the list operation.
  */
-export type AccountsListResponse = CognitiveServicesAccountListResult & {
+export type CognitiveServicesAccountsListResponse = CognitiveServicesAccountListResult & {
   /**
    * The underlying HTTP response.
    */
@@ -865,7 +447,7 @@ export type AccountsListResponse = CognitiveServicesAccountListResult & {
 /**
  * Contains response data for the listKeys operation.
  */
-export type AccountsListKeysResponse = CognitiveServicesAccountKeys & {
+export type CognitiveServicesAccountsListKeysResponse = CognitiveServicesAccountKeys & {
   /**
    * The underlying HTTP response.
    */
@@ -884,7 +466,7 @@ export type AccountsListKeysResponse = CognitiveServicesAccountKeys & {
 /**
  * Contains response data for the regenerateKey operation.
  */
-export type AccountsRegenerateKeyResponse = CognitiveServicesAccountKeys & {
+export type CognitiveServicesAccountsRegenerateKeyResponse = CognitiveServicesAccountKeys & {
   /**
    * The underlying HTTP response.
    */
@@ -903,7 +485,7 @@ export type AccountsRegenerateKeyResponse = CognitiveServicesAccountKeys & {
 /**
  * Contains response data for the listSkus operation.
  */
-export type AccountsListSkusResponse = CognitiveServicesAccountEnumerateSkusResult & {
+export type CognitiveServicesAccountsListSkusResponse = CognitiveServicesAccountEnumerateSkusResult & {
   /**
    * The underlying HTTP response.
    */
@@ -916,157 +498,5 @@ export type AccountsListSkusResponse = CognitiveServicesAccountEnumerateSkusResu
        * The response body as parsed JSON or XML
        */
       parsedBody: CognitiveServicesAccountEnumerateSkusResult;
-    };
-};
-
-/**
- * Contains response data for the getUsages operation.
- */
-export type AccountsGetUsagesResponse = UsagesResult & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: UsagesResult;
-    };
-};
-
-/**
- * Contains response data for the listByResourceGroupNext operation.
- */
-export type AccountsListByResourceGroupNextResponse = CognitiveServicesAccountListResult & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CognitiveServicesAccountListResult;
-    };
-};
-
-/**
- * Contains response data for the listNext operation.
- */
-export type AccountsListNextResponse = CognitiveServicesAccountListResult & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CognitiveServicesAccountListResult;
-    };
-};
-
-/**
- * Contains response data for the list operation.
- */
-export type ResourceSkusListResponse = ResourceSkusResult & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceSkusResult;
-    };
-};
-
-/**
- * Contains response data for the listNext operation.
- */
-export type ResourceSkusListNextResponse = ResourceSkusResult & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: ResourceSkusResult;
-    };
-};
-
-/**
- * Contains response data for the list operation.
- */
-export type OperationsListResponse = OperationEntityListResult & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: OperationEntityListResult;
-    };
-};
-
-/**
- * Contains response data for the listNext operation.
- */
-export type OperationsListNextResponse = OperationEntityListResult & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: OperationEntityListResult;
-    };
-};
-
-/**
- * Contains response data for the list operation.
- */
-export type CheckSkuAvailabilityListResponse = CheckSkuAvailabilityResultList & {
-  /**
-   * The underlying HTTP response.
-   */
-  _response: msRest.HttpResponse & {
-      /**
-       * The response body as text (string format)
-       */
-      bodyAsText: string;
-      /**
-       * The response body as parsed JSON or XML
-       */
-      parsedBody: CheckSkuAvailabilityResultList;
     };
 };
