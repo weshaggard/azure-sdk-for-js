@@ -8,8 +8,8 @@
  * regenerated.
  */
 
-import { BaseResource, CloudError, AzureServiceClientOptions } from "@azure/ms-rest-azure-js";
-import * as msRest from "@azure/ms-rest-js";
+import { BaseResource, CloudError, AzureServiceClientOptions } from "ms-rest-azure-js";
+import * as msRest from "ms-rest-js";
 
 export { BaseResource, CloudError };
 
@@ -30,7 +30,7 @@ export interface ShareCredentialDetails {
   /**
    * @member {ShareDestinationFormatType} [shareType] Type of the share.
    * Possible values include: 'UnknownType', 'HCS', 'BlockBlob', 'PageBlob',
-   * 'AzureFile'
+   * 'AzureFile', 'ManagedDisk'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
@@ -222,7 +222,7 @@ export interface AvailableSkuRequest {
   country: string;
   /**
    * @member {string} location Location for data transfer. For locations check:
-   * https://management.azure.com/subscriptions/SUBSCRIPTIONID/locations?api-version=2018-01-01
+   * https://management.azure.com/subscriptions/SUBSCRIPTIONID/locations?api-version=2018-90-90
    */
   location: string;
   /**
@@ -364,7 +364,7 @@ export interface SkuInformation {
   /**
    * @member {SkuDisabledReason} [disabledReason] Reason why the Sku is
    * disabled. Possible values include: 'None', 'Country', 'Region', 'Feature',
-   * 'OfferType'
+   * 'OfferType', 'NoSubscriptionInfo'
    * **NOTE: This property will not be serialized. It can only be populated by
    * the server.**
    */
@@ -505,6 +505,20 @@ export interface CopyProgress {
    * the server.**
    */
   readonly totalBytesToProcess?: number;
+  /**
+   * @member {number} [filesProcessed] Number of files processed by the job as
+   * of now.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly filesProcessed?: number;
+  /**
+   * @member {number} [totalFilesToProcess] Total number of files to be
+   * processed by the job.
+   * **NOTE: This property will not be serialized. It can only be populated by
+   * the server.**
+   */
+  readonly totalFilesToProcess?: number;
 }
 
 /**
@@ -651,10 +665,10 @@ export interface JobDetails {
    */
   readonly returnPackage?: PackageShippingDetails;
   /**
-   * @member {DestinationAccountDetails[]} destinationAccountDetails
+   * @member {DestinationAccountDetailsUnion[]} destinationAccountDetails
    * Destination account details.
    */
-  destinationAccountDetails: DestinationAccountDetails[];
+  destinationAccountDetails: DestinationAccountDetailsUnion[];
   /**
    * @member {JobErrorDetails[]} [errorDetails] Error details for failure. This
    * is optional.
@@ -735,10 +749,10 @@ export interface DataBoxDiskJobDetails {
    */
   readonly returnPackage?: PackageShippingDetails;
   /**
-   * @member {DestinationAccountDetails[]} destinationAccountDetails
+   * @member {DestinationAccountDetailsUnion[]} destinationAccountDetails
    * Destination account details.
    */
-  destinationAccountDetails: DestinationAccountDetails[];
+  destinationAccountDetails: DestinationAccountDetailsUnion[];
   /**
    * @member {JobErrorDetails[]} [errorDetails] Error details for failure. This
    * is optional.
@@ -942,10 +956,10 @@ export interface DataBoxHeavyJobDetails {
    */
   readonly returnPackage?: PackageShippingDetails;
   /**
-   * @member {DestinationAccountDetails[]} destinationAccountDetails
+   * @member {DestinationAccountDetailsUnion[]} destinationAccountDetails
    * Destination account details.
    */
-  destinationAccountDetails: DestinationAccountDetails[];
+  destinationAccountDetails: DestinationAccountDetailsUnion[];
   /**
    * @member {JobErrorDetails[]} [errorDetails] Error details for failure. This
    * is optional.
@@ -1096,10 +1110,10 @@ export interface DataBoxJobDetails {
    */
   readonly returnPackage?: PackageShippingDetails;
   /**
-   * @member {DestinationAccountDetails[]} destinationAccountDetails
+   * @member {DestinationAccountDetailsUnion[]} destinationAccountDetails
    * Destination account details.
    */
-  destinationAccountDetails: DestinationAccountDetails[];
+  destinationAccountDetails: DestinationAccountDetailsUnion[];
   /**
    * @member {JobErrorDetails[]} [errorDetails] Error details for failure. This
    * is optional.
@@ -1202,16 +1216,76 @@ export interface DataboxJobSecrets {
 }
 
 /**
+ * Contains the possible cases for DestinationAccountDetails.
+ */
+export type DestinationAccountDetailsUnion = DestinationAccountDetails | DestinationManagedDiskDetails | DestinationStorageAccountDetails;
+
+/**
  * @interface
  * An interface representing DestinationAccountDetails.
- * Details for the destination account.
+ * Details of the destination of the data
  *
  */
 export interface DestinationAccountDetails {
   /**
-   * @member {string} accountId Destination storage account id.
+   * @member {string} dataDestinationType Polymorphic Discriminator
    */
-  accountId: string;
+  dataDestinationType: "DestinationAccountDetails";
+  /**
+   * @member {string} [accountId] Arm Id of the destination where the data has
+   * to be moved.
+   */
+  accountId?: string;
+}
+
+/**
+ * @interface
+ * An interface representing DestinationManagedDiskDetails.
+ * Details for the destination compute disks.
+ *
+ */
+export interface DestinationManagedDiskDetails {
+  /**
+   * @member {string} dataDestinationType Polymorphic Discriminator
+   */
+  dataDestinationType: "ManagedDisk";
+  /**
+   * @member {string} [accountId] Arm Id of the destination where the data has
+   * to be moved.
+   */
+  accountId?: string;
+  /**
+   * @member {string} resourceGroupId Destination Resource Group Id where the
+   * Compute disks should be created.
+   */
+  resourceGroupId: string;
+  /**
+   * @member {string} stagingStorageAccountId Arm Id of the storage account
+   * that can be used to copy the vhd for staging.
+   */
+  stagingStorageAccountId: string;
+}
+
+/**
+ * @interface
+ * An interface representing DestinationStorageAccountDetails.
+ * Details for the destination storage account.
+ *
+ */
+export interface DestinationStorageAccountDetails {
+  /**
+   * @member {string} dataDestinationType Polymorphic Discriminator
+   */
+  dataDestinationType: "StorageAccount";
+  /**
+   * @member {string} [accountId] Arm Id of the destination where the data has
+   * to be moved.
+   */
+  accountId?: string;
+  /**
+   * @member {string} storageAccountId Destination Storage Account Arm Id.
+   */
+  storageAccountId: string;
 }
 
 /**
@@ -1504,10 +1578,10 @@ export interface JobResourceUpdateParameter {
    */
   details?: UpdateJobDetails;
   /**
-   * @member {DestinationAccountDetails[]} [destinationAccountDetails]
+   * @member {DestinationAccountDetailsUnion[]} [destinationAccountDetails]
    * Destination account details.
    */
-  destinationAccountDetails?: DestinationAccountDetails[];
+  destinationAccountDetails?: DestinationAccountDetailsUnion[];
   /**
    * @member {{ [propertyName: string]: string }} [tags] The list of key value
    * pairs that describe the resource. These tags can be used in viewing and
@@ -1813,11 +1887,12 @@ export interface AvailableSkusResult extends Array<SkuInformation> {
 
 /**
  * Defines values for ShareDestinationFormatType.
- * Possible values include: 'UnknownType', 'HCS', 'BlockBlob', 'PageBlob', 'AzureFile'
+ * Possible values include: 'UnknownType', 'HCS', 'BlockBlob', 'PageBlob', 'AzureFile',
+ * 'ManagedDisk'
  * @readonly
  * @enum {string}
  */
-export type ShareDestinationFormatType = 'UnknownType' | 'HCS' | 'BlockBlob' | 'PageBlob' | 'AzureFile';
+export type ShareDestinationFormatType = 'UnknownType' | 'HCS' | 'BlockBlob' | 'PageBlob' | 'AzureFile' | 'ManagedDisk';
 
 /**
  * Defines values for AccessProtocol.
@@ -1853,11 +1928,12 @@ export type SkuName = 'DataBox' | 'DataBoxDisk' | 'DataBoxHeavy';
 
 /**
  * Defines values for SkuDisabledReason.
- * Possible values include: 'None', 'Country', 'Region', 'Feature', 'OfferType'
+ * Possible values include: 'None', 'Country', 'Region', 'Feature', 'OfferType',
+ * 'NoSubscriptionInfo'
  * @readonly
  * @enum {string}
  */
-export type SkuDisabledReason = 'None' | 'Country' | 'Region' | 'Feature' | 'OfferType';
+export type SkuDisabledReason = 'None' | 'Country' | 'Region' | 'Feature' | 'OfferType' | 'NoSubscriptionInfo';
 
 /**
  * Defines values for NotificationStageName.
