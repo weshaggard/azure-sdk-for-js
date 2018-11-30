@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "../models";
 import * as Mappers from "../models/testJobOperationsMappers";
 import * as Parameters from "../models/parameters";
@@ -223,7 +223,7 @@ const createOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -256,7 +256,7 @@ const getOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -282,7 +282,7 @@ const resumeOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -306,7 +306,7 @@ const stopOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -330,7 +330,7 @@ const suspendOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage

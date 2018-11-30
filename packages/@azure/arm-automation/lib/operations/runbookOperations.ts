@@ -8,8 +8,8 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
-import * as msRestAzure from "@azure/ms-rest-azure-js";
+import * as msRest from "ms-rest-js";
+import * as msRestAzure from "ms-rest-azure-js";
 import * as Models from "../models";
 import * as Mappers from "../models/runbookOperationsMappers";
 import * as Parameters from "../models/parameters";
@@ -324,7 +324,7 @@ const getContentOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -355,7 +355,7 @@ const getOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -381,7 +381,7 @@ const createOrUpdateOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -417,7 +417,7 @@ const updateOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -450,7 +450,7 @@ const deleteMethodOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -474,7 +474,7 @@ const listByAutomationAccountOperationSpec: msRest.OperationSpec = {
     Parameters.automationAccountName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -500,7 +500,7 @@ const beginPublishOperationSpec: msRest.OperationSpec = {
     Parameters.runbookName
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
