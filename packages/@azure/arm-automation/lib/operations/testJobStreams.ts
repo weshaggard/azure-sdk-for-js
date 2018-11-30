@@ -8,7 +8,7 @@
  * regenerated.
  */
 
-import * as msRest from "@azure/ms-rest-js";
+import * as msRest from "ms-rest-js";
 import * as Models from "../models";
 import * as Mappers from "../models/testJobStreamsMappers";
 import * as Parameters from "../models/parameters";
@@ -144,7 +144,7 @@ const getOperationSpec: msRest.OperationSpec = {
     Parameters.jobStreamId
   ],
   queryParameters: [
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
@@ -171,7 +171,7 @@ const listByTestJobOperationSpec: msRest.OperationSpec = {
   ],
   queryParameters: [
     Parameters.filter,
-    Parameters.apiVersion3
+    Parameters.apiVersion
   ],
   headerParameters: [
     Parameters.acceptLanguage
