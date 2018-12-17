@@ -32,7 +32,7 @@ class BatchManagementClient extends BatchManagementClientContext {
    * 00000000-0000-0000-0000-000000000000)
    * @param [options] The parameter options
    */
-  constructor(credentials: msRest.ServiceClientCredentials, subscriptionId: string, options?: Models.BatchManagementClientOptions) {
+  constructor(credentials: msRest.ServiceClientCredentials, options?: Models.BatchManagementClientOptions) {
     super(credentials, subscriptionId, options);
     this.batchAccount = new operations.BatchAccountOperations(this);
     this.applicationPackage = new operations.ApplicationPackageOperations(this);
