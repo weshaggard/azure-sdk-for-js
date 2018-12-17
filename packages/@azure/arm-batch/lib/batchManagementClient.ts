@@ -16,7 +16,7 @@ import { BatchManagementClientContext } from "./batchManagementClientContext";
 
 
 class BatchManagementClient extends BatchManagementClientContext {
-  // Operation groups
+  // Operational groups
   batchAccount: operations.BatchAccountOperations;
   applicationPackage: operations.ApplicationPackageOperations;
   application: operations.ApplicationOperations;
